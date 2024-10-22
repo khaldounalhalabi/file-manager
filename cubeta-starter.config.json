@@ -1,0 +1,7 @@
+{
+    "installed_web": true,
+    "frontend_type": "React & Typescript",
+    "installed_auth": true,
+    "has_roles": true,
+    "installed_api": true
+}

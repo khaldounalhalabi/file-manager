@@ -23,11 +23,11 @@ const Login = () => {
                 <div className="flex flex-col items-center">
                     <div className="flex items-center my-2 gap-1">
                         <img
-                            src={asset("images/cubeta-logo.png")}
+                            src={asset("images/logo.png")}
                             width={"35px"}
                         />
                         <h1 className="text-brand text-4xl font-bold">
-                            Cubeta Starter
+                            Ultimate file manager
                         </h1>
                     </div>
                     <PageCard>
@@ -78,19 +78,6 @@ const Login = () => {
                                         className="text-blue-700 hover:text-primary"
                                     >
                                         Reset Your Password
-                                    </Link>
-                                </span>
-                            </p>
-                            <p className="text-lg dark:text-white">
-                                New User ?{" "}
-                                <span>
-                                    <Link
-                                        href={route(
-                                            "v1.web.public.register.page",
-                                        )}
-                                        className="text-blue-700 hover:text-primary"
-                                    >
-                                        Create New Account Now
                                     </Link>
                                 </span>
                             </p>

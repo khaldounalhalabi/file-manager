@@ -55,8 +55,8 @@ const ProfileDropdown = () => {
                     <li>
                         <Link
                             id="user-details"
-                            href={"#"}
-                            className="cursor-pointer block hover:bg-gray-50 dark:hover:text-black p-2 rounded-md"
+                            href={route("v1.web.protected.user.details")}
+                            className="cursor-pointer block hover:bg-gray-100 dark:hover:text-black p-2 rounded-md"
                         >
                             My Profile
                         </Link>
@@ -64,8 +64,8 @@ const ProfileDropdown = () => {
                     <li>
                         <Link
                             id="logout"
-                            href={"#"}
-                            className="cursor-pointer block hover:bg-gray-50 dark:hover:text-black p-2 rounded-md"
+                            href={route("v1.web.protected.logout")}
+                            className="cursor-pointer block hover:bg-gray-100 dark:hover:text-black p-2 rounded-md"
                         >
                             Sign Out
                         </Link>

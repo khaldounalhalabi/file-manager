@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\WEB\v1;
 
-use Exception;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use App\Services\v1\User\UserService;
 use App\Http\Requests\v1\AuthRequests\AuthLoginRequest;
-use App\Http\Requests\v1\AuthRequests\UpdateUserRequest;
 use App\Http\Requests\v1\AuthRequests\AuthRegisterRequest;
-use App\Http\Requests\v1\AuthRequests\ResetPasswordRequest;
 use App\Http\Requests\v1\AuthRequests\CheckPasswordResetRequest;
 use App\Http\Requests\v1\AuthRequests\RequestResetPasswordRequest;
+use App\Http\Requests\v1\AuthRequests\ResetPasswordRequest;
+use App\Http\Requests\v1\AuthRequests\UpdateUserRequest;
+use App\Services\v1\User\UserService;
+use Exception;
 use Inertia\Inertia;
 
 class BaseAuthController extends Controller
@@ -19,9 +18,9 @@ class BaseAuthController extends Controller
     private UserService $userService;
     private ?string $role = null;
 
-   /**
-    * @throws Exception
-    */
+    /**
+     * @throws Exception
+     */
     public function __construct()
     {
         $this->userService = UserService::make();
@@ -62,7 +61,7 @@ class BaseAuthController extends Controller
         $user = $this->userService->userDetails($this->role);
 
         if ($user) {
-            return Inertia::render('dashboard/profile/UserDetails' , [
+            return Inertia::render('dashboard/profile/UserDetails', [
                 'user' => $user,
             ]);
         } else {

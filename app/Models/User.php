@@ -2,24 +2,21 @@
 
 namespace App\Models;
 
-use App\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * Class User
- *
  * @mixin Builder
  */
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
-    use HasRoles;
+    use HasFactory, Notifiable, HasRoles;
 
     protected $guarded = ['id'];
 
@@ -41,7 +38,7 @@ class User extends Authenticatable implements JWTSubject
     protected function password(): Attribute
     {
         return Attribute::make(
-            set: fn (string $value) => Hash::make($value)
+            set: fn(string $value) => Hash::make($value)
         );
     }
 
@@ -53,15 +50,5 @@ class User extends Authenticatable implements JWTSubject
             'created_at' => 'datetime:Y-m-d H:i:s',
             'updated_at' => 'datetime:Y-m-d H:i:s',
         ];
-    }
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
     }
 }

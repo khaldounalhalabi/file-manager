@@ -2,13 +2,13 @@
 
 namespace App\Services\v1\User;
 
-use Illuminate\Contracts\Auth\Authenticatable;
+use App\Models\User;
 use App\Notifications\ResetPasswordCodeEmail;
 use App\Repositories\UserRepository;
 use App\Services\Contracts\BaseService;
-use App\Models\User;
 use App\Services\Contracts\Makable;
 use Exception;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 /**
  * @extends BaseService<User>
@@ -17,6 +17,7 @@ use Exception;
 class UserService extends BaseService
 {
     use Makable;
+
     private string $guard = 'web';
 
     protected string $repositoryClass = UserRepository::class;
@@ -36,7 +37,7 @@ class UserService extends BaseService
     }
 
     /**
-     * @param array $data
+     * @param array       $data
      * @param string|null $role
      * @return array{User , string , string}|User|null
      */
@@ -67,9 +68,9 @@ class UserService extends BaseService
     }
 
     /**
-     * @param array $data
+     * @param array       $data
      * @param string|null $role
-     * @param array $additionalData
+     * @param array       $additionalData
      * @return User|Authenticatable|array{User , string , string}|null
      */
     public function login(array $data, ?string $role = null, array $additionalData = []): User|Authenticatable|array|null
@@ -143,14 +144,14 @@ class UserService extends BaseService
             $token = auth($this->guard)->setTTL(env('JWT_TTL', 10080))->refresh();
             $refresh_token = auth($this->guard)->setTTL(env('JWT_REFRESH_TTL', 20160))->refresh();
 
-            return [$user,$token,$refresh_token];
+            return [$user, $token, $refresh_token];
         } catch (Exception) {
             return null;
         }
     }
 
     /**
-     * @param array $data
+     * @param array       $data
      * @param string|null $role
      * @return array{User , string , string}|User
      */

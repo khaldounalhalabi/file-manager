@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import Modal from "../ui/Modal";
 import Input from "../form/fields/Input";
 import { useForm } from "@inertiajs/react";
@@ -6,12 +6,12 @@ import Button from "../ui/Button";
 import DownloadFile from "@/Hooks/DownloadFile";
 
 const ImportModal = ({
-                         openImport,
-                         setOpenImport,
-                         revalidate,
-                         importRoute,
-                         importExampleRoute,
-                     }: {
+    openImport,
+    setOpenImport,
+    revalidate,
+    importRoute,
+    importExampleRoute,
+}: {
     openImport: boolean;
     setOpenImport: (value: boolean | ((prev: boolean) => boolean)) => void;
     revalidate: () => void;

@@ -28,16 +28,16 @@ export const Sidebar = ({
             >
                 <div className={`flex items-center justify-center gap-1`}>
                     <img
-                        src={asset("/images/cubeta-logo.png")}
-                        width={`${isOpen ? "17px" : "25px"}`}
+                        src={asset("/images/logo.png")}
+                        width={`${isOpen ? "40px" : "40px"}`}
                         alt=""
                     />
                     {isOpen && (
                         <a
                             href="#"
-                            className={`px-2 w-full text-xl text-brand dark:text-white hover:underline`}
+                            className={`px-2 w-full text-brand dark:text-white hover:underline`}
                         >
-                            Cubeta Starter
+                            Ultimate file manager
                         </a>
                     )}
                 </div>

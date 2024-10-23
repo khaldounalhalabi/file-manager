@@ -9,7 +9,7 @@ import { Translatable, translate } from "@/Models/Translatable";
 import { usePage } from "@inertiajs/react";
 import { MiddlewareProps } from "@/types";
 import { LocaleContext } from "@/Contexts/TranslatableInputsContext";
-import {getNestedPropertyValue} from "@/helper";
+import { getNestedPropertyValue } from "@/helper";
 
 interface TranslatableProps
     extends Omit<HTMLProps<HTMLTextAreaElement>, "defaultValue"> {
@@ -17,15 +17,15 @@ interface TranslatableProps
 }
 
 const TranslatableTextEditor: React.FC<TranslatableProps> = ({
-                                                                 label,
-                                                                 className,
-                                                                 defaultValue,
-                                                                 onChange = undefined,
-                                                                 onInput = undefined,
-                                                                 name,
-                                                                 required = false,
-                                                                 ...props
-                                                             }) => {
+    label,
+    className,
+    defaultValue,
+    onChange = undefined,
+    onInput = undefined,
+    name,
+    required = false,
+    ...props
+}) => {
     const errors = usePage().props.errors;
     const error = name && errors[name] ? errors[name] : undefined;
 
@@ -47,9 +47,9 @@ const TranslatableTextEditor: React.FC<TranslatableProps> = ({
         await setValue((prev) =>
             prev
                 ? {
-                    ...prev,
-                    [lang]: e.target.value,
-                }
+                      ...prev,
+                      [lang]: e.target.value,
+                  }
                 : { [lang]: e.target.value },
         );
 
@@ -98,7 +98,11 @@ const TranslatableTextEditor: React.FC<TranslatableProps> = ({
                         }
                         rows={4}
                         name={`${name}[${lang}]`}
-                        defaultValue={defaultValue ? getNestedPropertyValue(defaultValue , lang) : ""}
+                        defaultValue={
+                            defaultValue
+                                ? getNestedPropertyValue(defaultValue, lang)
+                                : ""
+                        }
                         onChange={(e) => handleChange(lang, e)}
                         required={required}
                         {...props}

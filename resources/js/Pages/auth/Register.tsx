@@ -1,12 +1,12 @@
 import Form from "@/Components/form/Form";
 import Input from "@/Components/form/fields/Input";
 import PageCard from "@/Components/ui/PageCard";
-import {asset} from "@/helper";
-import {Link, useForm} from "@inertiajs/react";
-import {FormEvent} from "react";
+import { asset } from "@/helper";
+import { Link, useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
 
 const Register = () => {
-    const {post, setData, errors, processing} = useForm<{
+    const { post, setData, errors, processing } = useForm<{
         first_name: string;
         last_name: string;
         email: string;
@@ -57,7 +57,7 @@ const Register = () => {
                                         onChange={(e) =>
                                             setData(
                                                 "first_name",
-                                                e.target.value
+                                                e.target.value,
                                             )
                                         }
                                         label="First Name"
@@ -99,7 +99,7 @@ const Register = () => {
                                     onChange={(e) =>
                                         setData(
                                             "password_confirmation",
-                                            e.target.value
+                                            e.target.value,
                                         )
                                     }
                                     label="Confirm Password"
@@ -108,7 +108,7 @@ const Register = () => {
                                 />
                             </div>
                             <p className="text-lg dark:text-white">
-                                Have An Account ? {" "}
+                                Have An Account ?{" "}
                                 <span>
                                     <Link
                                         href={route("v1.web.public.login.page")}

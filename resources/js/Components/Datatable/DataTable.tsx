@@ -11,23 +11,23 @@ import ImportModal from "./ImportModal";
 import ExportModal from "./ExportModal";
 
 function DataTable<ApiResponse, Data>({
-                                          api,
-                                          schema,
-                                          createUrl,
-                                          filter,
-                                          title,
-                                          getDataArray,
-                                          getTotalPages,
-                                          getNextPage = undefined,
-                                          getPreviousPage = undefined,
-                                          getTotalRecords = undefined,
-                                          isFirst = undefined,
-                                          isLast = undefined,
-                                          importExampleRoute = undefined,
-                                          importRoute = undefined,
-                                          exportRoute = undefined,
-                                          exportables = undefined,
-                                      }: DataTableData<ApiResponse, Data>) {
+    api,
+    schema,
+    createUrl,
+    filter,
+    title,
+    getDataArray,
+    getTotalPages,
+    getNextPage = undefined,
+    getPreviousPage = undefined,
+    getTotalRecords = undefined,
+    isFirst = undefined,
+    isLast = undefined,
+    importExampleRoute = undefined,
+    importRoute = undefined,
+    exportRoute = undefined,
+    exportables = undefined,
+}: DataTableData<ApiResponse, Data>) {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
     const [hideCols, setHideCols] = useState<number[]>([]);
@@ -126,7 +126,9 @@ function DataTable<ApiResponse, Data>({
                 <PageCard>
                     <div>
                         {title ? (
-                            <h1 className="font-bold text-xl dark:text-white">{title}</h1>
+                            <h1 className="font-bold text-xl dark:text-white">
+                                {title}
+                            </h1>
                         ) : (
                             ""
                         )}

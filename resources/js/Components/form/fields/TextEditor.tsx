@@ -9,12 +9,12 @@ export interface TextEditorProps extends HTMLProps<HTMLTextAreaElement> {
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({
-                                                   name,
-                                                   label,
-                                                   className,
-                                                   required = false,
-                                                   ...props
-                                               }) => {
+    name,
+    label,
+    className,
+    required = false,
+    ...props
+}) => {
     const errors = usePage().props.errors;
     const error = name && errors[name] ? errors[name] : undefined;
 

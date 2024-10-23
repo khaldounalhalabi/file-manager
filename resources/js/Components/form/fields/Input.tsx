@@ -16,15 +16,15 @@ export interface InputProps extends HTMLProps<HTMLInputElement> {
 }
 
 const Input: React.FC<InputProps> = ({
-                                         name,
-                                         label,
-                                         type,
-                                         defaultValue,
-                                         className,
-                                         placeholder = "",
-                                         required = false,
-                                         ...props
-                                     }) => {
+    name,
+    label,
+    type,
+    defaultValue,
+    className,
+    placeholder = "",
+    required = false,
+    ...props
+}) => {
     const [show, setShow] = useState(false);
 
     const errors = usePage().props.errors;
@@ -39,7 +39,7 @@ const Input: React.FC<InputProps> = ({
                         : `block relative border-gray-200 shadow-sm border focus-within:border-blue-600 rounded-md focus-within:ring-1 focus-within:ring-blue-600`
                 }
             >
-                {type == "file" ? label ?? "" : ""}
+                {type == "file" ? (label ?? "") : ""}
                 <input
                     type={
                         type === "password"

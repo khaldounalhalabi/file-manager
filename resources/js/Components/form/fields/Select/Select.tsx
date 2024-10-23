@@ -12,34 +12,34 @@ import {
 import { usePage } from "@inertiajs/react";
 
 function Select<TData>({
-                           label,
-                           data = [],
-                           clearable = true,
-                           styles = undefined,
-                           name = undefined,
-                           isMultiple = false,
-                           closeOnSelect = true,
-                           optionLabel = undefined,
-                           optionValue = undefined,
-                           getOptionLabel = undefined,
-                           getOptionValue = undefined,
-                           onSelect = undefined,
-                           placeHolder = "Select An Item",
-                           defaultValues = undefined,
-                           onChange = undefined,
-                           required = false,
-                           inputProps = {},
-                       }: ISelectProps<TData>) {
+    label,
+    data = [],
+    clearable = true,
+    styles = undefined,
+    name = undefined,
+    isMultiple = false,
+    closeOnSelect = true,
+    optionLabel = undefined,
+    optionValue = undefined,
+    getOptionLabel = undefined,
+    getOptionValue = undefined,
+    onSelect = undefined,
+    placeHolder = "Select An Item",
+    defaultValues = undefined,
+    onChange = undefined,
+    required = false,
+    inputProps = {},
+}: ISelectProps<TData>) {
     const errors = usePage().props.errors;
     const error = name && errors[name] ? errors[name] : undefined;
 
     const getOption = (item: TData): Option => ({
         label: getOptionLabel
             ? getOptionLabel(item)
-            : getNestedPropertyValue(item, String(optionLabel)) ?? undefined,
+            : (getNestedPropertyValue(item, String(optionLabel)) ?? undefined),
         value: getOptionValue
             ? getOptionValue(item)
-            : getNestedPropertyValue(item, String(optionValue)) ?? undefined,
+            : (getNestedPropertyValue(item, String(optionValue)) ?? undefined),
     });
 
     let df: Option[] = [];
@@ -69,7 +69,7 @@ function Select<TData>({
 
     const handleChoseItem = (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        item: TData
+        item: TData,
     ) => {
         e.stopPropagation();
         if (onSelect) {
@@ -79,7 +79,7 @@ function Select<TData>({
             if (isMultiple) {
                 if (include(option, selected)) {
                     setSelected((prev) =>
-                        prev.filter((sel) => !isEqual(sel, option))
+                        prev.filter((sel) => !isEqual(sel, option)),
                     );
                 } else {
                     setSelected((prev) => [option, ...prev]);
@@ -110,7 +110,7 @@ function Select<TData>({
     };
 
     const handleClickingOnSearchInput = (
-        e: React.MouseEvent<HTMLInputElement, MouseEvent>
+        e: React.MouseEvent<HTMLInputElement, MouseEvent>,
     ) => {
         e.stopPropagation();
         setIsOpen(true);
@@ -118,7 +118,7 @@ function Select<TData>({
 
     const handleRemoveFromSelected = (
         e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-        clickedItem: Option
+        clickedItem: Option,
     ) => {
         e.stopPropagation();
         setSelected((prev) => prev.filter((i) => !isEqual(i, clickedItem)));
@@ -217,9 +217,9 @@ function Select<TData>({
                     className={
                         isOpen
                             ? `absolute left-0 z-50 ${
-                                styles?.dropDownItemsContainer ??
-                                " px-3 pb-3 rounded-lg border border-gray-200 shadow-2xl bg-white dark:bg-dark w-full"
-                            }`
+                                  styles?.dropDownItemsContainer ??
+                                  " px-3 pb-3 rounded-lg border border-gray-200 shadow-2xl bg-white dark:bg-dark w-full"
+                              }`
                             : "hidden"
                     }
                     style={{
@@ -255,9 +255,9 @@ function Select<TData>({
                                     className={`${
                                         include(getOption(item), selected)
                                             ? `${
-                                                styles?.selectedDropDownItemClasses ??
-                                                "bg-primary border-primary"
-                                            }`
+                                                  styles?.selectedDropDownItemClasses ??
+                                                  "bg-primary border-primary"
+                                              }`
                                             : ""
                                     } ${
                                         styles?.dropDownItemClasses ??
@@ -271,7 +271,7 @@ function Select<TData>({
                         } else {
                             const escapedQuery = search.replace(
                                 /[.*+?^${}()|[\]\\]/g,
-                                "\\$&"
+                                "\\$&",
                             );
                             const regex = new RegExp(escapedQuery, "i");
                             if (regex.test(getOption(item).label ?? "")) {
@@ -281,9 +281,9 @@ function Select<TData>({
                                         className={`${
                                             include(getOption(item), selected)
                                                 ? `${
-                                                    styles?.selectedDropDownItemClasses ??
-                                                    "bg-primary border-primary"
-                                                }`
+                                                      styles?.selectedDropDownItemClasses ??
+                                                      "bg-primary border-primary"
+                                                  }`
                                                 : ""
                                         } ${
                                             styles?.dropDownItemClasses ??

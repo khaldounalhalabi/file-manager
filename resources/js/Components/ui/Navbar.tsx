@@ -4,9 +4,9 @@ import Menu from "../icons/Menu";
 import DarkModeToggle from "@/Components/ui/DarkModeToggle";
 
 const Navbar = ({
-                    isSidebarOpen,
-                    toggleSidebar,
-                }: {
+    isSidebarOpen,
+    toggleSidebar,
+}: {
     isSidebarOpen: boolean;
     toggleSidebar: () => void;
 }) => {

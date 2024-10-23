@@ -1,12 +1,12 @@
 import Form from "@/Components/form/Form";
 import Input from "@/Components/form/fields/Input";
 import PageCard from "@/Components/ui/PageCard";
-import {asset} from "@/helper";
-import {useForm} from "@inertiajs/react";
-import {FormEvent} from "react";
+import { asset } from "@/helper";
+import { useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
 
 const ForgetPassword = () => {
-    const {post, setData, errors, processing} = useForm<{
+    const { post, setData, errors, processing } = useForm<{
         email: string;
     }>();
 
@@ -41,7 +41,12 @@ const ForgetPassword = () => {
                                 </p>
                             </div>
                         </div>
-                        <Form onSubmit={onSubmit} processing={processing} backButton={false} buttonText="Send Code">
+                        <Form
+                            onSubmit={onSubmit}
+                            processing={processing}
+                            backButton={false}
+                            buttonText="Send Code"
+                        >
                             <Input
                                 name={"email"}
                                 onChange={(e) =>

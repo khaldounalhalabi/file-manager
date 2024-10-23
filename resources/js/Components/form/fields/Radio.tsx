@@ -10,12 +10,12 @@ interface IRadioProps {
 }
 
 const Radio: React.FC<IRadioProps> = ({
-                                          name,
-                                          items = [],
-                                          checked = undefined,
-                                          onChange = undefined,
-                                          label = undefined,
-                                      }) => {
+    name,
+    items = [],
+    checked = undefined,
+    onChange = undefined,
+    label = undefined,
+}) => {
     const errors = usePage().props.errors;
     const error = name && errors[name] ? errors[name] : undefined;
 

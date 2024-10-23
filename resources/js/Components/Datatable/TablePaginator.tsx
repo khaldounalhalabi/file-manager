@@ -3,16 +3,16 @@ import ChevronRight from "../icons/ChevronRight";
 import { TablePaginatorProps } from "./DataTableUtils";
 
 function TablePaginator<ApiResponse>({
-                                         response,
-                                         page,
-                                         setPage,
-                                         getTotalPages,
-                                         getNextPage,
-                                         getPreviousPage,
-                                         getTotalRecords = undefined,
-                                         isFirst = undefined,
-                                         isLast = undefined,
-                                     }: TablePaginatorProps<ApiResponse>) {
+    response,
+    page,
+    setPage,
+    getTotalPages,
+    getNextPage,
+    getPreviousPage,
+    getTotalRecords = undefined,
+    isFirst = undefined,
+    isLast = undefined,
+}: TablePaginatorProps<ApiResponse>) {
     const paginationArray = [...Array(getTotalPages(response) ?? 0)];
 
     const setNextPage = () => {

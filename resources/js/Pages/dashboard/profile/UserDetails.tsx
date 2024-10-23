@@ -47,7 +47,9 @@ export default UserDetails;
 const UserOverview = ({ user }: { user: User }) => {
     return (
         <div className="w-full p-8">
-            <h2 className="text-xl font-semibold dark:text-white">Profile Details :</h2>
+            <h2 className="text-xl font-semibold dark:text-white">
+                Profile Details :
+            </h2>
             <div className="my-5 grid grid-cols-1 md:grid-cols-2 gap-3">
                 <label className="flex justify-between items-center dark:text-white">
                     <strong>User Name :</strong>
@@ -65,8 +67,8 @@ const UserOverview = ({ user }: { user: User }) => {
     );
 };
 
-const EditProfile = ({user}: { user: User }) => {
-    const {put, setData, processing} = useForm<{
+const EditProfile = ({ user }: { user: User }) => {
+    const { put, setData, processing } = useForm<{
         first_name?: string;
         last_name?: string;
         email?: string;
@@ -82,8 +84,14 @@ const EditProfile = ({user}: { user: User }) => {
 
     return (
         <div className="w-full p-8">
-            <h2 className="text-xl font-semibold dark:text-white">Edit Profile :</h2>
-            <Form onSubmit={onSubmit} processing={processing} backButton={false}>
+            <h2 className="text-xl font-semibold dark:text-white">
+                Edit Profile :
+            </h2>
+            <Form
+                onSubmit={onSubmit}
+                processing={processing}
+                backButton={false}
+            >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 my-5">
                     <Input
                         name="first_name"
@@ -124,7 +132,7 @@ const EditProfile = ({user}: { user: User }) => {
                                 "password",
                                 e.target.value.length <= 0
                                     ? undefined
-                                    : e.target.value
+                                    : e.target.value,
                             );
                         }}
                     />
@@ -138,7 +146,7 @@ const EditProfile = ({user}: { user: User }) => {
                                 "password_confirmation",
                                 e.target.value.length <= 0
                                     ? undefined
-                                    : e.target.value
+                                    : e.target.value,
                             );
                         }}
                     />

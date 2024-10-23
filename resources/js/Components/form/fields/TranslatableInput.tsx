@@ -1,9 +1,9 @@
-import {LocaleContext} from "@/Contexts/TranslatableInputsContext";
-import {usePage} from "@inertiajs/react";
-import React, {ChangeEvent, useContext, useRef, useState} from "react";
-import Input, {InputProps} from "./Input";
-import {MiddlewareProps} from "@/types";
-import {Translatable, translate} from "@/Models/Translatable";
+import { LocaleContext } from "@/Contexts/TranslatableInputsContext";
+import { usePage } from "@inertiajs/react";
+import React, { ChangeEvent, useContext, useRef, useState } from "react";
+import Input, { InputProps } from "./Input";
+import { MiddlewareProps } from "@/types";
+import { Translatable, translate } from "@/Models/Translatable";
 
 interface ITranslatableInputProps {
     defaultValue?: string | Translatable | object | undefined;
@@ -14,19 +14,19 @@ interface ITranslatableInputProps {
 
 const TranslatableInput: React.FC<
     Omit<InputProps, "defaultValue" | "onChange" | "onInput"> &
-    ITranslatableInputProps
+        ITranslatableInputProps
 > = ({
-         name,
-         label,
-         type,
-         defaultValue,
-         className,
-         placeholder = "",
-         onChange = undefined,
-         onInput = undefined,
-         required = false,
-         ...props
-     }) => {
+    name,
+    label,
+    type,
+    defaultValue,
+    className,
+    placeholder = "",
+    onChange = undefined,
+    onInput = undefined,
+    required = false,
+    ...props
+}) => {
     const locale = useContext(LocaleContext);
     const availableLocales = usePage<MiddlewareProps>().props.availableLocales;
     const inputRef = useRef<HTMLInputElement>(null);
@@ -49,12 +49,12 @@ const TranslatableInput: React.FC<
         await setValue((prev) =>
             prev
                 ? {
-                    ...prev,
-                    [lang]: e.target.value,
-                }
-                : {[lang]: e.target.value},
+                      ...prev,
+                      [lang]: e.target.value,
+                  }
+                : { [lang]: e.target.value },
         );
-        inputRef?.current?.dispatchEvent(new Event("input", {bubbles: true}));
+        inputRef?.current?.dispatchEvent(new Event("input", { bubbles: true }));
     };
 
     return (

@@ -1,14 +1,14 @@
-import {FormEvent, ReactNode} from "react";
+import { FormEvent, ReactNode } from "react";
 import Button from "../ui/Button";
 import ChevronLeft from "../icons/ChevronLeft";
 
 const Form = ({
-                  onSubmit,
-                  processing,
-                  children,
-                  buttonText = "Save",
-                  backButton = true,
-              }: {
+    onSubmit,
+    processing,
+    children,
+    buttonText = "Save",
+    backButton = true,
+}: {
     onSubmit: (e: FormEvent<HTMLFormElement>) => void;
     processing?: boolean;
     children?: ReactNode;
@@ -18,9 +18,11 @@ const Form = ({
     return (
         <form onSubmit={onSubmit}>
             {children}
-            <div className={`flex items-center ${backButton ? "justify-between" : "justify-end"} w-full my-2`}>
-                {backButton
-                    ? (<Button
+            <div
+                className={`flex items-center ${backButton ? "justify-between" : "justify-end"} w-full my-2`}
+            >
+                {backButton ? (
+                    <Button
                         type="button"
                         color="secondary"
                         onClick={(e) => {
@@ -28,10 +30,12 @@ const Form = ({
                             window.history.back();
                         }}
                     >
-                        <ChevronLeft/>
+                        <ChevronLeft />
                         Back
-                    </Button>)
-                    : ""}
+                    </Button>
+                ) : (
+                    ""
+                )}
                 <Button type="submit" disabled={processing}>
                     {buttonText}
                 </Button>

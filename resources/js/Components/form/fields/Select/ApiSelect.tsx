@@ -12,39 +12,39 @@ import {
 import { usePage } from "@inertiajs/react";
 
 function ApiSelect<TResponse, TData>({
-                                         api,
-                                         getIsLast,
-                                         getTotalPages,
-                                         getDataArray,
-                                         label,
-                                         clearable = true,
-                                         styles = undefined,
-                                         name = undefined,
-                                         isMultiple = false,
-                                         closeOnSelect = true,
-                                         optionLabel = undefined,
-                                         optionValue = undefined,
-                                         getOptionLabel = undefined,
-                                         getOptionValue = undefined,
-                                         onSelect = undefined,
-                                         placeHolder = "Select An Item",
-                                         defaultValues = undefined,
-                                         onChange = undefined,
-                                         revalidateOnOpen = false,
-                                         inputProps = {},
-                                         getNextPage = undefined,
-                                         required = false,
-                                     }: IApiSelectProps<TResponse, TData>) {
+    api,
+    getIsLast,
+    getTotalPages,
+    getDataArray,
+    label,
+    clearable = true,
+    styles = undefined,
+    name = undefined,
+    isMultiple = false,
+    closeOnSelect = true,
+    optionLabel = undefined,
+    optionValue = undefined,
+    getOptionLabel = undefined,
+    getOptionValue = undefined,
+    onSelect = undefined,
+    placeHolder = "Select An Item",
+    defaultValues = undefined,
+    onChange = undefined,
+    revalidateOnOpen = false,
+    inputProps = {},
+    getNextPage = undefined,
+    required = false,
+}: IApiSelectProps<TResponse, TData>) {
     const errors = usePage().props.errors;
     const error = name && errors[name] ? errors[name] : undefined;
 
     const getOption = (item: TData): Option => ({
         label: getOptionLabel
             ? getOptionLabel(item)
-            : getNestedPropertyValue(item, String(optionLabel)) ?? undefined,
+            : (getNestedPropertyValue(item, String(optionLabel)) ?? undefined),
         value: getOptionValue
             ? getOptionValue(item)
-            : getNestedPropertyValue(item, String(optionValue)) ?? undefined,
+            : (getNestedPropertyValue(item, String(optionValue)) ?? undefined),
     });
 
     let df: Option[] = [];
@@ -287,9 +287,9 @@ function ApiSelect<TResponse, TData>({
                     className={
                         isOpen
                             ? `absolute left-0 z-50 ${
-                                styles?.dropDownItemsContainerClasses ??
-                                " px-3 pb-3 rounded-lg border border-gray-200 shadow-2xl bg-white-secondary dark:bg-dark-secondary w-full"
-                            }`
+                                  styles?.dropDownItemsContainerClasses ??
+                                  " px-3 pb-3 rounded-lg border border-gray-200 shadow-2xl bg-white-secondary dark:bg-dark-secondary w-full"
+                              }`
                             : "hidden"
                     }
                     style={{
@@ -325,9 +325,9 @@ function ApiSelect<TResponse, TData>({
                             ${
                                 include(getOption(item), selected)
                                     ? `${
-                                        styles?.selectedDropDownItemClasses ??
-                                        "bg-primary border-primary"
-                                    }`
+                                          styles?.selectedDropDownItemClasses ??
+                                          "bg-primary border-primary"
+                                      }`
                                     : ""
                             }
                             ${

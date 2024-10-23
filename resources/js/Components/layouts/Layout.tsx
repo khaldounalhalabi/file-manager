@@ -1,12 +1,12 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Navbar from "@/Components/ui/Navbar";
-import {Sidebar} from "@/Components/ui/Sidebar";
-import {toast, ToastContainer} from "react-toastify";
+import { Sidebar } from "@/Components/ui/Sidebar";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {usePage} from "@inertiajs/react";
-import {MiddlewareProps} from "@/types";
+import { usePage } from "@inertiajs/react";
+import { MiddlewareProps } from "@/types";
 
-const Layout = ({children}: { children?: React.ReactNode }) => {
+const Layout = ({ children }: { children?: React.ReactNode }) => {
     const theme = window.localStorage.getItem("theme_mode") ?? "light";
     const [isOpen, setIsOpen] = useState(true);
     const toggleSidebar = () => {
@@ -42,7 +42,7 @@ const Layout = ({children}: { children?: React.ReactNode }) => {
                             : "slide-sidebar-left w-1/4"
                     }`}
                 >
-                    <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar}/>
+                    <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
                 </div>
                 <div
                     className={`w-full h-screen overflow-y-scroll bg-white dark:bg-dark`}

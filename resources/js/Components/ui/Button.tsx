@@ -19,12 +19,12 @@ interface IButtonProps
 }
 
 const Button: React.FunctionComponent<IButtonProps> = ({
-                                                           className,
-                                                           children,
-                                                           disabled,
-                                                           color = "primary",
-                                                           ...props
-                                                       }) => {
+    className,
+    children,
+    disabled,
+    color = "primary",
+    ...props
+}) => {
     return (
         <button
             className={

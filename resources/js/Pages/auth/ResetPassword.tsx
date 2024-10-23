@@ -2,11 +2,11 @@ import Form from "@/Components/form/Form";
 import Input from "@/Components/form/fields/Input";
 import PageCard from "@/Components/ui/PageCard";
 import { asset } from "@/helper";
-import {useForm} from "@inertiajs/react";
-import {FormEvent} from "react";
+import { useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
 
 const ResetPassword = () => {
-    const {post, setData, errors, processing} = useForm<{
+    const { post, setData, errors, processing } = useForm<{
         reset_password_code: string;
         password: string;
         password_confirmation: string;
@@ -37,10 +37,17 @@ const ResetPassword = () => {
                                 </h1>
                             </div>
                             <div className="flex justify-center items-center dark:text-white">
-                                <p>Please enter your new password and your reset code</p>
+                                <p>
+                                    Please enter your new password and your
+                                    reset code
+                                </p>
                             </div>
                         </div>
-                        <Form onSubmit={onSubmit} processing={processing} backButton={false}>
+                        <Form
+                            onSubmit={onSubmit}
+                            processing={processing}
+                            backButton={false}
+                        >
                             <div className="flex flex-col gap-5">
                                 <Input
                                     label="Password Reset Code"
@@ -49,7 +56,7 @@ const ResetPassword = () => {
                                     onChange={(e) => {
                                         setData(
                                             "reset_password_code",
-                                            e.target.value
+                                            e.target.value,
                                         );
                                     }}
                                     required={true}
@@ -72,7 +79,7 @@ const ResetPassword = () => {
                                     onChange={(e) => {
                                         setData(
                                             "password_confirmation",
-                                            e.target.value
+                                            e.target.value,
                                         );
                                     }}
                                     required={true}

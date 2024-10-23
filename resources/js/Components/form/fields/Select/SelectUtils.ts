@@ -16,7 +16,7 @@ export interface IApiSelectProps<TResponse, TData> {
         page?: number,
         search?: string,
         isLast?: boolean,
-        totalPages?: number
+        totalPages?: number,
     ) => Promise<TResponse>;
     isMultiple?: boolean;
     optionLabel?: keyof TData;
@@ -30,7 +30,7 @@ export interface IApiSelectProps<TResponse, TData> {
         selectedItem?: TData,
         selected?: Option[],
         setSelected?: React.Dispatch<React.SetStateAction<Option[]>>,
-        event?: React.MouseEvent<HTMLDivElement, MouseEvent>
+        event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => void;
     defaultValues?: TData[] | Option[];
     placeHolder?: string;
@@ -55,9 +55,9 @@ export interface IApiSelectProps<TResponse, TData> {
     getNextPage?: (
         prevPage: number,
         isLast: boolean,
-        totalPages: number
+        totalPages: number,
     ) => number;
-    required?:boolean
+    required?: boolean;
 }
 
 export interface ISelectProps<TData> {
@@ -71,7 +71,7 @@ export interface ISelectProps<TData> {
         selectedItem?: TData,
         selected?: Option[],
         setSelected?: React.Dispatch<React.SetStateAction<Option[]>>,
-        event?: React.MouseEvent<HTMLDivElement, MouseEvent>
+        event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => void;
     defaultValues?: TData[] | Option[];
     placeHolder?: string;
@@ -92,7 +92,7 @@ export interface ISelectProps<TData> {
     };
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     inputProps?: SelectInputProps;
-    required?:boolean
+    required?: boolean;
 }
 
 export const isEqual = (option1: Option, option2: Option): boolean =>

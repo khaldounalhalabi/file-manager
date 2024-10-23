@@ -31,7 +31,7 @@ export interface DataTableData<ApiResponse, Data> {
     importRoute?: string;
     importExampleRoute?: string;
     exportRoute?: string;
-    exportables?:string[];
+    exportables?: string[];
     getDataArray: (res: ApiResponse) => Data[];
     getTotalPages: (res: ApiResponse) => number;
     getNextPage?: (res: ApiResponse) => number;

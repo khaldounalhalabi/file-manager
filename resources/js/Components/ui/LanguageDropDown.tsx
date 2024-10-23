@@ -1,10 +1,10 @@
-import {useEffect, useRef, useState} from "react";
-import {usePage} from "@inertiajs/react";
-import {MiddlewareProps} from "@/types";
-import {AvailableLocales} from "@/Models/Translatable";
+import { useEffect, useRef, useState } from "react";
+import { usePage } from "@inertiajs/react";
+import { MiddlewareProps } from "@/types";
+import { AvailableLocales } from "@/Models/Translatable";
 
 const LanguageDropdown = () => {
-    const {currentLocale, availableLocales, csrfToken} =
+    const { currentLocale, availableLocales, csrfToken } =
         usePage<MiddlewareProps>().props;
     const [open, setOpen] = useState(false);
     const [selectedLocale, setSelectedLocale] = useState<
@@ -14,7 +14,10 @@ const LanguageDropdown = () => {
     const selectorRef = useRef<HTMLDivElement>(null);
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (selectorRef.current && !selectorRef.current.contains(event.target as Node)) {
+        if (
+            selectorRef.current &&
+            !selectorRef.current.contains(event.target as Node)
+        ) {
             setOpen(false);
         }
     };
@@ -32,9 +35,7 @@ const LanguageDropdown = () => {
                 className="inline-flex items-center bg-white-secondary dark:bg-dark-secondary rounded-md overflow-hidden"
                 onClick={() => setOpen((prevState) => !prevState)}
             >
-                <div
-                    className="flex bg-primary p-2 text-sm/none text-white"
-                >
+                <div className="flex bg-primary p-2 text-sm/none text-white">
                     {selectedLocale as string}
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

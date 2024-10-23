@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
 
 const PageCard = ({
-                      children,
-                      title,
-                      actions,
-                  }: {
+    children,
+    title,
+    actions,
+}: {
     children?: ReactNode;
     title?: string;
     actions?: ReactNode;
@@ -15,7 +15,7 @@ const PageCard = ({
                 "p-8 bg-white-secondary dark:bg-dark-secondary rounded-md w-full"
             }
             style={{
-                boxShadow:"0 35px 60px 15px rgba(0, 0, 0, 0.2)"
+                boxShadow: "0 35px 60px 15px rgba(0, 0, 0, 0.2)",
             }}
         >
             {title || actions ? (

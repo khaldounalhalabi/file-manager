@@ -21,16 +21,16 @@ export interface ActionsButtonsProps<Data> {
 }
 
 function ActionsButtons<Data>({
-                                  data,
-                                  id,
-                                  buttons,
-                                  baseUrl,
-                                  deleteUrl,
-                                  showUrl,
-                                  editUrl,
-                                  setHidden,
-                                  children,
-                              }: ActionsButtonsProps<Data>) {
+    data,
+    id,
+    buttons,
+    baseUrl,
+    deleteUrl,
+    showUrl,
+    editUrl,
+    setHidden,
+    children,
+}: ActionsButtonsProps<Data>) {
     const dataId = id ?? data?.id ?? undefined;
 
     const dUrl = deleteUrl ?? `${baseUrl}/${dataId ?? ""}`; // delete url
@@ -42,14 +42,20 @@ function ActionsButtons<Data>({
     return (
         <div className={`flex justify-start gap-3 items-center`}>
             {buttons.includes("show") ? (
-                <Link href={sUrl} className="hover:bg-white-secondary p-0.5 rounded-md">
+                <Link
+                    href={sUrl}
+                    className="hover:bg-white-secondary p-0.5 rounded-md"
+                >
                     <Eye className="w-5 h-5 text-info" />
                 </Link>
             ) : (
                 ""
             )}
             {buttons.includes("edit") ? (
-                <Link href={eUrl} className="hover:bg-white-secondary p-0.5 rounded-md">
+                <Link
+                    href={eUrl}
+                    className="hover:bg-white-secondary p-0.5 rounded-md"
+                >
                     <Pencil className="w-5 h-5 text-success" />
                 </Link>
             ) : (

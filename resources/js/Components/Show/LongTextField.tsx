@@ -1,7 +1,7 @@
 const LongTextField = ({
-                           label,
-                           value,
-                       }: {
+    label,
+    value,
+}: {
     label?: string;
     value?: string;
 }) => {

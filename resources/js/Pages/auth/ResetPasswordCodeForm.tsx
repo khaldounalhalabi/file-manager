@@ -1,12 +1,12 @@
 import Form from "@/Components/form/Form";
 import Input from "@/Components/form/fields/Input";
 import PageCard from "@/Components/ui/PageCard";
-import {asset} from "@/helper";
-import {useForm} from "@inertiajs/react";
-import {FormEvent} from "react";
+import { asset } from "@/helper";
+import { useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
 
 const ResetPasswordCodeForm = () => {
-    const {post, setData, errors, processing} = useForm<{
+    const { post, setData, errors, processing } = useForm<{
         reset_password_code: string;
     }>();
 
@@ -42,7 +42,12 @@ const ResetPasswordCodeForm = () => {
                                 </p>
                             </div>
                         </div>
-                        <Form backButton={false} buttonText="Submit Code" onSubmit={onSubmit} processing={processing}>
+                        <Form
+                            backButton={false}
+                            buttonText="Submit Code"
+                            onSubmit={onSubmit}
+                            processing={processing}
+                        >
                             <Input
                                 label="Password Reset Code"
                                 name={"reset_password_code"}
@@ -50,7 +55,7 @@ const ResetPasswordCodeForm = () => {
                                 onChange={(e) => {
                                     setData(
                                         "reset_password_code",
-                                        e.target.value
+                                        e.target.value,
                                     );
                                 }}
                                 type="text"

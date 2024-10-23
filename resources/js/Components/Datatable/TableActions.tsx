@@ -6,19 +6,19 @@ import ArrowDownTray from "../icons/ArrowDownTray";
 import TableCells from "../icons/TableCells";
 
 function TableActions({
-                          createUrl,
-                          setOpenFilter,
-                          setPage,
-                          perPage,
-                          setPerPage,
-                          setSearch,
-                          search,
-                          filter,
-                          setOpenImport,
-                          setOpenExport,
-                          exportable = false,
-                          importable = false,
-                      }: TableActionsProps) {
+    createUrl,
+    setOpenFilter,
+    setPage,
+    perPage,
+    setPerPage,
+    setSearch,
+    search,
+    filter,
+    setOpenImport,
+    setOpenExport,
+    exportable = false,
+    importable = false,
+}: TableActionsProps) {
     return (
         <div className={`w-full flex justify-between items-center my-2`}>
             <div className={"flex gap-1"}>

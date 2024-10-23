@@ -1,7 +1,7 @@
-import {AvailableLocales} from "@/Models/Translatable";
-import {User} from "@/Models/User";
-import {route as routeFn} from "ziggy-js";
-import {PageProps as InertiaProps} from '@inertiajs/core';
+import { AvailableLocales } from "@/Models/Translatable";
+import { User } from "@/Models/User";
+import { route as routeFn } from "ziggy-js";
+import { PageProps as InertiaProps } from "@inertiajs/core";
 
 export type MiddlewareProps<
     T extends InertiaProps<string, unknown> = Record<string, unknown>,

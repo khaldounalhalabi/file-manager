@@ -72,7 +72,9 @@ const Login = () => {
                                 Forgot Your Password ?{" "}
                                 <span>
                                     <Link
-                                        href={route("v1.web.public.request.reset.password.code-page")}
+                                        href={route(
+                                            "v1.web.public.request.reset.password.code-page",
+                                        )}
                                         className="text-blue-700 hover:text-primary"
                                     >
                                         Reset Your Password
@@ -83,7 +85,9 @@ const Login = () => {
                                 New User ?{" "}
                                 <span>
                                     <Link
-                                        href={route("v1.web.public.register.page")}
+                                        href={route(
+                                            "v1.web.public.register.page",
+                                        )}
                                         className="text-blue-700 hover:text-primary"
                                     >
                                         Create New Account Now

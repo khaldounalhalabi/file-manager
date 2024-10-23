@@ -1,11 +1,11 @@
 import { usePage } from "@inertiajs/react";
-import { ReactNode, createContext, useState } from "react";
+import { createContext, ReactNode, useState } from "react";
 
 export const LocaleContext = createContext<string>("en");
 
 const TranslatableInputsContext = ({ children }: { children: ReactNode }) => {
     const [locale, setLocale] = useState(
-        usePage().props.currentLocale as string
+        usePage().props.currentLocale as string,
     );
 
     const availableLocales = usePage().props.availableLocales as string[];

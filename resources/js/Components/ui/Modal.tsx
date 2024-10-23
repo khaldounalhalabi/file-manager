@@ -3,10 +3,10 @@ import ReactDOM from "react-dom";
 import XMark from "../icons/XMark";
 
 const Modal = ({
-                   isOpen,
-                   onClose,
-                   children,
-               }: {
+    isOpen,
+    onClose,
+    children,
+}: {
     isOpen: boolean;
     onClose: () => void;
     children: ReactNode;
@@ -53,7 +53,7 @@ const Modal = ({
                 <div className="p-4">{children}</div>
             </div>
         </div>,
-        document.body
+        document.body,
     );
 };
 

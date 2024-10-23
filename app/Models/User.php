@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RolesPermissionEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,6 +36,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public static function exportable(): array
+    {
+        return [];
+    }
+
     protected function password(): Attribute
     {
         return Attribute::make(
@@ -50,5 +56,15 @@ class User extends Authenticatable
             'created_at' => 'datetime:Y-m-d H:i:s',
             'updated_at' => 'datetime:Y-m-d H:i:s',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(RolesPermissionEnum::ADMIN['role']);
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->hasRole(RolesPermissionEnum::CUSTOMER['role']);
     }
 }

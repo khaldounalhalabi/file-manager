@@ -2,6 +2,7 @@
 
 namespace App\Services\v1\User;
 
+use App\Enums\RolesPermissionEnum;
 use App\Models\User;
 use App\Notifications\ResetPasswordCodeEmail;
 use App\Repositories\UserRepository;
@@ -9,6 +10,8 @@ use App\Services\Contracts\BaseService;
 use App\Services\Contracts\Makable;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @extends BaseService<User>
@@ -258,5 +261,32 @@ class UserService extends BaseService
         }
 
         return $user;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function store(array $data, array $relationships = []): Model
+    {
+        try {
+            DB::beginTransaction();
+            $user = $this->repository->create($data);
+
+            if (isset($data['role'])) {
+                $user->assignRole($data['role']);
+            } else {
+                throw new Exception("The created user don't have a role");
+            }
+
+            if ($data['role'] == RolesPermissionEnum::CUSTOMER['role']) {
+                //TODO::create user group if a customer
+            }
+
+            DB::commit();
+            return $user;
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
     }
 }

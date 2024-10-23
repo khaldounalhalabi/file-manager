@@ -1,14 +1,21 @@
+import TableCells from "../icons/TableCells";
 import React, { ReactNode } from "react";
 import { asset } from "@/helper";
 import { Link } from "@inertiajs/react";
 import XMark from "../icons/XMark";
 import PresentationChart from "../icons/PresentationChart";
+import {User} from "lucide-react";
 
 const sidebarItems = [
     {
         href: route("v1.web.protected.index"),
         title: "Dashboard",
         icon: () => <PresentationChart />,
+    },
+    {
+        href: route("v1.web.admin.users.index"),
+        title: "User",
+        icon: () => <User />,
     },
 ];
 

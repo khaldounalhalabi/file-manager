@@ -3,5 +3,39 @@
     "frontend_type": "React & Typescript",
     "installed_auth": true,
     "has_roles": true,
-    "installed_api": true
+    "installed_api": true,
+    "tables": [
+        {
+            "model_name": "User",
+            "table_name": "users",
+            "attributes": [
+                {
+                    "name": "first_name",
+                    "type": "string",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "last_name",
+                    "type": "string",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "email",
+                    "type": "string",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "password",
+                    "type": "string",
+                    "nullable": false,
+                    "unique": false
+                }
+            ],
+            "relations": [],
+            "version": "v1"
+        }
+    ]
 }

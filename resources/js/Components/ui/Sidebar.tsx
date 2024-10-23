@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import { asset } from "@/helper";
 import { Link } from "@inertiajs/react";
 import XMark from "../icons/XMark";
-import TableCells from "../icons/TableCells";
 import PresentationChart from "../icons/PresentationChart";
 
 const sidebarItems = [
@@ -14,9 +13,9 @@ const sidebarItems = [
 ];
 
 export const Sidebar = ({
-                            toggleSidebar,
-                            isOpen,
-                        }: {
+    toggleSidebar,
+    isOpen,
+}: {
     toggleSidebar: () => void;
     isOpen: boolean;
 }) => {
@@ -71,11 +70,11 @@ export const Sidebar = ({
 };
 
 export const SidebarItem = ({
-                                href,
-                                title,
-                                isOpen = false,
-                                icon = undefined,
-                            }: {
+    href,
+    title,
+    isOpen = false,
+    icon = undefined,
+}: {
     href: string;
     title: string;
     isOpen: boolean;
@@ -101,10 +100,10 @@ export const SidebarItem = ({
 };
 
 export const CompactSidebarItem = ({
-                                       title,
-                                       children,
-                                       baseRouteName,
-                                   }: {
+    title,
+    children,
+    baseRouteName,
+}: {
     title: string;
     children?: React.ReactNode;
     baseRouteName?: string;

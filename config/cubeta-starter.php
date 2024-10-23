@@ -5,7 +5,7 @@ return [
     /**
      * the created postman collection will be named corresponding to it
      */
-    'project_name' => 'CubetaStarter',
+    'project_name' => 'Ultimate file manager',
 
     /**
      * version of generated structure

@@ -9,9 +9,9 @@ function TablePaginator<ApiResponse>({
     getTotalPages,
     getNextPage,
     getPreviousPage,
-    getTotalRecords = undefined,
-    isFirst = undefined,
-    isLast = undefined,
+    getTotalRecords = (res: any) => res.pagination_data?.total ?? 0,
+    isLast = (res: any) => res.pagination_data?.is_last ?? true,
+    isFirst = (res: any) => res.pagination_data?.is_first ?? true,
 }: TablePaginatorProps<ApiResponse>) {
     const paginationArray = [...Array(getTotalPages(response) ?? 0)];
 
@@ -43,7 +43,7 @@ function TablePaginator<ApiResponse>({
                     <button
                         onClick={() => setPrevPage()}
                         disabled={isFirst ? isFirst(response) : page <= 1}
-                        className="cursor-pointer inline-flex justify-center items-center bg-secondary rounded-md border-0 outline-0 text-white size-8 rtl:rotate-180"
+                        className="disabled:bg-gray-300 disabled:cursor-not-allowed cursor-pointer inline-flex justify-center items-center bg-secondary rounded-md border-0 outline-0 text-white size-8 rtl:rotate-180"
                     >
                         <span className="sr-only">Prev Page</span>
                         <ChevronLeft />
@@ -104,7 +104,7 @@ function TablePaginator<ApiResponse>({
                                 ? isLast(response)
                                 : getTotalPages(response) == page
                         }
-                        className="cursor-pointer inline-flex justify-center items-center bg-secondary rounded-md border-0 outline-0 text-white size-8 rtl:rotate-180"
+                        className="disabled:bg-gray-300 disabled:cursor-not-allowed cursor-pointer inline-flex justify-center items-center bg-secondary rounded-md border-0 outline-0 text-white size-8 rtl:rotate-180"
                     >
                         <span className="sr-only">Next Page</span>
                         <ChevronRight />

@@ -19,7 +19,7 @@ const Form = ({
         <form onSubmit={onSubmit}>
             {children}
             <div
-                className={`flex items-center ${backButton ? "justify-between" : "justify-end"} w-full my-2`}
+                className={`flex items-center ${backButton ? "justify-between" : "justify-end"} w-full mt-10`}
             >
                 {backButton ? (
                     <Button

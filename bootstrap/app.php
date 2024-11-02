@@ -27,18 +27,14 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes\v1\web\protected.php'));
 
             Route::middleware(['web', 'locale', 'authenticated', 'has-role:admin'])
+                ->name('v1.web.admin.')
+                ->prefix('v1/admin')
                 ->group(base_path('routes\v1\web\admin.php'));
 
             Route::middleware(['web', 'locale', 'authenticated', 'has-role:customer'])
+                ->name('v1.web.customer.')
+                ->prefix('v1/customer')
                 ->group(base_path('routes\v1\web\customer.php'));
-
-            Route::middleware(['api', 'locale',])
-                ->prefix('api')
-                ->group(base_path('routes\v1\api\public.php'));
-
-            Route::middleware(['api', 'locale', 'authenticated'])
-                ->prefix('api')
-                ->group(base_path('routes\v1\api\protected.php'));
         }
     )->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([

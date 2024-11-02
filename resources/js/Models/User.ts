@@ -1,3 +1,4 @@
+import { Group } from "./Group";
 import { Role } from "@/Models/Role";
 
 export interface User {
@@ -10,4 +11,6 @@ export interface User {
     reset_password_code?: string;
     fcm_token?: string;
     roles: Role[];
+    groups?: Group[];
+    ownedGroups?: Group[];
 }

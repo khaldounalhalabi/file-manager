@@ -3,16 +3,28 @@
 namespace App\Models;
 
 use App\Enums\RolesPermissionEnum;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * Class User
+ * @param string                                     $first_name
+ * @param string                                     $last_name
+ * @param string                                     $email
+ * @param Carbon                                     $email_verified_at
+ * @param string                                     $fcm_token
+ * @param string                                     $reset_password_code
+ * @param Collection<Group>|SupportCollection<Group> $ownedGroups
+ * @param Collection<Group>|SupportCollection<Group> $groups
  * @mixin Builder
  */
 class User extends Authenticatable
@@ -66,5 +78,38 @@ class User extends Authenticatable
     public function isCustomer(): bool
     {
         return $this->hasRole(RolesPermissionEnum::CUSTOMER['role']);
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, 'group_users');
+    }
+
+    public function ownedGroups(): HasMany
+    {
+        return $this->hasMany(Group::class, 'owner_id');
+    }
+
+    /**
+     * add your searchable columns, so you can search within them in the
+     * index method
+     */
+    public static function searchableArray(): array
+    {
+        return [
+            'first_name',
+            'last_name',
+            'email',
+        ];
+    }
+
+    /**
+     * add your relations and their searchable columns,
+     * so you can search within them in the index method
+     */
+    public static function relationsSearchableArray(): array
+    {
+        return [
+        ];
     }
 }

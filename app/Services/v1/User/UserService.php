@@ -5,6 +5,7 @@ namespace App\Services\v1\User;
 use App\Enums\RolesPermissionEnum;
 use App\Models\User;
 use App\Notifications\ResetPasswordCodeEmail;
+use App\Repositories\GroupRepository;
 use App\Repositories\UserRepository;
 use App\Services\Contracts\BaseService;
 use App\Services\Contracts\Makable;
@@ -279,7 +280,10 @@ class UserService extends BaseService
             }
 
             if ($data['role'] == RolesPermissionEnum::CUSTOMER['role']) {
-                //TODO::create user group if a customer
+                GroupRepository::make()->create([
+                    'name' => $data['group_name'],
+                    'owner_id' => $user->id,
+                ]);
             }
 
             DB::commit();
@@ -288,5 +292,15 @@ class UserService extends BaseService
             DB::rollBack();
             throw $exception;
         }
+    }
+
+    public function getByGroup($groupId, array $relations = []): ?array
+    {
+        return $this->repository->getByGroup($groupId, $relations);
+    }
+
+    public function getCustomers(array $relations = []): ?array
+    {
+        return $this->repository->getCustomers($relations);
     }
 }

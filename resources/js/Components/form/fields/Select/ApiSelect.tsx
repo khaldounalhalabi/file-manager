@@ -194,7 +194,7 @@ function ApiSelect<TResponse, TData>({
 
     const getInputValue = () => {
         if (isMultiple) {
-            return `[${selected.map((option) => option.value)}]`;
+            return selected.map((option) => option.value);
         } else {
             return selected?.[0]?.value ?? "";
         }

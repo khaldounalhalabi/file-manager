@@ -8,7 +8,6 @@ use App\Traits\FileHandler;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection as RegularCollection;
 use Illuminate\Support\Facades\Schema;
@@ -100,7 +99,7 @@ abstract class BaseRepository
 
     /**
      * @param array $relations
-     * @return Builder<T>
+     * @return Builder<T>|T
      */
     public function globalQuery(array $relations = []): Builder
     {
@@ -257,13 +256,13 @@ abstract class BaseRepository
 
         return [
             'currentPage' => $paginated_arr['current_page'],
-            'from'        => $paginated_arr['from'],
-            'to'          => $paginated_arr['to'],
-            'total'       => $paginated_arr['total'],
-            'per_page'    => $paginated_arr['per_page'],
+            'from' => $paginated_arr['from'],
+            'to' => $paginated_arr['to'],
+            'total' => $paginated_arr['total'],
+            'per_page' => $paginated_arr['per_page'],
             'total_pages' => ceil($paginated_arr['total'] / $paginated_arr['per_page']),
-            'is_first'    => $paginated_arr['current_page'] == 1,
-            'is_last'     => $paginated_arr['current_page'] == ceil($paginated_arr['total'] / $paginated_arr['per_page']),
+            'is_first' => $paginated_arr['current_page'] == 1,
+            'is_last' => $paginated_arr['current_page'] == ceil($paginated_arr['total'] / $paginated_arr['per_page']),
         ];
     }
 
@@ -506,5 +505,22 @@ abstract class BaseRepository
         } else {
             return $param;
         }
+    }
+
+    /**
+     * @param Builder|\Illuminate\Database\Query\Builder $builder
+     * @param                                            $perPage
+     * @return array{data:Collection<T>|RegularCollection<T>|T[] , pagination_data:array}|null
+     */
+    public function paginate(Builder|\Illuminate\Database\Query\Builder $builder, $perPage = 10): ?array
+    {
+        $perPage = request("limit") ?? $perPage;
+        $all = $builder->paginate($perPage);
+
+        if (count($all) > 0) {
+            $paginationData = $this->formatPaginateData($all);
+            return ['data' => $all->items(), 'pagination_data' => $paginationData];
+        }
+        return null;
     }
 }

@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\User\StoreUpdateUserRequest;
 use App\Models\User;
 use App\Services\v1\User\UserService;
+use App\Traits\RestTrait;
 use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    use RestTrait;
+
     private UserService $userService;
 
     private array $relations = ['roles'];
@@ -25,16 +28,27 @@ class UserController extends Controller
     {
         $items = $this->userService->indexWithPagination($this->relations);
         if ($items) {
-            return response()->json([
-                'data' => $items['data'],
-                'pagination_data' => $items['pagination_data'],
-            ], 200);
+            return $this->apiResponse($items['data'], 200, __('site.get_successfully'), $items['pagination_data']);
         }
+        return $this->noData();
+    }
 
-        return response()->json([
-            'data' => [],
-            'pagination_data' => null,
-        ], 200);
+    public function getUsersByGroup($groupId)
+    {
+        $items = $this->userService->getByGroup($groupId, $this->relations);
+        if ($items) {
+            return $this->apiResponse($items['data'], 200, __('site.get_successfully'), $items['pagination_data']);
+        }
+        return $this->noData();
+    }
+
+    public function getCustomers()
+    {
+        $items = $this->userService->getCustomers($this->relations);
+        if ($items) {
+            return $this->apiResponse($items['data'], 200, __('site.get_successfully'), $items['pagination_data']);
+        }
+        return $this->noData();
     }
 
     public function index()
@@ -113,30 +127,6 @@ class UserController extends Controller
             return $result;
         } catch (Exception $e) {
             return redirect()->back()->with('error', __('site.something_went_wrong'));
-        }
-    }
-
-    public function getImportExample()
-    {
-        try {
-            $result = $this->userService->getImportExample();
-            session()->flash('success', __('site.success'));
-            return $result;
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', __('site.something_went_wrong'));
-        }
-    }
-
-    public function import(Request $request)
-    {
-        try {
-            $request->validate([
-                'excel_file' => 'required|mimes:xls,xlsx',
-            ]);
-            $this->userService->import();
-            return redirect()->back()->with('message', __('site.success'));
-        } catch (Exception) {
-            return redirect()->back()->with('message', __('site.something_went_wrong'));
         }
     }
 }

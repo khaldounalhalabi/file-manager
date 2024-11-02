@@ -2,16 +2,15 @@
 
 namespace App\Traits;
 
-use Illuminate\Http\JsonResponse;
-use JetBrains\PhpStorm\ArrayShape;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\ApiController;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
+use JetBrains\PhpStorm\ArrayShape;
 
 trait RestTrait
 {
     /**
      * this function will determine the api response structure to make all responses has the same structure
-     *
      * @param null $data
      * @param null $message
      * @param null $paginate
@@ -23,7 +22,7 @@ trait RestTrait
             'status' => $code == 200 || $code == 201 || $code == 204 || $code == 205,
             'message' => $message,
             'code' => $code,
-            'paginate' => $paginate,
+            'pagination_data' => $paginate,
         ];
 
         return response()->json($arrayResponse, $code, [], JSON_PRETTY_PRINT);
@@ -71,7 +70,7 @@ trait RestTrait
      * @param mixed $response
      * @return JsonResponse
      */
-    public function noData(mixed $response): JsonResponse
+    public function noData(mixed $response = null): JsonResponse
     {
         return $this->apiResponse($response, ApiController::STATUS_OK, __('site.there_is_no_data'));
     }

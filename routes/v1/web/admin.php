@@ -4,14 +4,18 @@ use App\Http\Controllers\WEB\v1;
 use Illuminate\Support\Facades\Route;
 
 
-Route::inertia('/v1/admin/', 'dashboard/Index')->name('v1.web.admin.index');
+Route::inertia('/', 'dashboard/Index')->name('index');
 
-Route::put('/v1/admin/update-user-data', [v1\AdminAuthController::class, 'updateUserData'])->name('v1.web.admin.update.user.data');
-Route::get('/v1/admin/user-details', [v1\AdminAuthController::class, 'userDetails'])->name('v1.web.admin.user.details');
-Route::get('/v1/admin/logout', [v1\AdminAuthController::class, 'logout'])->name('v1.web.admin.logout');
+Route::put('/update-user-data', [v1\AdminAuthController::class, 'updateUserData'])->name('update.user.data');
+Route::get('/user-details', [v1\AdminAuthController::class, 'userDetails'])->name('user.details');
+Route::get('/logout', [v1\AdminAuthController::class, 'logout'])->name('logout');
 
-Route::get('/v1/admin/users/data', [v1\UserController::class, 'data'])->name('v1.web.admin.users.data');
-Route::post('/v1/admin/users/export', [v1\UserController::class, 'export'])->name('v1.web.admin.users.export');
-Route::get('/v1/admin/users/get-import-example', [v1\UserController::class, 'getImportExample'])->name('v1.web.admin.users.get.example');
-Route::post('/v1/admin/users/import', [v1\UserController::class, 'import'])->name('v1.web.admin.users.import');
-Route::Resource('/v1/admin/users', v1\UserController::class)->names('v1.web.admin.users');
+Route::get('users/customers', [v1\UserController::class, 'getCustomers'])->name('users.customers');
+Route::get('/groups/{groupId}/users', [v1\UserController::class, 'getUsersByGroup'])->name('groups.users');
+Route::get('/users/data', [v1\UserController::class, 'data'])->name('users.data');
+Route::post('/users/export', [v1\UserController::class, 'export'])->name('users.export');
+Route::Resource('/users', v1\UserController::class)->names('users');
+
+Route::get('/groups/data', [v1\GroupController::class, 'data'])->name('groups.data');
+Route::post('/groups/export', [v1\GroupController::class, 'export'])->name('groups.export');
+Route::Resource('/groups', v1\GroupController::class)->names('groups');

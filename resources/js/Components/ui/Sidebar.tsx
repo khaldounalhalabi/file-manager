@@ -1,9 +1,10 @@
+import TableCells from "../icons/TableCells";
 import React, { ReactNode } from "react";
 import { asset, role } from "@/helper";
 import { Link } from "@inertiajs/react";
 import XMark from "../icons/XMark";
 import PresentationChart from "../icons/PresentationChart";
-import { User } from "lucide-react";
+import { Group, User } from "lucide-react";
 
 export const Sidebar = ({
     toggleSidebar,
@@ -23,6 +24,12 @@ export const Sidebar = ({
             href: route(`v1.web.admin.users.index`),
             title: "User",
             icon: () => <User />,
+            role: ["admin"],
+        },
+        {
+            href: route("v1.web.admin.groups.index"),
+            title: "Group",
+            icon: () => <Group />,
             role: ["admin"],
         },
     ];

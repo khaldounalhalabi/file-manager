@@ -1,20 +1,18 @@
 import ActionsButtons from "@/Components/Datatable/ActionsButtons";
 import DataTable from "@/Components/Datatable/DataTable";
-import { User } from "@/Models/User";
+import { Group } from "@/Models/Group";
 import { PaginatedResponse } from "@/Models/Response";
 
 const Index = ({ exportables }: { exportables: string[] }) => {
     return (
         <DataTable
-            title="User Table"
-            createUrl={route("v1.web.admin.users.create")}
-            exportRoute={route("v1.web.admin.users.export")}
+            title="Group Table"
+            createUrl={route("v1.web.admin.groups.create")}
+            exportRoute={route("v1.web.admin.groups.export")}
             exportables={exportables}
             getDataArray={(res) => res.data}
             getTotalPages={(res) => res?.pagination_data?.total_pages ?? 0}
             getTotalRecords={(res) => res.pagination_data?.total ?? 0}
-            isFirst={(res) => res.pagination_data?.is_first ?? true}
-            isLast={(res) => res.pagination_data?.is_last ?? true}
             api={(
                 page?: number | undefined,
                 search?: string | undefined,
@@ -22,9 +20,9 @@ const Index = ({ exportables }: { exportables: string[] }) => {
                 sortDir?: string | undefined,
                 perPage?: number | undefined,
                 params?: object | undefined,
-            ): Promise<PaginatedResponse<User>> =>
+            ): Promise<PaginatedResponse<Group>> =>
                 fetch(
-                    route("v1.web.admin.users.data", {
+                    route("v1.web.admin.groups.data", {
                         page: page,
                         search: search,
                         sort_col: sortCol,
@@ -48,31 +46,23 @@ const Index = ({ exportables }: { exportables: string[] }) => {
                     sortable: true,
                 },
                 {
-                    label: "First Name",
-                    name: "first_name",
+                    label: "Name",
+                    name: "name",
                     sortable: true,
                 },
                 {
-                    label: "Last Name",
-                    name: "last_name",
-                    sortable: true,
-                },
-                {
-                    label: "Email",
-                    name: "email",
-                    sortable: true,
-                },
-                {
-                    label: "Role",
-                    render: (_data, user) => user?.roles?.[0]?.name,
+                    label: "Owner",
+                    name: "owner.first_name",
+                    render: (name, group) =>
+                        `${group?.owner?.first_name} ${group?.owner?.last_name}`,
                 },
                 {
                     label: "Options",
-                    render: (_data, user, setHidden) => (
+                    render: (_data, group, setHidden, revalidate) => (
                         <ActionsButtons
                             buttons={["delete", "edit", "show"]}
-                            baseUrl={route("v1.web.admin.users.index")}
-                            id={user?.id ?? 0}
+                            baseUrl={route("v1.web.admin.groups.index")}
+                            id={group?.id ?? 0}
                             setHidden={setHidden}
                         />
                     ),

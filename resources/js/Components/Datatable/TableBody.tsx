@@ -69,7 +69,7 @@ function TableBody<Data>({
                                                           ) ?? "No Data"),
                                                     item,
                                                     setHidden,
-                                                    revalidate,
+
                                                 )}
                                             </td>
                                         );
@@ -88,7 +88,7 @@ function TableBody<Data>({
                                                     undefined,
                                                     item,
                                                     setHidden,
-                                                    revalidate,
+
                                                 )}
                                             </td>
                                         );

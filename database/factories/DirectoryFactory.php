@@ -3,13 +3,14 @@
 namespace Database\Factories;
 
 use App\Models\Directory;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<\App\Models\Group>
+ * @extends Factory<Directory>
  */
-class GroupFactory extends Factory
+class DirectoryFactory extends Factory
 {
 
     /**
@@ -21,17 +22,9 @@ class GroupFactory extends Factory
         return [
             'name' => fake()->firstName(),
             'owner_id' => User::factory()->customer(),
-
+            'parent_id' => null,
+            'group_id' => Group::factory(),
+            'path' => "",
         ];
-    }
-
-    public function withUsers($count = 1): GroupFactory|Factory
-    {
-        return $this->has(User::factory($count)->customer());
-    }
-
-    public function withDirectories($count = 1): GroupFactory|Factory
-    {
-        return $this->has(Directory::factory($count));
     }
 }

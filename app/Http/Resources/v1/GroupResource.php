@@ -11,7 +11,6 @@ class GroupResource extends BaseResource
 {
     /**
      * Transform the resource into an array.
-     *
      * @return array<string, mixed>
      */
     public function toArray($request): array
@@ -20,6 +19,7 @@ class GroupResource extends BaseResource
             'id' => $this->id,
             'name' => $this->name,
             'owner_id' => $this->owner_id,
+            'directories' => DirectoryResource::collection($this->whenLoaded('directories'))
         ];
     }
 }

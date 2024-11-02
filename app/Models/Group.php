@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 
 /**
  * @property string                                                                                      name
  * @property integer                                                                                     owner_id
  * @property  User                                                                                       owner
- * @property  \Illuminate\Support\Collection<User>|\Illuminate\Database\Eloquent\Collection<User>|User[] users
+ * @property  Collection<User>|\Illuminate\Database\Eloquent\Collection<User>|User[] users
  */
 class Group extends Model
 {
@@ -79,6 +81,7 @@ class Group extends Model
      * so you can search within them in the index method
      */
     public static function relationsSearchableArray(): array
+
     {
         return [
             'users' => [
@@ -92,5 +95,10 @@ class Group extends Model
                 'email',
             ]
         ];
+    }
+
+    public function directories(): HasMany
+    {
+        return $this->hasMany(Directory::class);
     }
 }

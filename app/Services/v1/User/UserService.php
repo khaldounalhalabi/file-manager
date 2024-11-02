@@ -43,9 +43,13 @@ class UserService extends BaseService
     /**
      * @param array       $data
      * @param string|null $role
+     * @param array       $relations
      * @return array{User , string , string}|User|null
+     * @noinspection PhpUndefinedMethodInspection
+     * @noinspection LaravelFunctionsInspection
+     * @noinspection PhpVoidFunctionResultUsedInspection
      */
-    public function updateUserDetails(array $data, ?string $role = null): array|User|null
+    public function updateUserDetails(array $data, ?string $role = null, array $relations = []): array|User|null
     {
         $user = auth($this->guard)->user();
 
@@ -65,19 +69,22 @@ class UserService extends BaseService
         if (!request()->acceptsHtml()) {
             $refresh_token = auth($this->guard)->setTTL(ttl: env('JWT_REFRESH_TTL', 20160))->refresh();
 
-            return [$user, $token, $refresh_token,];
+            return [$user->load($relations), $token, $refresh_token,];
         }
 
-        return $user;
+        return $user->load($relations);
     }
 
     /**
      * @param array       $data
      * @param string|null $role
      * @param array       $additionalData
+     * @param array       $relations
      * @return User|Authenticatable|array{User , string , string}|null
+     * @noinspection PhpUndefinedMethodInspection
+     * @noinspection LaravelFunctionsInspection
      */
-    public function login(array $data, ?string $role = null, array $additionalData = []): User|Authenticatable|array|null
+    public function login(array $data, ?string $role = null, array $additionalData = [], array $relations = []): User|Authenticatable|array|null
     {
         $token = auth($this->guard)->attempt([
             'email' => $data['email'],
@@ -108,10 +115,10 @@ class UserService extends BaseService
         if (!request()->acceptsHtml()) {
             $refresh_token = auth($this->guard)->setTTL(ttl: env('JWT_REFRESH_TTL', 20160))->refresh();
 
-            return [$user, $token, $refresh_token,];
+            return [$user->load($relations), $token, $refresh_token,];
         }
 
-        return $user;
+        return $user->load($relations);
     }
 
     /**
@@ -139,27 +146,15 @@ class UserService extends BaseService
     }
 
     /**
-     * @return array{User , string , string}|null
-     */
-    public function refresh_token(): ?array
-    {
-        try {
-            $user = auth($this->guard)->user();
-            $token = auth($this->guard)->setTTL(env('JWT_TTL', 10080))->refresh();
-            $refresh_token = auth($this->guard)->setTTL(env('JWT_REFRESH_TTL', 20160))->refresh();
-
-            return [$user, $token, $refresh_token];
-        } catch (Exception) {
-            return null;
-        }
-    }
-
-    /**
      * @param array       $data
      * @param string|null $role
+     * @param array       $relations
      * @return array{User , string , string}|User
+     * @noinspection PhpUndefinedMethodInspection
+     * @noinspection LaravelFunctionsInspection
+     * @noinspection PhpVoidFunctionResultUsedInspection
      */
-    public function register(array $data, ?string $role = null): array|User
+    public function register(array $data, ?string $role = null, array $relations = []): array|User
     {
         $user = $this->repository->create($data);
 
@@ -172,10 +167,10 @@ class UserService extends BaseService
         if (!request()->acceptsHtml()) {
             $refresh_token = auth($this->guard)->setTTL(ttl: env('JWT_REFRESH_TTL', 20160))->refresh();
 
-            return [$user, $token, $refresh_token,];
+            return [$user->load($relations), $token, $refresh_token,];
         }
 
-        return $user;
+        return $user->load($relations);
     }
 
     /**
@@ -208,12 +203,13 @@ class UserService extends BaseService
     }
 
     /**
-     * @param $email
+     * @param       $email
+     * @param array $relations
      * @return User|null
      */
-    public function getUserByEmail($email): ?User
+    public function getUserByEmail($email, array $relations = []): ?User
     {
-        return $this->repository->getUserByEmail($email);
+        return $this->repository->getUserByEmail($email)?->load($relations);
     }
 
     /**
@@ -247,9 +243,10 @@ class UserService extends BaseService
 
     /**
      * @param string|null $role
+     * @param array       $relations
      * @return User|Authenticatable|null
      */
-    public function userDetails(?string $role = null): User|Authenticatable|null
+    public function userDetails(?string $role = null, array $relations = []): User|Authenticatable|null
     {
         $user = auth($this->guard)->user();
 
@@ -261,7 +258,7 @@ class UserService extends BaseService
             return null;
         }
 
-        return $user;
+        return $user->load($relations);
     }
 
     /**
@@ -280,9 +277,13 @@ class UserService extends BaseService
             }
 
             if ($data['role'] == RolesPermissionEnum::CUSTOMER['role']) {
-                GroupRepository::make()->create([
+                $group = GroupRepository::make()->create([
                     'name' => $data['group_name'],
                     'owner_id' => $user->id,
+                ]);
+
+                $user->update([
+                    'group_id' => $group->id
                 ]);
             }
 

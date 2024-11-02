@@ -1,3 +1,4 @@
+import { Directory } from "./Directory";
 import { User } from "./User";
 
 export interface Group {
@@ -6,4 +7,5 @@ export interface Group {
     owner_id: number;
     owner?: User;
     users?: User[];
+    directories?: Directory[];
 }

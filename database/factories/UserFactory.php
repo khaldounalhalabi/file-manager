@@ -39,7 +39,7 @@ class UserFactory extends Factory
         ]);
     }
 
-    public function withGroups($count = 1)
+    public function withGroups($count = 1): Factory|UserFactory
     {
         return $this->has(Group::factory($count));
     }

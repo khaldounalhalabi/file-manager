@@ -5,16 +5,19 @@ import { asset } from "@/helper";
 import { Link, useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
 
-const Login = () => {
+const Register = () => {
     const { post, setData, errors, processing } = useForm<{
+        first_name: string;
+        last_name: string;
         email: string;
         password: string;
+        password_confirmation: string;
     }>();
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        post(route("v1.web.public.login"));
+        post(route("v1.web.public.customer.register"));
     };
 
     return (
@@ -22,10 +25,7 @@ const Login = () => {
             <div className="col-start-2 col-end-3">
                 <div className="flex flex-col items-center">
                     <div className="flex items-center my-2 gap-1">
-                        <img
-                            src={asset("images/logo.png")}
-                            width={"35px"}
-                        />
+                        <img src={asset("images/logo.png")} width={"35px"}/>
                         <h1 className="text-brand text-4xl font-bold">
                             Ultimate file manager
                         </h1>
@@ -34,20 +34,43 @@ const Login = () => {
                         <div className="flex flex-col my-5">
                             <div className="flex justify-center items-center">
                                 <h1 className="font-semibold text-3xl text-brand">
-                                    Welcome Back
+                                    Hello There !
                                 </h1>
                             </div>
                             <div className="flex justify-center items-center dark:text-white">
-                                <p>Please Login To Your Account</p>
+                                <p>Fill The Information Below To Continue</p>
                             </div>
                         </div>
                         <Form
                             onSubmit={onSubmit}
                             processing={processing}
-                            buttonText="Login"
+                            buttonText="Sign Up"
                             backButton={false}
                         >
                             <div className="flex flex-col gap-5 my-5 w-full">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+                                    <Input
+                                        name="first_name"
+                                        onChange={(e) =>
+                                            setData(
+                                                "first_name",
+                                                e.target.value,
+                                            )
+                                        }
+                                        label="First Name"
+                                        required={true}
+                                        type="text"
+                                    />
+                                    <Input
+                                        name="last_name"
+                                        onChange={(e) =>
+                                            setData("last_name", e.target.value)
+                                        }
+                                        label="Last Name"
+                                        required={true}
+                                        type="text"
+                                    />
+                                </div>
                                 <Input
                                     name="email"
                                     onChange={(e) =>
@@ -67,30 +90,30 @@ const Login = () => {
                                     required={true}
                                     type="password"
                                 />
+
+                                <Input
+                                    name="password_confirmation"
+                                    onChange={(e) =>
+                                        setData(
+                                            "password_confirmation",
+                                            e.target.value,
+                                        )
+                                    }
+                                    label="Confirm Password"
+                                    required={true}
+                                    type="password"
+                                />
                             </div>
                             <p className="text-lg dark:text-white">
-                                Forgot Your Password ?{" "}
+                                Have An Account ?{" "}
                                 <span>
                                     <Link
                                         href={route(
-                                            "v1.web.public.request.reset.password.code-page",
+                                            "v1.web.public.customer.login.page",
                                         )}
                                         className="text-blue-700 hover:text-primary"
                                     >
-                                        Reset Your Password
-                                    </Link>
-                                </span>
-                            </p>
-                            <p className="text-lg dark:text-white">
-                                New User ?{" "}
-                                <span>
-                                    <Link
-                                        href={route(
-                                            "v1.web.public.register.page",
-                                        )}
-                                        className="text-blue-700 hover:text-primary"
-                                    >
-                                        Create New Account Now
+                                        Login
                                     </Link>
                                 </span>
                             </p>
@@ -102,4 +125,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Register;

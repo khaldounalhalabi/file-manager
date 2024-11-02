@@ -12,7 +12,7 @@ const ForgetPassword = () => {
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(route("v1.web.public.request.reset.password.code"));
+        post(route("v1.web.public.customer.request.reset.password.code"));
     };
     return (
         <div className="grid grid-cols-3 my-20">

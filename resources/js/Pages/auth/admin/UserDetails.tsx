@@ -79,7 +79,7 @@ const EditProfile = ({ user }: { user: User }) => {
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        put(route("v1.web.protected.update.user.data"));
+        put(route("v1.web.admin.update.user.data"));
     };
 
     return (

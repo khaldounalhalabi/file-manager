@@ -40,7 +40,7 @@ class UserController extends Controller
     public function index()
     {
         $exportables = User::getModel()->exportable();
-        return Inertia::render('dashboard/users/Index', [
+        return Inertia::render('dashboard/admin/users/Index', [
             "exportables" => $exportables
         ]);
     }
@@ -48,14 +48,14 @@ class UserController extends Controller
     public function show($userId)
     {
         $user = $this->userService->view($userId, $this->relations);
-        return Inertia::render('dashboard/users/Show', [
+        return Inertia::render('dashboard/admin/users/Show', [
             'user' => $user,
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('dashboard/users/Create');
+        return Inertia::render('dashboard/admin/users/Create');
     }
 
     /**
@@ -78,7 +78,7 @@ class UserController extends Controller
         if (!$user) {
             abort(404);
         }
-        return Inertia::render('dashboard/users/Edit', [
+        return Inertia::render('dashboard/admin/users/Edit', [
             'user' => $user
         ]);
     }

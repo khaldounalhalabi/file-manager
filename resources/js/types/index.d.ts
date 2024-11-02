@@ -2,10 +2,9 @@ import { AvailableLocales } from "@/Models/Translatable";
 import { User } from "@/Models/User";
 import { route as routeFn } from "ziggy-js";
 import { PageProps as InertiaProps } from "@inertiajs/core";
+import { RoleName } from "@/Models/Role";
 
-export type MiddlewareProps<
-    T extends InertiaProps<string, unknown> = Record<string, unknown>,
-> = T & {
+export interface MiddlewareProps extends InertiaProps {
     authUser: User;
     availableLocales: AvailableLocales[] | string[];
     currentLocale: AvailableLocales | string;
@@ -17,7 +16,8 @@ export type MiddlewareProps<
     message?: string;
     success?: string;
     error?: string;
-};
+    role?: RoleName;
+}
 
 declare global {
     var route: typeof routeFn;

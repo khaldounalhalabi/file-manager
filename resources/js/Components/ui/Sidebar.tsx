@@ -1,23 +1,9 @@
-import TableCells from "../icons/TableCells";
 import React, { ReactNode } from "react";
-import { asset } from "@/helper";
+import { asset, role } from "@/helper";
 import { Link } from "@inertiajs/react";
 import XMark from "../icons/XMark";
 import PresentationChart from "../icons/PresentationChart";
-import {User} from "lucide-react";
-
-const sidebarItems = [
-    {
-        href: route("v1.web.protected.index"),
-        title: "Dashboard",
-        icon: () => <PresentationChart />,
-    },
-    {
-        href: route("v1.web.admin.users.index"),
-        title: "User",
-        icon: () => <User />,
-    },
-];
+import { User } from "lucide-react";
 
 export const Sidebar = ({
     toggleSidebar,
@@ -26,6 +12,21 @@ export const Sidebar = ({
     toggleSidebar: () => void;
     isOpen: boolean;
 }) => {
+    const sidebarItems = [
+        {
+            href: route(`v1.web.${role()}.index`),
+            title: "Dashboard",
+            icon: () => <PresentationChart />,
+            role: ["admin", "customer"],
+        },
+        {
+            href: route(`v1.web.admin.users.index`),
+            title: "User",
+            icon: () => <User />,
+            role: ["admin"],
+        },
+    ];
+    const userRole = role();
     return (
         <div
             className={`sticky flex flex-col bg-white-secondary dark:bg-dark-secondary max-h-screen overflow-y-scroll`}
@@ -62,15 +63,20 @@ export const Sidebar = ({
                     "bg-white-secondary dark:bg-dark-secondary w-full mt-6 gap-1 px-4"
                 }
             >
-                {sidebarItems.map((item, index) => (
-                    <SidebarItem
-                        key={index}
-                        href={item.href}
-                        title={item.title}
-                        icon={item.icon}
-                        isOpen={isOpen}
-                    />
-                ))}
+                {sidebarItems.map((item, index) =>
+                    (userRole && item.role?.includes(userRole)) ||
+                    !item.role ? (
+                        <SidebarItem
+                            key={index}
+                            href={item.href}
+                            title={item.title}
+                            icon={item.icon}
+                            isOpen={isOpen}
+                        />
+                    ) : (
+                        ""
+                    ),
+                )}
             </div>
         </div>
     );

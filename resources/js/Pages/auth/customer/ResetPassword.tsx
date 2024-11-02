@@ -14,7 +14,7 @@ const ResetPassword = () => {
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(route("v1.web.public.change.password"));
+        post(route("v1.web.public.customer.change.password"));
     };
     return (
         <div className="grid grid-cols-3 my-20">

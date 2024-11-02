@@ -20,5 +20,14 @@ class UserSeeder extends Seeder
             'last_name' => 'File',
             'email_verified_at' => now()
         ])->assignRole(RolesPermissionEnum::ADMIN['role']);
+
+
+        User::create([
+            'email' => 'user@files.com',
+            'password' => '123456789',
+            'first_name' => 'User',
+            'last_name' => 'File',
+            'email_verified_at' => now()
+        ])->assignRole(RolesPermissionEnum::CUSTOMER['role']);
     }
 }

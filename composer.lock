@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b81707a60c15c58deca5f763f3abaff",
+    "content-hash": "8896262aec13b1cfb98bd955c30ea350",
     "packages": [
         {
             "name": "brick/math",
@@ -218,16 +218,16 @@
         },
         {
             "name": "cubeta/cubeta-starter",
-            "version": "v2.1.2",
+            "version": "dev-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cubeta-io/cubeta-starter.git",
-                "reference": "e1f5f9589f1765506cf24922f6aa26008a304457"
+                "reference": "f8c86551b70851f35c1c50e6002217b6335e1290"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cubeta-io/cubeta-starter/zipball/e1f5f9589f1765506cf24922f6aa26008a304457",
-                "reference": "e1f5f9589f1765506cf24922f6aa26008a304457",
+                "url": "https://api.github.com/repos/cubeta-io/cubeta-starter/zipball/f8c86551b70851f35c1c50e6002217b6335e1290",
+                "reference": "f8c86551b70851f35c1c50e6002217b6335e1290",
                 "shasum": ""
             },
             "require": {
@@ -265,9 +265,9 @@
             "description": "Cubeta-Starter: A developer's Swiss army knife for seamless CRUD operations. Choose between core integration or dev dependency. Enjoy a user-friendly GUI for code generation, enhancing your development workflow. Say goodbye to repetition, embrace productivity with Cubeta-Starter!",
             "support": {
                 "issues": "https://github.com/cubeta-io/cubeta-starter/issues",
-                "source": "https://github.com/cubeta-io/cubeta-starter/tree/v2.1.2"
+                "source": "https://github.com/cubeta-io/cubeta-starter/tree/dev"
             },
-            "time": "2024-08-17T07:55:42+00:00"
+            "time": "2024-09-12T12:36:43+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -8769,7 +8769,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "cubeta/cubeta-starter": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

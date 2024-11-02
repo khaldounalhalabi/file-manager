@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { User } from "@/Models/User";
-import { asset } from "@/helper";
+import { asset, role } from "@/helper";
 import ChevronDown from "../icons/ChevronDown";
 
 const ProfileDropdown = () => {
@@ -55,7 +55,7 @@ const ProfileDropdown = () => {
                     <li>
                         <Link
                             id="user-details"
-                            href={route("v1.web.protected.user.details")}
+                            href={route(`v1.web.${role()}.user.details`)}
                             className="cursor-pointer block hover:bg-gray-100 dark:hover:text-black p-2 rounded-md"
                         >
                             My Profile
@@ -64,7 +64,7 @@ const ProfileDropdown = () => {
                     <li>
                         <Link
                             id="logout"
-                            href={route("v1.web.protected.logout")}
+                            href={route(`v1.web.${role()}.logout`)}
                             className="cursor-pointer block hover:bg-gray-100 dark:hover:text-black p-2 rounded-md"
                         >
                             Sign Out

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\RolesPermissionEnum;
 use Closure;
 use App\Traits\RestTrait;
 use Illuminate\Http\Request;
@@ -27,7 +28,11 @@ class Authenticate
                 ]);
             }
         } elseif (!auth('web')?->user()) {
-            return redirect()->route('v1.web.public.login.page');
+            if (str_contains($request->fullUrl() , RolesPermissionEnum::ADMIN['role'])){
+                return redirect()->route('v1.web.public.admin.login.page');
+            }else{
+                return redirect()->route('v1.web.public.customer.login.page');
+            }
         }
 
         return $next($request);

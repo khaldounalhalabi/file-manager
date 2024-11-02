@@ -3,11 +3,31 @@
 use App\Http\Controllers\WEB\v1;
 use Illuminate\Support\Facades\Route;
 
-/** Auth Routes */
-Route::post('/v1/dashboard/login', [v1\BaseAuthController::class, 'login'])->name('v1.web.public.login');
-Route::post('/v1/dashboard/request-reset-password-code', [v1\BaseAuthController::class, 'requestResetPasswordCode'])->name('v1.web.public.request.reset.password.code');
-Route::post('/v1/dashboard/validate-reset-password-code', [v1\BaseAuthController::class, 'validateResetPasswordCode'])->name('v1.web.public.validate.reset.password.code');
-Route::post('/v1/dashboard/change-password', [v1\BaseAuthController::class, 'changePassword'])->name('v1.web.public.change.password');
-Route::inertia('/v1/dashboard/login', 'auth/Login')->name('v1.web.public.login.page');
-Route::inertia('/v1/dashboard/request-reset-password-code-page', 'auth/ForgetPassword')->name('v1.web.public.request.reset.password.code-page');
-Route::inertia('/v1/dashboard/reset-page', 'auth/ResetPassword')->name('v1.web.public.reset.password.page');
+Route::prefix('v1/admin')
+    ->name('v1.web.public.admin.')
+    ->group(function () {
+        Route::post('login', [v1\AdminAuthController::class, 'login'])->name('login');
+        Route::post('request-reset-password-code', [v1\AdminAuthController::class, 'requestResetPasswordCode'])->name('request.reset.password.code');
+        Route::post('validate-reset-password-code', [v1\AdminAuthController::class, 'validateResetPasswordCode'])->name('validate.reset.password.code');
+        Route::post('change-password', [v1\AdminAuthController::class, 'changePassword'])->name('change.password');
+
+        Route::inertia('login', 'auth/admin/Login')->name('login.page');
+        Route::inertia('request-reset-password-code-page', 'auth/admin/ForgetPassword')->name('request.reset.password.code-page');
+        Route::inertia('reset-page', 'auth/admin/ResetPassword')->name('reset.password.page');
+
+    });
+
+Route::prefix('v1/customer')
+    ->name('v1.web.public.customer.')
+    ->group(function () {
+        Route::post('login', [v1\CustomerAuthController::class, 'login'])->name('login');
+        Route::post('register', [v1\CustomerAuthController::class, 'register'])->name('register');
+        Route::post('request-reset-password-code', [v1\CustomerAuthController::class, 'requestResetPasswordCode'])->name('request.reset.password.code');
+        Route::post('validate-reset-password-code', [v1\CustomerAuthController::class, 'validateResetPasswordCode'])->name('validate.reset.password.code');
+        Route::post('change-password', [v1\CustomerAuthController::class, 'changePassword'])->name('change.password');
+
+        Route::inertia('login', 'auth/customer/Login')->name('login.page');
+        Route::inertia('request-reset-password-code-page', 'auth/customer/ForgetPassword')->name('request.reset.password.code-page');
+        Route::inertia('reset-page', 'auth/customer/ResetPassword')->name('reset.password.page');
+        Route::inertia('/register', 'auth/customer/Register')->name('register.page');
+    });

@@ -5,24 +5,21 @@ import { asset } from "@/helper";
 import { useForm } from "@inertiajs/react";
 import { FormEvent } from "react";
 
-const ResetPasswordCodeForm = () => {
+const ForgetPassword = () => {
     const { post, setData, errors, processing } = useForm<{
-        reset_password_code: string;
+        email: string;
     }>();
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(route("v1.web.public.validate.reset.password.code"));
+        post(route("v1.web.public.admin.request.reset.password.code"));
     };
     return (
         <div className="grid grid-cols-3 my-20">
             <div className="col-start-2 col-end-3">
                 <div className="flex flex-col items-center">
                     <div className="flex items-center my-2 gap-1">
-                        <img
-                            src={asset("images/logo.png")}
-                            width={"35px"}
-                        />
+                        <img src={asset("images/logo.png")} width={"35px"} />
                         <h1 className="text-brand text-4xl font-bold">
                             Ultimate file manager
                         </h1>
@@ -30,35 +27,31 @@ const ResetPasswordCodeForm = () => {
                     <PageCard>
                         <div className="flex flex-col my-5">
                             <div className="flex justify-center items-center">
-                                <h1 className="font-semibold text-2xl text-brand text-center">
-                                    Please Check Your Email For An Email From Us
-                                    !
+                                <h1 className="font-semibold text-3xl text-brand">
+                                    Forget Your Password ?
                                 </h1>
                             </div>
                             <div className="flex justify-center items-center">
-                                <p className={"dark:text-white"}>
-                                    Enter the reset code sent within the email
-                                    below
+                                <p className="text-center mt-1 dark:text-white">
+                                    Enter Your Email So We Can Send You A Reset
+                                    Password Code
                                 </p>
                             </div>
                         </div>
                         <Form
-                            backButton={false}
-                            buttonText="Submit Code"
                             onSubmit={onSubmit}
                             processing={processing}
+                            backButton={false}
+                            buttonText="Send Code"
                         >
                             <Input
-                                label="Password Reset Code"
-                                name={"reset_password_code"}
+                                name={"email"}
+                                onChange={(e) =>
+                                    setData("email", e.target.value)
+                                }
+                                label="Email"
                                 required={true}
-                                onChange={(e) => {
-                                    setData(
-                                        "reset_password_code",
-                                        e.target.value,
-                                    );
-                                }}
-                                type="text"
+                                type="email"
                             />
                         </Form>
                     </PageCard>
@@ -68,4 +61,4 @@ const ResetPasswordCodeForm = () => {
     );
 };
 
-export default ResetPasswordCodeForm;
+export default ForgetPassword;

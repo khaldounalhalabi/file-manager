@@ -38,7 +38,7 @@ class BaseAuthController extends Controller
         //login method and this data will be stored in the users table
         $user = $this->userService->login($request->validated(), $this->role, []);
         if ($user) {
-            return redirect()->route('v1.web.protected.user.details');
+            return redirect()->route("v1.web.$this->role.user.details");
         } else {
             return redirect()->back();
         }
@@ -50,7 +50,7 @@ class BaseAuthController extends Controller
         $user = $this->userService->updateUserDetails($request->validated(), $this->role);
 
         if ($user) {
-            return redirect()->route('v1.web.protected.user.details');
+            return redirect()->route("v1.web.$this->role.user.details");
         } else {
             return redirect()->back();
         }
@@ -61,7 +61,7 @@ class BaseAuthController extends Controller
         $user = $this->userService->userDetails($this->role);
 
         if ($user) {
-            return Inertia::render('dashboard/profile/UserDetails', [
+            return Inertia::render("auth/$this->role/UserDetails", [
                 'user' => $user,
             ]);
         } else {
@@ -73,7 +73,7 @@ class BaseAuthController extends Controller
     {
         $result = $this->userService->passwordResetRequest($request->validated()['email']);
         if ($result) {
-            return Inertia::render('auth/ResetPasswordCodeForm');
+            return Inertia::render("auth/$this->role/ResetPasswordCodeForm");
         } else {
             return redirect()->back();
         }
@@ -82,7 +82,7 @@ class BaseAuthController extends Controller
     public function validateResetPasswordCode(CheckPasswordResetRequest $request)
     {
         $request->validated();
-        return redirect()->route('v1.web.public.reset.password.page');
+        return redirect()->route("v1.web.public.$this->role.reset.password.page");
     }
 
     public function changePassword(ResetPasswordRequest $request)
@@ -91,7 +91,7 @@ class BaseAuthController extends Controller
         $result = $this->userService->passwordReset($data['reset_password_code'], $data['password']);
 
         if ($result) {
-            return redirect()->route('v1.web.public.login.page');
+            return redirect()->route("v1.web.public.$this->role.login.page");
         } else {
             return redirect()->back();
         }
@@ -101,7 +101,7 @@ class BaseAuthController extends Controller
     {
         $user = $this->userService->register($request->validated(), $this->role);
         if ($user) {
-            return redirect()->route('v1.web.protected.user.details');
+            return redirect()->route("v1.web.$this->role.user.details");
         } else {
             return redirect()->back();
         }
@@ -110,6 +110,6 @@ class BaseAuthController extends Controller
     public function logout()
     {
         $this->userService->logout();
-        return redirect()->route("v1.web.public.login.page");
+        return redirect()->route("v1.web.public.$this->role.login.page");
     }
 }

@@ -19,9 +19,12 @@ class GroupController extends Controller
 
     private array $relations = array('users', 'owner');
 
+    private ?string $role;
+
     public function __construct()
     {
         $this->groupService = GroupService::make();
+        $this->role = auth()->user()?->roles()?->first()?->name;
     }
 
     public function data()
@@ -43,7 +46,7 @@ class GroupController extends Controller
     public function index()
     {
         $exportables = Group::getModel()->exportable();
-        return Inertia::render('dashboard/admin/groups/Index', array(
+        return Inertia::render("dashboard/{$this->role}/groups/Index", array(
             'exportables' => $exportables,
         ));
     }
@@ -51,14 +54,14 @@ class GroupController extends Controller
     public function show($group_id)
     {
         $group = $this->groupService->view($group_id, [...$this->relations, 'users']);
-        return Inertia::render('dashboard/admin/groups/Show', array(
+        return Inertia::render("dashboard/{$this->role}/groups/Show", array(
             'group' => $group,
         ));
     }
 
     public function create()
     {
-        return Inertia::render('dashboard/admin/groups/Create');
+        return Inertia::render("dashboard/{$this->role}/groups/Create");
     }
 
     public function store(StoreUpdateGroupRequest $request)
@@ -66,7 +69,7 @@ class GroupController extends Controller
         /** @var Group|null $item */
         $group = $this->groupService->store($request->validated(), $this->relations);
         if ($group) {
-            return redirect()->route('v1.web.admin.groups.index')->with('success', __('site.stored_successfully'));
+            return redirect()->route("v1.web.{$this->role}.groups.index")->with('success', __('site.stored_successfully'));
         }
         return redirect()->back()->with('error', __('site.something_went_wrong'));
     }
@@ -78,9 +81,9 @@ class GroupController extends Controller
         if (!$group) {
             abort(404);
         }
-        return Inertia::render('dashboard/admin/groups/Edit', array(
+        return Inertia::render("dashboard/{$this->role}/groups/Edit", [
             'group' => $group,
-        ));
+        ]);
     }
 
     public function update(StoreUpdateGroupRequest $request, $group_id)
@@ -88,7 +91,7 @@ class GroupController extends Controller
         /** @var Group|null $item */
         $group = $this->groupService->update($request->validated(), $group_id, $this->relations);
         if ($group) {
-            return redirect()->route('v1.web.admin.groups.index')->with('success', __('site.update_successfully'));
+            return redirect()->route("v1.web.{$this->role}.groups.index")->with('success', __('site.update_successfully'));
         } else return redirect()->back()->with('error', __('site.there_is_no_data'));
     }
 
@@ -114,5 +117,19 @@ class GroupController extends Controller
         } catch (Exception) {
             return redirect()->back()->with('error', __('site.something_went_wrong'));
         }
+    }
+
+    public function userGroups()
+    {
+        $groups = $this->groupService->getUserGroups($this->relations);
+        return Inertia::render('auth/customer/GroupSelector', [
+            'groups' => $groups,
+        ]);
+    }
+
+    public function selectGroup($groupId)
+    {
+        $this->groupService->selectGroup($groupId);
+        return redirect()->route('v1.web.customer.index');
     }
 }

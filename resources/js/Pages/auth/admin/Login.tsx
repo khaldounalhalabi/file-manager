@@ -13,7 +13,6 @@ const Login = () => {
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         post(route("v1.web.public.admin.login"));
     };
 

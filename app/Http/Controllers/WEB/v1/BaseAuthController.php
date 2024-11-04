@@ -15,8 +15,8 @@ use Inertia\Inertia;
 
 class BaseAuthController extends Controller
 {
-    private UserService $userService;
-    private ?string $role = null;
+    protected UserService $userService;
+    protected ?string $role = null;
     protected array $relations = [];
 
     /**

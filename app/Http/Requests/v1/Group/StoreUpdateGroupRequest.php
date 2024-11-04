@@ -38,4 +38,13 @@ class StoreUpdateGroupRequest extends FormRequest
             'users.*' => ['numeric', 'exists:users,id'],
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        if (auth()->user()?->isCustomer()) {
+            $this->merge([
+                'owner_id' => auth()->user()->id,
+            ]);
+        }
+    }
 }

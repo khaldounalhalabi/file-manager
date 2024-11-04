@@ -13,6 +13,7 @@ const authPages = [
     "ResetPasswordCodeForm",
     "ResetPassword",
     "Register",
+    "GroupSelector",
 ];
 
 createInertiaApp({

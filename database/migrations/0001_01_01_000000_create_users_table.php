@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Group;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,7 +20,7 @@ return new class extends Migration {
             $table->string('fcm_token')->nullable();
             $table->string('reset_password_code')->nullable();
             $table->json('profile')->nullable();
-            $table->foreignIdFor(Group::class)->nullable()->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('group_id')->nullable()->index();
             $table->rememberToken();
             $table->timestamps();
         });

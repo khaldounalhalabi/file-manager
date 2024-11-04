@@ -35,8 +35,8 @@ const Input: React.FC<InputProps> = ({
                 htmlFor={`${name}-id`}
                 className={
                     type == "file"
-                        ? "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        : `block relative border-gray-200 shadow-sm border focus-within:border-blue-600 rounded-md focus-within:ring-1 focus-within:ring-blue-600`
+                        ? "block mb-2 text-sm font-medium text-gray-900 dark:text-white w-full"
+                        : `w-full block relative border-gray-200 shadow-sm border focus-within:border-blue-600 rounded-md focus-within:ring-1 focus-within:ring-blue-600`
                 }
             >
                 {type == "file" ? (label ?? "") : ""}

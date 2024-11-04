@@ -101,7 +101,7 @@ abstract class BaseRepository
      * @param array $relations
      * @return Builder<T>|T
      */
-    public function globalQuery(array $relations = []): Builder
+    public function globalQuery(array $relations = []): Builder|Model
     {
         $query = $this->model->with($relations);
 
@@ -348,11 +348,17 @@ abstract class BaseRepository
     }
 
     /**
-     * @param $id
+     * @param int|string|T|Model $id
      * @return bool|null
      */
-    public function delete($id): ?bool
+    public function delete(Model|int|string $id): ?bool
     {
+        if ($id instanceof Model) {
+            $result = $id;
+        } else {
+            $result = $this->model->where('id', '=', $id)->first();
+        }
+
         $result = $this->model->where('id', '=', $id)->first();
         if ($result) {
             $result->delete();
@@ -380,14 +386,18 @@ abstract class BaseRepository
     }
 
     /**
-     * @param array $data
-     * @param       $id
-     * @param array $relationships
-     * @return T|null
+     * @param array              $data
+     * @param int|string|Model|T $id
+     * @param array              $relationships
+     * @return T|null|Model
      */
-    public function update(array $data, $id, array $relationships = []): ?Model
+    public function update(array $data, Model|int|string $id, array $relationships = []): ?Model
     {
-        $item = $this->model->where('id', '=', $id)->first();
+        if ($id instanceof Model) {
+            $item = $id;
+        } else {
+            $item = $this->model->where('id', '=', $id)->first();
+        }
 
         if ($item) {
             $fileCols = $this->fileColName($data);

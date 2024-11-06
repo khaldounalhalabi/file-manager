@@ -24,33 +24,33 @@ class StoreUpdateDirectoryRequest extends FormRequest
     {
         if (request()->method() == 'POST') {
             return [
-                'name' => ['required', 'string', 'min:3', 'max:255'],
-                'owner_id' => ['required', 'numeric', 'exists:users,id'],
-                'parent_id' => ['nullable', 'numeric', 'exists:directories,id'],
-                'group_id' => ['required', 'numeric', 'exists:groups,id'],
+                'name' => [
+                    'required', 'string', 'min:3', 'max:255',
+                    Rule::unique('directories', 'name')
+                        ->where('group_id', auth()->user()->group_id)
+                        ->when($this->input('parent_id'), function ($query) {
+                            return $query->where('parent_id', $this->input('parent_id'));
+                        })->when(!$this->input('parent_id'), function ($query) {
+                            return $query->whereNull('parent_id');
+                        })
+                ],
+                'parent_id' => ['nullable', 'numeric', 'exists:directories,id']
             ];
         }
 
         return [
-            'name' => ['nullable', 'string', 'min:3', 'max:255'],
-            'owner_id' => ['nullable', 'numeric', 'exists:owners,id'],
-            'parent_id' => ['nullable', 'numeric', 'exists:parents,id'],
-            'group_id' => ['nullable', 'numeric', 'exists:groups,id'],
+            'name' => [
+                'nullable', 'string', 'min:3', 'max:255',
+                Rule::unique('directories', 'name')
+                    ->ignore($this->route('directoryId'))
+                    ->where('group_id', auth()->user()->group_id)
+                    ->when($this->input('parent_id'), function ($query) {
+                        return $query->where('parent_id', $this->input('parent_id'));
+                    })->when(!$this->input('parent_id'), function ($query) {
+                        return $query->whereNull('parent_id');
+                    })
+            ],
+            'parent_id' => ['nullable', 'numeric', 'exists:directories,id'],
         ];
-    }
-
-    protected function prepareForValidation(): void
-    {
-        if (auth()->user()?->isCustomer()) {
-            $this->merge([
-                'group_id' => auth()->user()?->group_id,
-            ]);
-
-            if ($this->method() == "POST") {
-                $this->merge([
-                    'owner_id' => auth()->user()?->id,
-                ]);
-            }
-        }
     }
 }

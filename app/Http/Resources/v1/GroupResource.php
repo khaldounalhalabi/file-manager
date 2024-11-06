@@ -3,6 +3,7 @@
 namespace App\Http\Resources\v1;
 
 use App\Http\Resources\BaseResource;
+use App\Http\Resources\DirectoryResource;
 
 /**
  * @mixin \App\Models\Group

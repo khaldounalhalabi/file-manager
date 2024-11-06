@@ -14,7 +14,7 @@ return new class extends Migration {
         Schema::create('directories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->json('path');
+            $table->json('path')->nullable();
             $table->foreignId('owner_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreignId('parent_id')->nullable()->references('id')->on('directories')->cascadeOnDelete();
             $table->foreignIdFor(Group::class)->constrained()->cascadeOnDelete();

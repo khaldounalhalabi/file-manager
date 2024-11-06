@@ -6,7 +6,6 @@ import { Link } from "@inertiajs/react";
 import SmallTextField from "@/Components/Show/SmallTextField";
 
 const Show = ({ user }: { user: User }) => {
-    console.log(user);
     return (
         <PageCard
             title="User Details"

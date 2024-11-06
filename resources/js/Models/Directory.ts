@@ -2,7 +2,8 @@ import { Group } from "./Group";
 import { User } from "@/Models/User";
 
 export interface Directory {
-    id?: number;
+    updated_at: string;
+    id: number;
     name: string;
     group_id: number;
     path: string;

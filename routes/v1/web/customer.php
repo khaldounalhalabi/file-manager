@@ -29,3 +29,9 @@ Route::controller(v1\GroupController::class)
 Route::resource('/groups', v1\GroupController::class)
     ->withoutMiddleware(CustomerMustHaveAGroup::class)
     ->names('groups');
+
+Route::get('/directories/get-root', [v1\DirectoryController::class, 'getRoot'])->name('directories.get.root');
+Route::inertia('/directories/root', 'dashboard/customer/directories/Index')->name('directories.root');
+Route::post('/directories', [v1\DirectoryController::class, 'store'])->name('directories.store');
+Route::put('directories/{directoryId}', [v1\DirectoryController::class, 'update'])->name('directories.update');
+Route::delete('directories/{directoryId}', [v1\DirectoryController::class, 'destroy'])->name('directories.destroy');

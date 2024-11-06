@@ -108,7 +108,11 @@ class Directory extends Model
     public static function relationsSearchableArray(): array
     {
         return [
-
         ];
+    }
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class);
     }
 }

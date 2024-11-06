@@ -20,7 +20,8 @@ class GroupResource extends BaseResource
             'id' => $this->id,
             'name' => $this->name,
             'owner_id' => $this->owner_id,
-            'directories' => DirectoryResource::collection($this->whenLoaded('directories'))
+            'directories' => DirectoryResource::collection($this->whenLoaded('directories')),
+            'files' => FileResource::collection($this->whenLoaded('files'))
         ];
     }
 }

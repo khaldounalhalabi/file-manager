@@ -3,15 +3,14 @@
 namespace Database\Factories;
 
 use App\Models\Directory;
-use App\Models\File;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Directory>
+ * @extends Factory<\App\Models\File>
  */
-class DirectoryFactory extends Factory
+class FileFactory extends Factory
 {
 
     /**
@@ -21,16 +20,9 @@ class DirectoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->firstName(),
-            'owner_id' => User::factory()->customer(),
-            'parent_id' => null,
+            'owner_id' => User::factory(),
             'group_id' => Group::factory(),
-            'path' => "",
+            'directory_id' => Directory::factory(),
         ];
-    }
-
-    public function withFiles($count = 1): DirectoryFactory|Factory
-    {
-        return $this->has(File::factory($count));
     }
 }

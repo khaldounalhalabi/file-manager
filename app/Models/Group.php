@@ -9,9 +9,9 @@ use Illuminate\Support\Collection;
 
 
 /**
- * @property string                                                                                      name
- * @property integer                                                                                     owner_id
- * @property  User                                                                                       owner
+ * @property string                                                                  name
+ * @property integer                                                                 owner_id
+ * @property  User                                                                   owner
  * @property  Collection<User>|\Illuminate\Database\Eloquent\Collection<User>|User[] users
  */
 class Group extends Model
@@ -81,7 +81,6 @@ class Group extends Model
      * so you can search within them in the index method
      */
     public static function relationsSearchableArray(): array
-
     {
         return [
             'users' => [
@@ -100,5 +99,10 @@ class Group extends Model
     public function directories(): HasMany
     {
         return $this->hasMany(Directory::class);
+    }
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class);
     }
 }

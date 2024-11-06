@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Directory;
+use App\Models\File;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -33,5 +34,10 @@ class GroupFactory extends Factory
     public function withDirectories($count = 1): GroupFactory|Factory
     {
         return $this->has(Directory::factory($count));
+    }
+
+    public function withFiles($count = 1): GroupFactory|Factory
+    {
+        return $this->has(File::factory($count));
     }
 }

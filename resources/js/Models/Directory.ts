@@ -1,3 +1,4 @@
+import { File } from "./File";
 import { Group } from "./Group";
 import { User } from "@/Models/User";
 
@@ -13,4 +14,5 @@ export interface Directory {
     owner?: User;
     parent?: Directory;
     subDirectories?: Directory[];
+    files?: File[][];
 }

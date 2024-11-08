@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 
 /**
@@ -66,10 +68,14 @@ class File extends Model
             'status',
         ];
     }
-public function fileVersions()
-{
-	 return $this->hasMany(FileVersion::class);
-}
 
+    public function fileVersions(): HasMany
+    {
+        return $this->hasMany(FileVersion::class);
+    }
 
+    public function lastVersion(): HasOne
+    {
+        return $this->hasOne(FileVersion::class)->ofMany('version', 'MAX');
+    }
 }

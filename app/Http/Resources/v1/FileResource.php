@@ -25,6 +25,9 @@ class FileResource extends BaseResource
             'owner' => $this->whenLoaded('owner'),
             'directory' => $this->whenLoaded('directory'),
             'fileVersions' => FileVersionResource::collection($this->whenLoaded('fileVersions')),
+            'last_version' => new FileVersionResource($this->whenLoaded('lastVersion')),
+            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

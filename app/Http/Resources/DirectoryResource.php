@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\v1\FileResource;
 use App\Http\Resources\v1\GroupResource;
 use App\Models\Directory;
 use Illuminate\Http\Request;
@@ -25,7 +26,8 @@ class DirectoryResource extends JsonResource
 
             'parent' => new DirectoryResource($this->whenLoaded('parent')),
             'group' => new GroupResource($this->whenLoaded('group')),
-            'subDirectories' => DirectoryResource::collection($this->whenLoaded('subDirectories')),
+            'sub_directories' => DirectoryResource::collection($this->whenLoaded('subDirectories')),
+            'files' => FileResource::collection($this->whenLoaded('files')),
         ];
     }
 }

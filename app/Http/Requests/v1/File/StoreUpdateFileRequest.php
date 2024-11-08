@@ -25,11 +25,13 @@ class StoreUpdateFileRequest extends FormRequest
         if (request()->method() == 'POST') {
             return [
                 'directory_id' => ['required', 'numeric', 'exists:directories,id'],
+                'file' => 'required|file|max:25000',
             ];
         }
 
         return [
             'directory_id' => ['nullable', 'numeric', 'exists:directories,id'],
+            'file' => 'required|file|max:25000',
         ];
     }
 }

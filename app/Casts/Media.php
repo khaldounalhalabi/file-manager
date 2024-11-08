@@ -85,10 +85,10 @@ class Media implements CastsAttributes
         $images = [];
 
         $isArray = is_array($value);
+        /** @var UploadedFile[] $files */
         $files = Arr::wrap($value);
 
         foreach ($files as $file) {
-            File::makeDirectory(storage_path('app/public/' . $model->getTable()), 0777, true, true);
             $images[] = $this->storeFile($file, $model->getTable());
         }
 

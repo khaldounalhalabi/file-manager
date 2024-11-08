@@ -35,3 +35,6 @@ Route::inertia('/directories/root', 'dashboard/customer/directories/Index')->nam
 Route::post('/directories', [v1\DirectoryController::class, 'store'])->name('directories.store');
 Route::put('directories/{directoryId}', [v1\DirectoryController::class, 'update'])->name('directories.update');
 Route::delete('directories/{directoryId}', [v1\DirectoryController::class, 'destroy'])->name('directories.destroy');
+Route::get('directories/{directoryId}', [v1\DirectoryController::class, 'show'])->name('directories.show');
+
+Route::post('/files', [v1\FileController::class, 'store'])->name('files.store');

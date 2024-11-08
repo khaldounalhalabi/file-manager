@@ -7,6 +7,7 @@ import { Folder } from "lucide-react";
 import ExplorerHeader from "@/Components/FilesAndDirectories/ExplorerHeader";
 import { GET } from "@/Modules/Http";
 import FolderOptions from "@/Components/FilesAndDirectories/FolderOptions";
+import { Link } from "@inertiajs/react";
 
 const fetchDirectories = async ({
     pageParam,
@@ -60,40 +61,61 @@ const Index = () => {
                     </div>
                 ) : (
                     data?.pages?.map((page) =>
-                        page.data?.map((dir) => (
-                            <div
-                                className={
-                                    "flex flex-col items-start p-3 bg-gray-200 hover:bg-gray-300 w-full gap-1 rounded-md cursor-pointer h-full"
-                                }
-                            >
+                        page?.data ? (
+                            page?.data?.map((dir, index) => (
                                 <div
                                     className={
-                                        "flex items-center justify-between w-full"
+                                        "flex items-center justify-between p-3 bg-gray-200 hover:bg-gray-300 w-full gap-1 rounded-md h-full"
                                     }
                                 >
-                                    <div
-                                        className={
-                                            "flex items-center gap-2 w-3/4"
-                                        }
+                                    <Link
+                                        key={index}
+                                        href={route(
+                                            "v1.web.customer.directories.show",
+                                            dir.id,
+                                        )}
+                                        className={"cursor-pointer w-[90%] border-r border-r-black"}
                                     >
-                                        <Folder className={"w-12 h-12"} />
                                         <div
                                             className={
-                                                "flex flex-col items-start"
+                                                "flex items-center justify-between w-full"
                                             }
                                         >
-                                            <span>{dir.name}</span>
-                                            Last modified : {dir.updated_at}
+                                            <div
+                                                className={
+                                                    "flex items-center gap-2 w-full"
+                                                }
+                                            >
+                                                <Folder
+                                                    className={"w-12 h-12"}
+                                                />
+                                                <div
+                                                    className={
+                                                        "flex flex-col items-start"
+                                                    }
+                                                >
+                                                    <span>{dir.name}</span>
+                                                    Last modified :{" "}
+                                                    {dir.updated_at}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-
+                                    </Link>
                                     <FolderOptions
                                         directory={dir}
                                         refetch={refetch}
                                     />
                                 </div>
+                            ))
+                        ) : (
+                            <div
+                                className={
+                                    "flex justify-center items-center w-full p-5"
+                                }
+                            >
+                                There is no data
                             </div>
-                        )),
+                        ),
                     )
                 )}
                 {isFetchingNextPage && (

@@ -2,10 +2,11 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
-use Intervention\Image\Facades\Image;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 trait FileHandler
 {
@@ -14,7 +15,6 @@ trait FileHandler
     /**
      * this function takes image(DB name) and deletes it from the filesystem ,
      * returns true if deleted and false if not found
-     *
      * @param $file
      * @return bool
      */
@@ -32,32 +32,15 @@ trait FileHandler
     /**
      * this function takes a base64 encoded image and store it in the filesystem and return the name of it
      * (ex. 12546735.png) that will be stored in DB
-     *
-     * @param $file
-     * @param $dir
-     * @param bool $to_compress
-     * @param bool $is_base_64
-     * @param int $width
+     * @param UploadedFile $file
+     * @param              $dir
      * @return string
      */
-    public function storeFile($file, $dir, bool $to_compress = true, bool $is_base_64 = false, int $width = 300): string
+    public function storeFile(UploadedFile $file, $dir): string
     {
         $this->files = new Filesystem();
         $this->makeDirectory(storage_path('app/public/' . $dir));
-        if ($is_base_64) {
-            $name = $dir . '/' . str_replace([':', '\\', '/', '*'], '', bcrypt(microtime(true))) . '.' . explode('/', explode(':', explode(';', $file)[0])[1])[1];
-        } else {
-            $name = $dir . '/' . $file->hashName();
-        }
-        if ($to_compress) {
-            Image::make($file)->resize($width, null, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save(storage_path('app/public/') . $name);
-        } else {
-            Image::make($file)->save(storage_path('app/public/') . $name);
-        }
-
-        return $name;
+        return $file->store($dir);
     }
 
     /**
@@ -77,7 +60,6 @@ trait FileHandler
 
     /**
      * this function can store any file
-     *
      * @param string $key key as sent in the request
      * @return string
      */
@@ -99,14 +81,14 @@ trait FileHandler
 
     /**
      * this function takes $newImage(base64 encoded) and $oldImage(DB name) ,
-     * it deletes the $oldImage from the filesystem and store the $newImage and return its name that will be stored in DB
-     *
-     * @param $new_file
-     * @param $old_file
-     * @param $dir
+     * it deletes the $oldImage from the filesystem and store the $newImage and return its name that will be stored in
+     * DB
+     * @param      $new_file
+     * @param      $old_file
+     * @param      $dir
      * @param bool $to_compress
      * @param bool $is_base_64
-     * @param int $width
+     * @param int  $width
      * @return string
      */
     public function updateFile($new_file, $old_file, $dir, bool $to_compress = true, bool $is_base_64 = false, int $width = 300): string
@@ -120,7 +102,6 @@ trait FileHandler
 
     /**
      * make directory for files
-     *
      * @param $path
      * @return mixed
      */
@@ -133,14 +114,13 @@ trait FileHandler
 
     /**
      * store requested keys as files
-     *
      * @param array $data
      * @param array $filesKeys
-     * @param bool $is_store
-     * @param null $item
-     * @param bool $to_compress
-     * @param bool $is_base_64
-     * @param int $width
+     * @param bool  $is_store
+     * @param null  $item
+     * @param bool  $to_compress
+     * @param bool  $is_base_64
+     * @param int   $width
      * @return array
      */
     private function storeOrUpdateRequestedFiles(array $data, array $filesKeys = [], bool $is_store = true, $item = null, bool $to_compress = true, bool $is_base_64 = false, int $width = 300): array

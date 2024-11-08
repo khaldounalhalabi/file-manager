@@ -7,6 +7,7 @@ use App\Http\Requests\v1\Directory\StoreUpdateDirectoryRequest;
 use App\Http\Resources\DirectoryResource;
 use App\Services\v1\Directory\DirectoryService;
 use App\Traits\RestTrait;
+use Inertia\Inertia;
 
 class DirectoryController extends Controller
 {
@@ -41,9 +42,9 @@ class DirectoryController extends Controller
     {
         $directory = $this->directoryService->update($request->validated(), $directoryId);
         if ($directory) {
-            return redirect()->back()->with('success', __('site.update_successfully'));
+            return redirect()->refresh()->with('success', __('site.update_successfully'));
         }
-        return redirect()->back()->with('error', __('site.something_went_wrong'));
+        return redirect()->refresh()->with('error', __('site.something_went_wrong'));
     }
 
     public function destroy($directoryId)
@@ -53,5 +54,17 @@ class DirectoryController extends Controller
             return $this->apiResponse(true, 200, __('site.delete_successfully'));
         }
         return $this->noData(false);
+    }
+
+    public function show($directoryId)
+    {
+        $directory = $this->directoryService->view($directoryId, ['subDirectories', 'files', 'files.lastVersion']);
+        if ($directory) {
+            return Inertia::render('dashboard/customer/directories/Show', [
+                'directory' => $directory,
+            ]);
+        }
+
+        abort(404);
     }
 }

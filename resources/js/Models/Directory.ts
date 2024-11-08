@@ -7,12 +7,17 @@ export interface Directory {
     id: number;
     name: string;
     group_id: number;
-    path: string;
+    path: DirectoryPath[];
     parent_id?: number;
     owner_id: number;
     group?: Group;
     owner?: User;
     parent?: Directory;
-    subDirectories?: Directory[];
-    files?: File[][];
+    sub_directories: Directory[];
+    files: File[];
+}
+
+export interface DirectoryPath {
+    name: string;
+    id: number;
 }

@@ -12,5 +12,8 @@ export interface File {
     directory?: Directory;
     owner?: User;
     owner_id?: number;
-    fileVersions?: FileVersion[];
+    file_versions?: FileVersion[];
+    last_version: FileVersion;
+    name: string;
+    updated_at: string;
 }

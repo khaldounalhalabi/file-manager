@@ -18,6 +18,8 @@ class FileVersionResource extends BaseResource
             'file_path' => $this->file_path,
             'file_id' => $this->file_id,
             'version' => $this->version,
+            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
             'file' => new FileResource($this->whenLoaded('file')),
         ];
     }

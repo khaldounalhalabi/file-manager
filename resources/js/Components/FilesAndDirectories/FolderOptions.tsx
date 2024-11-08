@@ -21,11 +21,16 @@ const FolderOptions = ({
     refetch,
 }: {
     directory: Directory;
-    refetch?: (
-        options?: RefetchOptions,
-    ) => Promise<
-        QueryObserverResult<InfiniteData<PaginatedResponse<any>, any>, Error>
-    >;
+    refetch?:
+        | ((
+              options?: RefetchOptions,
+          ) => Promise<
+              QueryObserverResult<
+                  InfiniteData<PaginatedResponse<any>, any>,
+                  Error
+              >
+          >)
+        | (() => void);
 }) => {
     const csrf = usePage<MiddlewareProps>().props.csrfToken;
     const [openEdit, setOpenEdit] = useState<boolean>(false);
@@ -85,7 +90,10 @@ const FolderOptions = ({
                     />
                 </Form>
             </Modal>
-            <button className="hover:bg-white-secondary p-0.5 rounded-md">
+            <button
+                className="hover:bg-white-secondary p-0.5 rounded-md"
+                type={"button"}
+            >
                 <Trash
                     className="w-5 h-5 text-danger"
                     onClick={() => {

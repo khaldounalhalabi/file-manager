@@ -15,6 +15,7 @@ return new class extends Migration {
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->default('untitled');
             $table->string('status')->default(FileStatusEnum::UNLOCKED->value);
             $table->foreignId('owner_id')->nullable()->references('id')->on('users')->nullOnDelete();
             $table->foreignIdFor(Group::class)->constrained()->cascadeOnDelete();

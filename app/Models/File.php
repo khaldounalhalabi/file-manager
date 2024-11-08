@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
 /**
+ * @property string       name
  * @property integer|null owner_id
  * @property integer      group_id
  * @property integer      directory_id
@@ -21,10 +22,11 @@ class File extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
+        'status',
         'owner_id',
         'group_id',
         'directory_id',
-        'status',
     ];
 
     public function exportable(): array
@@ -60,24 +62,8 @@ class File extends Model
     public static function searchableArray(): array
     {
         return [
+            'name',
             'status',
-        ];
-    }
-
-    /**
-     * add your relations and their searchable columns,
-     * so you can search within them in the index method
-     */
-    public static function relationsSearchableArray(): array
-    {
-        return [
-            'group' => [
-                'name'
-                //add your group desired column to be search within
-            ],
-            'directory' => [
-                'name', 'path'
-            ],
         ];
     }
 }

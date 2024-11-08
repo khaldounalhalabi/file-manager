@@ -1,3 +1,4 @@
+import { FileVersion } from "./FileVersion";
 import { Group } from "./Group";
 import { Directory } from "./Directory";
 import { User } from "@/Models/User";
@@ -11,4 +12,5 @@ export interface File {
     directory?: Directory;
     owner?: User;
     owner_id?: number;
+    fileVersions?: FileVersion[];
 }

@@ -23,7 +23,8 @@ class FileResource extends BaseResource
             'status' => $this->status,
             'group' => new GroupResource($this->whenLoaded('group')),
             'owner' => $this->whenLoaded('owner'),
-            'directory' => $this->whenLoaded('directory')
+            'directory' => $this->whenLoaded('directory'),
+            'fileVersions' => FileVersionResource::collection($this->whenLoaded('fileVersions')),
         ];
     }
 }

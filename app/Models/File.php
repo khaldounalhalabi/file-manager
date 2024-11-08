@@ -66,4 +66,10 @@ class File extends Model
             'status',
         ];
     }
+public function fileVersions()
+{
+	 return $this->hasMany(FileVersion::class);
+}
+
+
 }

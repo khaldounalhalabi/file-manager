@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\WEB\v1;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\User\StoreUpdateUserRequest;
 use App\Models\User;
@@ -28,7 +29,7 @@ class UserController extends Controller
     {
         $items = $this->userService->indexWithPagination($this->relations);
         if ($items) {
-            return $this->apiResponse($items['data'], 200, __('site.get_successfully'), $items['pagination_data']);
+            return $this->apiResponse($items['data'], ApiController::STATUS_OK, __('site.get_successfully'), $items['pagination_data']);
         }
         return $this->noData();
     }
@@ -37,7 +38,7 @@ class UserController extends Controller
     {
         $items = $this->userService->getByGroup($groupId, $this->relations);
         if ($items) {
-            return $this->apiResponse($items['data'], 200, __('site.get_successfully'), $items['pagination_data']);
+            return $this->apiResponse($items['data'], ApiController::STATUS_OK, __('site.get_successfully'), $items['pagination_data']);
         }
         return $this->noData();
     }
@@ -46,7 +47,7 @@ class UserController extends Controller
     {
         $items = $this->userService->getCustomers($this->relations);
         if ($items) {
-            return $this->apiResponse($items['data'], 200, __('site.get_successfully'), $items['pagination_data']);
+            return $this->apiResponse($items['data'], ApiController::STATUS_OK, __('site.get_successfully'), $items['pagination_data']);
         }
         return $this->noData();
     }
@@ -90,7 +91,7 @@ class UserController extends Controller
         $user = $this->userService->view($userId, $this->relations);
 
         if (!$user) {
-            abort(404);
+            abort(ApiController::STATUS_NOT_FOUND);
         }
         return Inertia::render('dashboard/admin/users/Edit', [
             'user' => $user
@@ -114,7 +115,7 @@ class UserController extends Controller
             return response()->json(['success' => __("site.delete_successfully")], 200);
         }
 
-        return response()->json(['error' => __('site.there_is_no_data')], 404);
+        return response()->json(['error' => __('site.there_is_no_data')], ApiController::STATUS_NOT_FOUND);
     }
 
     public function export(Request $request)

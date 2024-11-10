@@ -4,6 +4,7 @@ namespace App\Services\v1\Group;
 
 use App\Models\Group;
 use App\Repositories\GroupRepository;
+use App\Repositories\UserRepository;
 use App\Services\Contracts\BaseService;
 use App\Services\Contracts\Makable;
 use Illuminate\Database\Eloquent\Collection;
@@ -79,5 +80,23 @@ class GroupService extends BaseService
         ]);
 
         return $this->repository->delete($group);
+    }
+
+    public function changeUserGroup($groupId)
+    {
+        $group = $this->repository->find($groupId);
+        if (!$group) {
+            return null;
+        }
+
+        if ($group->owner_id != $this->user?->id && !$group->users()->where('users.id', $this->user?->id)->exists()) {
+            return null;
+        }
+
+        UserRepository::make()->update([
+            'group_id' => $group->id,
+        ], $this->user);
+
+        return $group;
     }
 }

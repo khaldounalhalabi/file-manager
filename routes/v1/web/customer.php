@@ -26,6 +26,7 @@ Route::controller(v1\GroupController::class)
         Route::post('/groups/export', 'export')
             ->name('groups.export');
     });
+Route::get('/groups/{groupId}/change', [v1\GroupController::class, 'changeUserGroup'])->name('groups.change');
 Route::resource('/groups', v1\GroupController::class)
     ->withoutMiddleware(CustomerMustHaveAGroup::class)
     ->names('groups');
@@ -38,3 +39,6 @@ Route::delete('directories/{directoryId}', [v1\DirectoryController::class, 'dest
 Route::get('directories/{directoryId}', [v1\DirectoryController::class, 'show'])->name('directories.show');
 
 Route::post('/files', [v1\FileController::class, 'store'])->name('files.store');
+Route::get('/files/{fileId}/edit', [v1\FileController::class, 'edit'])->name('files.edit');
+Route::put('/files/update', [v1\FileController::class, 'pushUpdates'])->name('files.update');
+Route::delete('files/{fileId}', [v1\FileController::class, 'destroy'])->name('files.destroy');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\WEB\v1;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Directory\StoreUpdateDirectoryRequest;
 use App\Http\Resources\DirectoryResource;
@@ -26,7 +27,7 @@ class DirectoryController extends Controller
     public function getRoot()
     {
         $directories = $this->directoryService->getRoot($this->relations);
-        return $this->apiResponse(DirectoryResource::collection($directories['data']), 200, __('site.get_successfully'), $directories['pagination_data']);
+        return $this->apiResponse(DirectoryResource::collection($directories['data']), ApiController::STATUS_OK, __('site.get_successfully'), $directories['pagination_data']);
     }
 
     public function store(StoreUpdateDirectoryRequest $request)
@@ -42,16 +43,16 @@ class DirectoryController extends Controller
     {
         $directory = $this->directoryService->update($request->validated(), $directoryId);
         if ($directory) {
-            return redirect()->refresh()->with('success', __('site.update_successfully'));
+            return redirect()->back()->with('success', __('site.update_successfully'));
         }
-        return redirect()->refresh()->with('error', __('site.something_went_wrong'));
+        return redirect()->back()->with('error', __('site.something_went_wrong'));
     }
 
     public function destroy($directoryId)
     {
         $result = $this->directoryService->delete($directoryId);
         if ($result) {
-            return $this->apiResponse(true, 200, __('site.delete_successfully'));
+            return $this->apiResponse(true, ApiController::STATUS_OK, __('site.delete_successfully'));
         }
         return $this->noData(false);
     }

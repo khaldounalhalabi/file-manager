@@ -6,9 +6,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { usePage } from "@inertiajs/react";
 import { MiddlewareProps } from "@/types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { getTheme, setCsrf } from "@/helper";
 
 const Layout = ({ children }: { children?: React.ReactNode }) => {
-    const theme = window.localStorage.getItem("theme_mode") ?? "light";
+    const theme = getTheme();
+    const { csrfToken } = usePage<MiddlewareProps>().props;
+    setCsrf(csrfToken);
     const [isOpen, setIsOpen] = useState(true);
     const toggleSidebar = () => {
         setIsOpen((prev) => !prev);

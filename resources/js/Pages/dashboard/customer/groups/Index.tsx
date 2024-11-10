@@ -2,6 +2,9 @@ import ActionsButtons from "@/Components/Datatable/ActionsButtons";
 import DataTable from "@/Components/Datatable/DataTable";
 import { Group } from "@/Models/Group";
 import { PaginatedResponse } from "@/Models/Response";
+import { Link } from "@inertiajs/react";
+import { ArrowLeftRight } from "lucide-react";
+import { user } from "@/helper";
 
 const Index = ({ exportables }: { exportables: string[] }) => {
     return (
@@ -58,7 +61,22 @@ const Index = ({ exportables }: { exportables: string[] }) => {
                             baseUrl={route("v1.web.customer.groups.index")}
                             id={group?.id ?? 0}
                             setHidden={setHidden}
-                        />
+                        >
+                            {user()?.group_id != group?.id ? (
+                                <Link
+                                    href={route(
+                                        "v1.web.customer.groups.change",
+                                        group?.id ?? 0,
+                                    )}
+                                >
+                                    <ArrowLeftRight
+                                        className={"w-5 h-5 text-brand"}
+                                    />
+                                </Link>
+                            ) : (
+                                <></>
+                            )}
+                        </ActionsButtons>
                     ),
                 },
             ]}

@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { user, userGroups } from "@/helper";
+import ChevronDown from "@/Components/icons/ChevronDown";
 import { Link } from "@inertiajs/react";
-import { asset, role, user } from "@/helper";
-import ChevronDown from "../icons/ChevronDown";
 
-const ProfileDropdown = () => {
+const GroupSelector = () => {
     const [open, setOpen] = useState(false);
     const authUser = user();
+    const groups = userGroups() ?? [];
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -31,14 +32,7 @@ const ProfileDropdown = () => {
                 type="button"
                 onClick={() => setOpen((prevState) => !prevState)}
             >
-                <div className="mx-2 rounded-full">
-                    <img
-                        className="rounded-full h-12"
-                        src={asset("/images/profile-img.jpg")}
-                        alt=""
-                    />
-                </div>
-                {authUser?.first_name + " " + authUser?.last_name}
+                {authUser?.group?.name}
                 <ChevronDown className="w-4 h-4 ms-3" />
             </button>
 
@@ -48,28 +42,30 @@ const ProfileDropdown = () => {
                 } z-10 start-5 bg-white-secondary dark:bg-dark-secondary rounded-lg shadow w-44`}
             >
                 <ul className="shadow-md h-full text-gray-700 text-sm dark:text-white">
-                    <li>
-                        <Link
-                            id="user-details"
-                            href={route(`v1.web.${role()}.user.details`)}
-                            className="cursor-pointer block hover:bg-gray-100 dark:hover:text-black p-2 rounded-md"
-                        >
-                            My Profile
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            id="logout"
-                            href={route(`v1.web.${role()}.logout`)}
-                            className="cursor-pointer block hover:bg-gray-100 dark:hover:text-black p-2 rounded-md"
-                        >
-                            Sign Out
-                        </Link>
-                    </li>
+                    {groups.map(
+                        (group) =>
+                            group.id != authUser?.group_id && (
+                                <li
+                                    onClick={() => {
+                                        setOpen((prevState) => !prevState);
+                                    }}
+                                >
+                                    <Link
+                                        href={route(
+                                            "v1.web.customer.groups.change",
+                                            group.id,
+                                        )}
+                                        className={`cursor-pointer block hover:bg-gray-200 dark:hover:text-black p-2 rounded-md ${group.id == authUser?.group_id ? "bg-gray-200" : ""}`}
+                                    >
+                                        {group.name}
+                                    </Link>
+                                </li>
+                            ),
+                    )}
                 </ul>
             </div>
         </div>
     );
 };
 
-export default ProfileDropdown;
+export default GroupSelector;

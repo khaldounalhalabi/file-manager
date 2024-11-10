@@ -58,10 +58,10 @@ const FolderOptions = ({
     }, [wasSuccessful]);
 
     return (
-        <div className={"flex items-center justify-between px-5"}>
+        <div className={"flex items-center justify-between px-5 gap-1"}>
             <button
                 type={"button"}
-                className="hover:bg-white-secondary p-0.5 rounded-md"
+                className="hover:bg-white-secondary p-1 rounded-md"
                 onClick={() => {
                     setOpenEdit(true);
                 }}
@@ -91,7 +91,7 @@ const FolderOptions = ({
                 </Form>
             </Modal>
             <button
-                className="hover:bg-white-secondary p-0.5 rounded-md"
+                className="hover:bg-white-secondary p-1 rounded-md"
                 type={"button"}
             >
                 <Trash

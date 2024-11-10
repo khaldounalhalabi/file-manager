@@ -3,11 +3,9 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { PaginatedResponse } from "@/Models/Response";
 import { Directory } from "@/Models/Directory";
 import LoadingSpinner from "@/Components/icons/LoadingSpinner";
-import { Folder } from "lucide-react";
 import ExplorerHeader from "@/Components/FilesAndDirectories/ExplorerHeader";
 import { GET } from "@/Modules/Http";
-import FolderOptions from "@/Components/FilesAndDirectories/FolderOptions";
-import { Link } from "@inertiajs/react";
+import FolderItem from "@/Components/FilesAndDirectories/FolderItem";
 
 const fetchDirectories = async ({
     pageParam,
@@ -63,49 +61,11 @@ const Index = () => {
                     data?.pages?.map((page) =>
                         page?.data ? (
                             page?.data?.map((dir, index) => (
-                                <div
-                                    className={
-                                        "flex items-center justify-between p-3 bg-gray-200 hover:bg-gray-300 w-full gap-1 rounded-md h-full"
-                                    }
-                                >
-                                    <Link
-                                        key={index}
-                                        href={route(
-                                            "v1.web.customer.directories.show",
-                                            dir.id,
-                                        )}
-                                        className={"cursor-pointer w-[90%] border-r border-r-black"}
-                                    >
-                                        <div
-                                            className={
-                                                "flex items-center justify-between w-full"
-                                            }
-                                        >
-                                            <div
-                                                className={
-                                                    "flex items-center gap-2 w-full"
-                                                }
-                                            >
-                                                <Folder
-                                                    className={"w-12 h-12"}
-                                                />
-                                                <div
-                                                    className={
-                                                        "flex flex-col items-start"
-                                                    }
-                                                >
-                                                    <span>{dir.name}</span>
-                                                    Last modified :{" "}
-                                                    {dir.updated_at}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                    <FolderOptions
-                                        directory={dir}
-                                        refetch={refetch}
-                                    />
-                                </div>
+                                <FolderItem
+                                    directory={dir}
+                                    refetch={refetch}
+                                    key={index}
+                                />
                             ))
                         ) : (
                             <div

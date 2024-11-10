@@ -37,3 +37,19 @@ export function role(): RoleName | undefined {
     const { role } = usePage<MiddlewareProps>().props;
     return role;
 }
+
+export const getTheme = () =>
+    window.localStorage.getItem("theme_mode") ?? "light";
+
+export const setTheme = (theme: "light" | "dark") =>
+    window.localStorage.setItem("theme_mode", theme);
+
+export const getCsrf = () => window.localStorage.getItem("csrf_token");
+
+export const setCsrf = (csrf_token: string) =>
+    window.localStorage.setItem("csrf_token", csrf_token);
+
+export const userGroups = () => {
+    const { user_groups } = usePage<MiddlewareProps>().props;
+    return user_groups;
+};

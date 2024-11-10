@@ -359,7 +359,6 @@ abstract class BaseRepository
             $result = $this->model->where('id', '=', $id)->first();
         }
 
-        $result = $this->model->where('id', '=', $id)->first();
         if ($result) {
             $result->delete();
 

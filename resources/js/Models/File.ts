@@ -4,7 +4,7 @@ import { Directory } from "./Directory";
 import { User } from "@/Models/User";
 
 export interface File {
-    id?: number;
+    id: number;
     group_id: number;
     directory_id: number;
     status: string;
@@ -17,3 +17,4 @@ export interface File {
     name: string;
     updated_at: string;
 }
+

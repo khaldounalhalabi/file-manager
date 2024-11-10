@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
 /**
- * @property string  file_path
- * @property integer file_id
- * @property numeric version
- * @property  File   file
+ * @property array{path:string,size:numeric,extension:string, mime_type:string} file_path
+ * @property integer                                                            file_id
+ * @property numeric                                                            version
+ * @property  File                                                              file
  */
 class FileVersion extends Model
 {

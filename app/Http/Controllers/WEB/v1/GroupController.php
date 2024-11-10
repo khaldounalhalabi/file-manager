@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\WEB\v1;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Group\StoreUpdateGroupRequest;
 use App\Models\Group;
@@ -103,7 +104,7 @@ class GroupController extends Controller
             return response()->json(array('success' => __('site.delete_successfully')));
         }
 
-        return response()->json(array('error' => __('site.there_is_no_data')), 404);
+        return response()->json(array('error' => __('site.there_is_no_data')), ApiController::STATUS_NOT_FOUND);
     }
 
     public function export(Request $request)
@@ -131,5 +132,17 @@ class GroupController extends Controller
     {
         $this->groupService->selectGroup($groupId);
         return redirect()->route('v1.web.customer.index');
+    }
+
+    public function changeUserGroup($groupId)
+    {
+        $group = $this->groupService->changeUserGroup($groupId);
+
+        if ($group) {
+            return redirect()->back()->with('success', __('site.group_changed_successfully'));
+        } else {
+
+            return redirect()->back()->with('error', __('site.something_went_wrong'));
+        }
     }
 }

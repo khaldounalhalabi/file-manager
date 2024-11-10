@@ -49,7 +49,6 @@ trait RestTrait
     /**
      * standard for pagination
      */
-    #[ArrayShape(['currentPage' => 'mixed', 'from' => 'mixed', 'to' => 'mixed', 'total' => 'mixed', 'per_page' => 'mixed'])]
     public function formatPaginateData($data): array
     {
         $paginated_arr = $data->toArray();
@@ -72,6 +71,6 @@ trait RestTrait
      */
     public function noData(mixed $response = null): JsonResponse
     {
-        return $this->apiResponse($response, ApiController::STATUS_OK, __('site.there_is_no_data'));
+        return $this->apiResponse($response, ApiController::STATUS_NOT_FOUND, __('site.there_is_no_data'));
     }
 }

@@ -26,7 +26,9 @@ Route::controller(v1\GroupController::class)
         Route::post('/groups/export', 'export')
             ->name('groups.export');
     });
-Route::get('/groups/{groupId}/change', [v1\GroupController::class, 'changeUserGroup'])->name('groups.change');
+Route::get('/groups/{groupId}/change', [v1\GroupController::class, 'changeUserGroup'])
+    ->withoutMiddleware(CustomerMustHaveAGroup::class)
+    ->name('groups.change');
 Route::resource('/groups', v1\GroupController::class)
     ->withoutMiddleware(CustomerMustHaveAGroup::class)
     ->names('groups');

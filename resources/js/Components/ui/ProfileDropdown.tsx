@@ -48,7 +48,11 @@ const ProfileDropdown = () => {
                 } z-10 start-5 bg-white-secondary dark:bg-dark-secondary rounded-lg shadow w-44`}
             >
                 <ul className="shadow-md h-full text-gray-700 text-sm dark:text-white">
-                    <li>
+                    <li
+                        onClick={() => {
+                            setOpen((prevState) => !prevState);
+                        }}
+                    >
                         <Link
                             id="user-details"
                             href={route(`v1.web.${role()}.user.details`)}
@@ -57,7 +61,11 @@ const ProfileDropdown = () => {
                             My Profile
                         </Link>
                     </li>
-                    <li>
+                    <li
+                        onClick={() => {
+                            setOpen((prevState) => !prevState);
+                        }}
+                    >
                         <Link
                             id="logout"
                             href={route(`v1.web.${role()}.logout`)}

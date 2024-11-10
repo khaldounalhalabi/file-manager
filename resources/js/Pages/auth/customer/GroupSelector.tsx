@@ -35,7 +35,7 @@ const GroupSelector = ({ groups }: { groups: Group[] }) => {
                         </div>
                         <div
                             className={
-                                "max-h-[75vh] min-h-[40vh] overflow-y-scroll p-5 w-full"
+                                "max-h-[75vh] min-h-[40vh] overflow-y-scroll p-5 w-full flex flex-col gap-2"
                             }
                         >
                             {groups.length > 0 ? (

@@ -17,30 +17,36 @@ Route::get('/groups/{groupId}/users', [v1\UserController::class, 'getUsersByGrou
 Route::controller(v1\GroupController::class)
     ->withoutMiddleware(CustomerMustHaveAGroup::class)
     ->group(function () {
-        Route::get('/groups/{groupId}/select', 'selectGroup')
-            ->name('groups.select');
-        Route::get('/user/groups', 'userGroups')
-            ->name('user.groups');
-        Route::get('/groups/data', 'data')
-            ->name('groups.data');
-        Route::post('/groups/export', 'export')
-            ->name('groups.export');
+        Route::post('/groups/invite', 'invite')->name('groups.invite');
+        Route::get('/groups/{groupId}/change', 'changeUserGroup')->name('groups.change');
+        Route::get('/groups/{groupId}/select', 'selectGroup')->name('groups.select');
+        Route::get('/user/groups', 'userGroups')->name('user.groups');
+        Route::get('/groups/data', 'data')->name('groups.data');
+        Route::post('/groups/export', 'export')->name('groups.export');
     });
-Route::get('/groups/{groupId}/change', [v1\GroupController::class, 'changeUserGroup'])
-    ->withoutMiddleware(CustomerMustHaveAGroup::class)
-    ->name('groups.change');
 Route::resource('/groups', v1\GroupController::class)
     ->withoutMiddleware(CustomerMustHaveAGroup::class)
     ->names('groups');
 
-Route::get('/directories/get-root', [v1\DirectoryController::class, 'getRoot'])->name('directories.get.root');
 Route::inertia('/directories/root', 'dashboard/customer/directories/Index')->name('directories.root');
-Route::post('/directories', [v1\DirectoryController::class, 'store'])->name('directories.store');
-Route::put('directories/{directoryId}', [v1\DirectoryController::class, 'update'])->name('directories.update');
-Route::delete('directories/{directoryId}', [v1\DirectoryController::class, 'destroy'])->name('directories.destroy');
-Route::get('directories/{directoryId}', [v1\DirectoryController::class, 'show'])->name('directories.show');
+Route::controller(v1\DirectoryController::class)
+    ->name('directories.')
+    ->prefix('directories')
+    ->group(function () {
+        Route::get('/get-root', 'getRoot')->name('get.root');
+        Route::post('/directories', 'store')->name('store');
+        Route::put('/{directoryId}', 'update')->name('update');
+        Route::delete('/{directoryId}', 'destroy')->name('destroy');
+        Route::get('/{directoryId}', 'show')->name('show');
+    });
 
-Route::post('/files', [v1\FileController::class, 'store'])->name('files.store');
-Route::get('/files/{fileId}/edit', [v1\FileController::class, 'edit'])->name('files.edit');
-Route::put('/files/update', [v1\FileController::class, 'pushUpdates'])->name('files.update');
-Route::delete('files/{fileId}', [v1\FileController::class, 'destroy'])->name('files.destroy');
+Route::controller(v1\FileController::class)
+    ->name('files.')
+    ->prefix('files')
+    ->group(function () {
+        Route::post('/', 'store')->name('store');
+        Route::get('/{fileId}/edit', 'edit')->name('edit');
+        Route::put('/update', 'pushUpdates')->name('update');
+        Route::delete('/{fileId}', 'destroy')->name('destroy');
+    });
+

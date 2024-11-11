@@ -4,6 +4,7 @@ namespace App\Http\Controllers\WEB\v1;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\Group\SendInvitationRequest;
 use App\Http\Requests\v1\Group\StoreUpdateGroupRequest;
 use App\Models\Group;
 use App\Services\v1\Group\GroupService;
@@ -144,5 +145,15 @@ class GroupController extends Controller
 
             return redirect()->back()->with('error', __('site.something_went_wrong'));
         }
+    }
+
+    public function invite(SendInvitationRequest $request)
+    {
+        $result = $this->groupService->invite($request->validated());
+
+        if ($result) {
+            return redirect()->back()->with('success', __('site.send_invitation_success'));
+        }
+        return redirect()->back()->with('error', __('site.something_went_wrong'));
     }
 }

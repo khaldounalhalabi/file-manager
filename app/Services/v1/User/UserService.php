@@ -9,9 +9,11 @@ use App\Repositories\GroupRepository;
 use App\Repositories\UserRepository;
 use App\Services\Contracts\BaseService;
 use App\Services\Contracts\Makable;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -303,5 +305,42 @@ class UserService extends BaseService
     public function getCustomers(array $relations = []): ?array
     {
         return $this->repository->getCustomers($relations);
+    }
+
+
+    public function acceptInvitation(string $token): ?bool
+    {
+        try {
+            $tokenData = Crypt::decrypt($token);
+            $validUntil = Carbon::parse($tokenData['valid_until']);
+
+            if ($validUntil->isBefore(now())) {
+                return false;
+            }
+
+            $user = $this->repository->getUserByEmail($tokenData['email']);
+            if (!$user) {
+                return false;
+            }
+
+            $group = GroupRepository::make()->find($tokenData['group_id']);
+            if (!$group) {
+                return false;
+            }
+
+            $user = $this->repository->update([
+                'group_id' => $group->id,
+            ], $user);
+
+            if (!$user->groups()->where('groups.id', $group->id)->exists()) {
+                $user->groups()->attach($group->id);
+            }
+
+            auth('web')->login($user);
+
+            return true;
+        } catch (\Exception) {
+            return null;
+        }
     }
 }

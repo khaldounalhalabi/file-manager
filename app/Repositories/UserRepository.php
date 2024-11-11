@@ -3,9 +3,11 @@
 namespace App\Repositories;
 
 use App\Enums\RolesPermissionEnum;
+use App\Models\Group;
 use App\Models\User;
 use App\Repositories\Contracts\BaseRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as CollectionAlias;
 use LaravelIdea\Helper\App\Models\_IH_User_C;
 
 /**
@@ -47,5 +49,28 @@ class UserRepository extends BaseRepository
             $this->globalQuery($relations)
                 ->role(RolesPermissionEnum::CUSTOMER['role'])
         );
+    }
+
+    /**
+     * @param Group $group
+     * @return void
+     */
+    public function removeUsersFromGroup(Group $group): void
+    {
+        $group->users()->chunk(10,
+            /**
+             * @param Collection<User>|CollectionAlias<User> $users
+             */
+            function (Collection|CollectionAlias $users) use ($group) {
+                foreach ($users as $user) {
+                    if ($user->group_id === $group->id) {
+                        $this->update([
+                            'group_id' => null
+                        ], $user);
+                    }
+
+                    $user->groups()->detach($group->id);
+                }
+            });
     }
 }

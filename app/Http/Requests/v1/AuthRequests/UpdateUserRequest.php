@@ -8,27 +8,25 @@ class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         $guard = request()->acceptsHtml() ? 'web' : 'api';
 
         return [
-            'first_name' => 'nullable|string',
-            'last_name' => 'nullable|string',
-            'email' => 'nullable|email|unique:users,email,'.auth($guard)->user()?->id,
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . auth($guard)->user()?->id,
             'password' => 'nullable|min:8|confirmed',
             'fcm_token' => 'nullable|string',
         ];

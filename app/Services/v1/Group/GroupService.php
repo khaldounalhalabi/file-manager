@@ -2,6 +2,8 @@
 
 namespace App\Services\v1\Group;
 
+use App\Enums\RolesPermissionEnum;
+use App\Mail\InviteToGroupEmail;
 use App\Models\Group;
 use App\Repositories\GroupRepository;
 use App\Repositories\UserRepository;
@@ -10,6 +12,9 @@ use App\Services\Contracts\Makable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection as CollectionAlias;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 /**
  * @extends BaseService<Group>
@@ -79,6 +84,8 @@ class GroupService extends BaseService
             'group_id' => null
         ]);
 
+        UserRepository::make()->removeUsersFromGroup($group);
+
         return $this->repository->delete($group);
     }
 
@@ -99,4 +106,48 @@ class GroupService extends BaseService
 
         return $group;
     }
+
+    public function invite(array $data): bool
+    {
+        try {
+            $group = $this->repository->find($data['group_id']);
+
+            $invited = UserRepository::make()->getUserByEmail($data['email']);
+
+            $password = Str::password();
+
+            if (!$invited) {
+                $invited = UserRepository::make()->create([
+                    'email' => $data['email'],
+                    'first_name' => explode('@', $data['email'])[0] ?? "",
+                    'last_name' => explode('@', $data['email'])[0] ?? "",
+                    'password' => $password,
+                    'group_id' => $group->id,
+                ]);
+                $invited->assignRole(RolesPermissionEnum::CUSTOMER['role']);
+            }
+
+            $token = Crypt::encrypt([
+                'group_id' => $group->id,
+                'valid_until' => now()->addDays(3),
+                'email' => $data['email'],
+            ]);
+
+            Mail::to($data['email'])->send(new InviteToGroupEmail(
+                $data['email'],
+                $this->user->first_name . " " . $this->user->last_name,
+                $this->user->email,
+                $group->name,
+                $token,
+                $password
+            ));
+
+            return true;
+
+        } catch (\Exception) {
+            return false;
+        }
+    }
 }
+
+

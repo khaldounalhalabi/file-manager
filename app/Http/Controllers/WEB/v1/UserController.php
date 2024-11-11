@@ -130,4 +130,14 @@ class UserController extends Controller
             return redirect()->back()->with('error', __('site.something_went_wrong'));
         }
     }
+
+    public function acceptGroupInvitation(Request $request)
+    {
+        $result = $this->userService->acceptInvitation($request->invitation_token ?? "");
+        if ($result) {
+            return redirect()->route('v1.web.customer.user.groups')->with('success', __('site.accepted_successfully'));
+        } else {
+            abort(403);
+        }
+    }
 }

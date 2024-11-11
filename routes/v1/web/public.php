@@ -30,4 +30,5 @@ Route::prefix('v1/customer')
         Route::inertia('request-reset-password-code-page', 'auth/customer/ForgetPassword')->name('request.reset.password.code-page');
         Route::inertia('reset-page', 'auth/customer/ResetPassword')->name('reset.password.page');
         Route::inertia('/register', 'auth/customer/Register')->name('register.page');
+        Route::get('accept-invitation', [v1\UserController::class, 'acceptGroupInvitation'])->name('accept.invitation');
     });

@@ -28,7 +28,7 @@ class HasRoleMiddleware
                 'message' => __('site.unauthorized_user')
             ]);
         } elseif (!$request->expectsJson() && !auth('web')?->user()?->hasRole($role)) {
-            abort(403, __('site.unauthorized_user'));
+            return redirect()->route("v1.web.public.$role.login.page");
         }
 
         return $next($request);

@@ -9,6 +9,7 @@ use App\Repositories\FileVersionRepository;
 use App\Services\Contracts\BaseService;
 use App\Services\Contracts\Makable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 
 /**
  * @extends BaseService<File>
@@ -23,8 +24,8 @@ class FileService extends BaseService
     public function store(array $data, array $relationships = []): Model
     {
         $fileData = [
-            'owner_id' => auth()->user()?->id,
-            'group_id' => auth()->user()?->group_id,
+            'owner_id' => $this->user?->id,
+            'group_id' => $this->user?->group_id,
             'directory_id' => $data['directory_id'],
             'status' => FileStatusEnum::UNLOCKED->value,
             'name' => explode('.', $data['file']->getClientOriginalName())[0] ?? "Unknown file",
@@ -60,12 +61,21 @@ class FileService extends BaseService
         return $file?->lastVersion?->file_path['path'];
     }
 
+    /**
+     * @param array{file:UploadedFile , file_id:numeric} $data
+     * @return bool|null
+     */
     public function pushUpdates(array $data): ?bool
     {
         $file = $this->repository->find($data['file_id'], ['lastVersion']);
 
         //TODO:: add locker checking via logs after adding them
         if (!$file->isLocked()) {
+            return false;
+        }
+
+        $fileName = $file->name . "." . $file->lastVersion?->file_path['extension'];
+        if ($fileName != $data['file']?->getClientOriginalName()) {
             return false;
         }
 

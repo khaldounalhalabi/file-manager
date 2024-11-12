@@ -1,6 +1,7 @@
 import ProfileDropdown from "@/Components/ui/ProfileDropdown";
 import Menu from "../icons/Menu";
 import GroupSelector from "@/Components/ui/GroupSelector";
+import { role } from "@/helper";
 
 const Navbar = ({
     isSidebarOpen,
@@ -19,7 +20,7 @@ const Navbar = ({
                 )}
             </div>
             <div className={`flex w-full items-center justify-end`}>
-                <GroupSelector />
+                {role() == "customer" ? <GroupSelector /> : ""}
                 <ProfileDropdown />
             </div>
         </nav>

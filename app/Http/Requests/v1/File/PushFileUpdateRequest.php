@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\v1\File;
 
+use App\Repositories\FileRepository;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -21,9 +22,14 @@ class PushFileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $file = FileRepository::make()->find($this->input('file_id'), ['lastVersion']);
         return [
             'file_id' => 'required|numeric|exists:files,id',
-            'file' => 'required|file|max:25000',
+            'file' => ['required', 'file', 'max:25000', function ($attribute, $value, $fail) use ($file) {
+                if ($file->name . "." . $file->lastVersion?->file_path['extension'] != $this->file('file')?->getClientOriginalName()) {
+                    $fail("You should upload a file with the same name of the previous one.");
+                }
+            }],
         ];
     }
 }

@@ -62,7 +62,7 @@ class GroupService extends BaseService
      */
     public function getUserGroups(array $relations = []): Collection|array|CollectionAlias
     {
-        return $this->repository->getByUser(auth()->user()->id, $relations);
+        return $this->repository->getByUser($this->user->id, $relations);
     }
 
     public function selectGroup($groupId): void

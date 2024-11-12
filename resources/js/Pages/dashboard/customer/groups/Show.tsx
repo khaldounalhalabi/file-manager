@@ -7,6 +7,7 @@ import SmallTextField from "@/Components/Show/SmallTextField";
 import { PaginatedResponse } from "@/Models/Response";
 import DataTable from "@/Components/Datatable/DataTable";
 import { User } from "@/Models/User";
+import { GET } from "@/Modules/Http";
 
 const Show = ({ group }: { group: Group }) => {
     return (
@@ -47,7 +48,7 @@ const Show = ({ group }: { group: Group }) => {
                         perPage?: number | undefined,
                         params?: object | undefined,
                     ): Promise<PaginatedResponse<User>> =>
-                        fetch(
+                        GET(
                             route("v1.web.customer.groups.users", {
                                 groupId: group.id,
                                 page: page,
@@ -57,14 +58,7 @@ const Show = ({ group }: { group: Group }) => {
                                 limit: perPage,
                                 ...params,
                             }),
-                            {
-                                method: "GET",
-                                headers: {
-                                    accept: "application/html",
-                                    "Content-Type": "application/html",
-                                },
-                            },
-                        ).then((res) => res.json())
+                        )
                     }
                     schema={[
                         {

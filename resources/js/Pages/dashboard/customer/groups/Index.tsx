@@ -6,6 +6,7 @@ import { Link } from "@inertiajs/react";
 import { ArrowLeftRight } from "lucide-react";
 import { user } from "@/helper";
 import SendInvitationModal from "@/Components/groups/SendInvitationModal";
+import { GET } from "@/Modules/Http";
 
 const Index = () => {
     return (
@@ -23,7 +24,7 @@ const Index = () => {
                 perPage?: number | undefined,
                 params?: object | undefined,
             ): Promise<PaginatedResponse<Group>> =>
-                fetch(
+                GET(
                     route("v1.web.customer.groups.data", {
                         page: page,
                         search: search,
@@ -32,14 +33,7 @@ const Index = () => {
                         limit: perPage,
                         ...params,
                     }),
-                    {
-                        method: "GET",
-                        headers: {
-                            accept: "application/html",
-                            "Content-Type": "application/html",
-                        },
-                    },
-                ).then((res) => res.json())
+                )
             }
             schema={[
                 {

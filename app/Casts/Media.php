@@ -8,7 +8,6 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class Media implements CastsAttributes
@@ -36,14 +35,8 @@ class Media implements CastsAttributes
     public function set(Model $model, string $key, mixed $value, array $attributes): string|null|false
     {
         $paths = $this->handleFileStoring($value, $model);
-        if (is_string($paths) && !Str::isJson($paths)) {
+        if (is_string($paths)) {
             return json_encode($this->format($paths));
-        } elseif (is_string($paths) && Str::isJson($paths)) {
-            $data = json_decode($paths, true);
-            foreach ($data as $key => $item) {
-                $data[$key] = $this->format($item);
-            }
-            return json_encode($data);
         } elseif (is_array($paths)) {
             foreach ($paths as $key => $item) {
                 $paths[$key] = $this->format($item);
@@ -92,6 +85,12 @@ class Media implements CastsAttributes
             $images[] = $this->storeFile($file, $model->getTable());
         }
 
-        return $isArray ? $images : (count($images) > 0 ? $images[0] : null);
+        return $isArray
+            ? $images
+            : (
+            count($images) > 0
+                ? $images[0]
+                : null
+            );
     }
 }

@@ -45,6 +45,7 @@ Route::controller(v1\FileController::class)
     ->prefix('files')
     ->group(function () {
         Route::post('/', 'store')->name('store');
+        Route::post('edit-multiple', 'editMultipleFiles')->name('edit.multiple');
         Route::get('/{fileId}/edit', 'edit')->name('edit');
         Route::put('/update', 'pushUpdates')->name('update');
         Route::delete('/{fileId}', 'destroy')->name('destroy');

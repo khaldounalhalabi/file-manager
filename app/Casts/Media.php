@@ -65,6 +65,7 @@ class Media implements CastsAttributes
             'mime_type' => file_exists(storage_path("app/public/" . trim($value, '/')))
                 ? mime_content_type(storage_path("app/public/" . trim($value, '/')))
                 : "unknown",
+            'absolute_path' => storage_path("app/public/" . trim($value, '/')),
         ];
     }
 

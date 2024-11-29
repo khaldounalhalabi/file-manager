@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->foreignId('owner_id')->nullable()->references('id')->on('users')->nullOnDelete();
             $table->foreignIdFor(Group::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Directory::class)->constrained()->cascadeOnDelete();
+            $table->integer('frequent')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

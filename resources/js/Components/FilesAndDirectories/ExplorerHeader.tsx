@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import { FormEvent, useEffect, useState } from "react";
+import React, { createContext, FormEvent, useEffect, useState } from "react";
 import Modal from "@/Components/ui/Modal";
 import Form from "@/Components/form/Form";
 import { Link, useForm } from "@inertiajs/react";
@@ -11,10 +11,22 @@ import {
 } from "@tanstack/react-query";
 import { PaginatedResponse } from "@/Models/Response";
 import { Directory } from "@/Models/Directory";
+import { POST } from "@/Modules/Http";
+import DownloadFile from "@/Hooks/DownloadFile";
+import { getCsrf } from "@/helper";
+import LoadingSpinner from "@/Components/icons/LoadingSpinner";
+
+export const SelectedFilesContext = createContext<{
+    selected: number[];
+    setSelected: (
+        value: ((prevState: number[]) => number[]) | number[],
+    ) => void;
+}>({ selected: [], setSelected: () => undefined });
 
 const ExplorerHeader = ({
     refetch,
     directory,
+    children = undefined,
 }: {
     refetch?:
         | ((
@@ -27,7 +39,9 @@ const ExplorerHeader = ({
           >)
         | (() => void);
     directory?: Directory;
+    children: any;
 }) => {
+    const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
     const [openNewFolder, setOpenNewFolder] = useState<boolean>(false);
     const [openNewFile, setOpenNewFile] = useState<boolean>(false);
     const { post, setData, processing, wasSuccessful, data, transform } =
@@ -55,8 +69,43 @@ const ExplorerHeader = ({
                 parent_id: directory.id,
             }));
         }
-        console.log(data);
         post(route("v1.web.customer.directories.store"));
+    };
+
+    const { downloadFile, isLoading } = DownloadFile();
+    const [isDownloadingMultiple, setIsDownloadingMultiple] = useState(false);
+    const onClickUpdateMultipleFilesButton = () => {
+        setIsDownloadingMultiple(true);
+        POST<{ url: string }>(route("v1.web.customer.files.edit.multiple"), {
+            files_ids: selectedFiles,
+        })
+            .then((res) => {
+                if (res.data.url) {
+                    downloadFile(
+                        () =>
+                            fetch(res.data.url ?? "", {
+                                method: "GET",
+                                headers: {
+                                    "X-CSRF-TOKEN": getCsrf() ?? "",
+                                    "Content-Type": "application/html",
+                                },
+                            }),
+                        "ultimate-file-manager",
+                    ).then(() => {
+                        if (refetch) {
+                            refetch();
+                        }
+                        setIsDownloadingMultiple(false);
+                    });
+                } else {
+                    setIsDownloadingMultiple(false);
+                    console.error(res);
+                }
+            })
+            .catch((error) => {
+                setIsDownloadingMultiple(false);
+                console.error(error);
+            });
     };
 
     const onSubmitNewFile = (e: FormEvent<HTMLFormElement>) => {
@@ -81,113 +130,141 @@ const ExplorerHeader = ({
         if (successFile) {
             setOpenNewFile(false);
         }
-    }, [wasSuccessful, successFile]);
+
+        setSelectedFiles([]);
+    }, [wasSuccessful, successFile, isLoading, directory]);
+
     return (
-        <div
-            className={
-                "flex items-center justify-items-start w-full border-b border-b-brand mb-5 p-5"
-            }
+        <SelectedFilesContext.Provider
+            value={{ selected: selectedFiles, setSelected: setSelectedFiles }}
         >
-            <div className={"flex items-center justify-start gap-5 w-full"}>
-                <button
-                    className={
-                        "text-brand flex items-center gap-2 border p-3 border-gray-200 hover:shadow-md rounded-md"
-                    }
-                    onClick={() => setOpenNewFolder(true)}
-                    type={"button"}
-                >
-                    New Folder <Plus />
-                </button>
-
-                <Modal
-                    isOpen={openNewFolder}
-                    onClose={() => setOpenNewFolder(false)}
-                >
-                    <Form
-                        onSubmit={onSubmitNewFolder}
-                        processing={processing}
-                        backButton={false}
+            <div
+                className={
+                    "flex items-center justify-items-start w-full border-b border-b-brand mb-5 p-5"
+                }
+            >
+                <div className={"flex items-center justify-start gap-5 w-full"}>
+                    <button
+                        className={
+                            "text-brand flex items-center gap-2 border p-3 border-gray-200 hover:shadow-md rounded-md"
+                        }
+                        onClick={() => setOpenNewFolder(true)}
+                        type={"button"}
                     >
-                        <Input
-                            name={"name"}
-                            type={"text"}
-                            onInput={(e) => {
-                                setData("name", e.target.value);
-                            }}
-                            required={true}
-                            label={"Folder name"}
-                        />
-                    </Form>
-                </Modal>
+                        New Folder <Plus />
+                    </button>
 
-                {directory ? (
-                    <>
+                    <Modal
+                        isOpen={openNewFolder}
+                        onClose={() => setOpenNewFolder(false)}
+                    >
+                        <Form
+                            onSubmit={onSubmitNewFolder}
+                            processing={processing}
+                            backButton={false}
+                        >
+                            <Input
+                                name={"name"}
+                                type={"text"}
+                                onInput={(e) => {
+                                    setData("name", e.target.value);
+                                }}
+                                required={true}
+                                label={"Folder name"}
+                            />
+                        </Form>
+                    </Modal>
+
+                    {directory ? (
+                        <>
+                            <button
+                                className={
+                                    "text-brand flex items-center gap-2 border p-3 border-gray-200 hover:shadow-md rounded-md"
+                                }
+                                type={"button"}
+                                onClick={() => {
+                                    setOpenNewFile(true);
+                                }}
+                            >
+                                New File
+                                <Plus />
+                            </button>
+                            <Modal
+                                isOpen={openNewFile}
+                                onClose={() => {
+                                    setOpenNewFile(false);
+                                }}
+                            >
+                                <Form
+                                    onSubmit={onSubmitNewFile}
+                                    processing={processingFile}
+                                    backButton={false}
+                                >
+                                    <Input
+                                        name={"File"}
+                                        type={"file"}
+                                        onChange={(e) => {
+                                            setFile(
+                                                "file",
+                                                e.target.files?.[0],
+                                            );
+                                        }}
+                                        required={true}
+                                        label={"File"}
+                                    />
+                                    <Input
+                                        name={"directory_id"}
+                                        className={"hidden"}
+                                    />
+                                </Form>
+                            </Modal>
+                        </>
+                    ) : undefined}
+
+                    {selectedFiles.length > 0 && (
                         <button
                             className={
                                 "text-brand flex items-center gap-2 border p-3 border-gray-200 hover:shadow-md rounded-md"
                             }
+                            onClick={(e) => {
+                                e.preventDefault();
+                                onClickUpdateMultipleFilesButton();
+                            }}
                             type={"button"}
-                            onClick={() => {
-                                setOpenNewFile(true);
-                            }}
                         >
-                            New File
-                            <Plus />
+                            Edit ({selectedFiles.length}) files
+                            {isDownloadingMultiple && <LoadingSpinner />}
                         </button>
-                        <Modal
-                            isOpen={openNewFile}
-                            onClose={() => {
-                                setOpenNewFile(false);
-                            }}
-                        >
-                            <Form
-                                onSubmit={onSubmitNewFile}
-                                processing={processingFile}
-                                backButton={false}
+                    )}
+                </div>
+                <div className={"w-full flex items-center justify-end"}>
+                    <Link
+                        className={"text-brand hover:underline"}
+                        href={route("v1.web.customer.directories.root")}
+                    >
+                        /root
+                    </Link>
+                    {directory &&
+                        directory.path.map((path) => (
+                            <Link
+                                href={route(
+                                    "v1.web.customer.directories.show",
+                                    path.id,
+                                )}
+                                key={path.id}
+                                className={"text-brand"}
                             >
-                                <Input
-                                    name={"File"}
-                                    type={"file"}
-                                    onChange={(e) => {
-                                        setFile("file", e.target.files?.[0]);
-                                    }}
-                                    required={true}
-                                    label={"File"}
-                                />
-                                <Input
-                                    name={"directory_id"}
-                                    className={"hidden"}
-                                />
-                            </Form>
-                        </Modal>
-                    </>
-                ) : undefined}
+                                /{" "}
+                                <span className={"hover:underline"}>
+                                    {path.name}
+                                </span>
+                            </Link>
+                        ))}
+                </div>
             </div>
-            <div className={"w-full flex items-center justify-end"}>
-                <Link
-                    className={"text-brand hover:underline"}
-                    href={route("v1.web.customer.directories.root")}
-                >
-                    /root
-                </Link>
-                {directory &&
-                    directory.path.map((path) => (
-                        <Link
-                            href={route(
-                                "v1.web.customer.directories.show",
-                                path.id,
-                            )}
-                            key={path.id}
-                            className={"text-brand"}
-                        >
-                            /{" "}
-                            <span className={"hover:underline"}>
-                                {path.name}
-                            </span>
-                        </Link>
-                    ))}
-            </div>
-        </div>
+
+            {children}
+        </SelectedFilesContext.Provider>
     );
 };
 

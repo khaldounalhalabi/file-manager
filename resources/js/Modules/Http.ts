@@ -5,20 +5,20 @@ import { router } from "@inertiajs/react";
 const csrf = getCsrf() ?? "";
 const baseHeaders: HeadersInit = {
     accept: "application/html",
-    "Content-Type": "application/html",
+    "Content-Type": "application/json",
     "X-CSRF-TOKEN": csrf,
     "X-Source": "Fetch-Api",
 };
 
 export const POST = async <T extends any = any>(
     url: string,
-    data: BodyInit | undefined,
-    headers: Record<string, any> | undefined,
+    data: Record<string, any> | undefined,
+    headers: Record<string, any> | undefined = {},
 ): Promise<ApiResponse<T>> => {
     return await fetch(url, {
         headers: { ...baseHeaders, ...headers },
         method: "POST",
-        body: data,
+        body: JSON.stringify(data),
     }).then((response) => handler(response.json()));
 };
 

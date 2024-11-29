@@ -14,7 +14,8 @@
         "maatwebsite/excel": "^3.1",
         "spatie/laravel-permission": "^6.9",
         "tightenco/ziggy": "^2.3",
-        "ext-fileinfo": "*"
+        "ext-fileinfo": "*",
+        "ext-zip": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

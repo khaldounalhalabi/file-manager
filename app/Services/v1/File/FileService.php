@@ -10,6 +10,8 @@ use App\Services\Contracts\BaseService;
 use App\Services\Contracts\Makable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
+use ZipArchive;
 
 /**
  * @extends BaseService<File>
@@ -30,6 +32,16 @@ class FileService extends BaseService
             'status' => FileStatusEnum::UNLOCKED->value,
             'name' => explode('.', $data['file']->getClientOriginalName())[0] ?? "Unknown file",
         ];
+
+        $existedFile = File::where('name', $fileData['name'])
+            ->where('group_id', $fileData['group_id'])
+            ->where('directory_id', $fileData['directory_id'])
+            ->latest()
+            ->first();
+
+        if ($existedFile) {
+            $fileData['frequent'] = $existedFile->frequent + 1;
+        }
 
         $file = $this->repository->create($fileData);
 
@@ -74,8 +86,7 @@ class FileService extends BaseService
             return false;
         }
 
-        $fileName = $file->name . "." . $file->lastVersion?->file_path['extension'];
-        if ($fileName != $data['file']?->getClientOriginalName()) {
+        if ($file->getFileName() != $data['file']?->getClientOriginalName()) {
             return false;
         }
 
@@ -104,5 +115,29 @@ class FileService extends BaseService
         }
 
         return $this->repository->delete($file);
+    }
+
+    public function zipMultipleFiles(array $data): ?string
+    {
+        $files = $this->repository->getByIds($data['files_ids'], ['lastVersion']);
+        $zipFileName = Str::uuid() . '.zip';
+        $zipFilePath = storage_path('app/public/' . $zipFileName);
+
+        $zip = new ZipArchive();
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+            foreach ($files as $file) {
+                if (!$file->isLocked() && $file->lastVersion) {
+                    $zip->addFile($file->lastVersion?->file_path['absolute_path'], $file->getFileName());
+                    $file->update([
+                        'status' => FileStatusEnum::LOCKED->value,
+                    ]);
+                }
+            }
+            $zip->close();
+        } else {
+            return null;
+        }
+        return asset("storage/" . Str::after($zipFilePath, "storage\app/public"));
     }
 }

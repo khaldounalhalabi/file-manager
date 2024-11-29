@@ -16,7 +16,7 @@ class FileResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => $this->frequent <= 0 ? $this->name : $this->name . " ({$this->frequent}) ",
             'owner_id' => $this->owner_id,
             'group_id' => $this->group_id,
             'directory_id' => $this->directory_id,

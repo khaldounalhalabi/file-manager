@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Pencil from "@/Components/icons/Pencil";
 import { toast } from "react-toastify";
 import { File } from "@/Models/File";
@@ -15,6 +15,7 @@ import { ResponseCodeEnum } from "@/Enums/ResponseCodeEnum";
 import { FileStatusEnum } from "@/Enums/FileStatusEnum";
 import DeleteFileButton from "@/Components/FilesAndDirectories/DeleteFileButton";
 import PushFileUpdateButton from "@/Components/FilesAndDirectories/PushFileUpdateButton";
+import { SelectedFilesContext } from "@/Components/FilesAndDirectories/ExplorerHeader";
 
 const FileOptions = ({
     file,
@@ -56,6 +57,8 @@ const FileOptions = ({
             });
     };
 
+    const { selected, setSelected } = useContext(SelectedFilesContext);
+
     return (
         <div className={"flex items-center justify-between px-5 gap-1"}>
             <PushFileUpdateButton file={file} refetch={refetch} />
@@ -75,6 +78,22 @@ const FileOptions = ({
             </button>
 
             <DeleteFileButton file={file} refetch={refetch} />
+
+            {file.status == FileStatusEnum.UNLOCKED && (
+                <input
+                    type={"checkbox"}
+                    defaultChecked={selected?.includes(file.id)}
+                    onChange={(e) => {
+                        if (e.target?.checked) {
+                            setSelected((prev) => [file?.id, ...prev]);
+                        } else {
+                            setSelected((prev) =>
+                                prev.filter((fileId) => fileId != file.id),
+                            );
+                        }
+                    }}
+                />
+            )}
         </div>
     );
 };

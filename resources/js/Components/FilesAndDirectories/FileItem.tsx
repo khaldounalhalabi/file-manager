@@ -31,7 +31,10 @@ const FileItem = ({ file, refetch }: { file: File; refetch: () => void }) => {
                             extension={file?.last_version?.file_path?.extension}
                         />
                         <div className={"flex flex-col items-start"}>
-                            <span>{file.name}</span>
+                            <span>
+                                {file.name +
+                                    `${file.frequent > 0 ? `(${file.frequent})` : ""}`}
+                            </span>
                             <span>
                                 Last modified :{" "}
                                 {dayjs(file?.last_version?.created_at).format(
@@ -39,6 +42,10 @@ const FileItem = ({ file, refetch }: { file: File; refetch: () => void }) => {
                                 )}
                             </span>
                             <span>Version: {file?.last_version?.version}</span>
+                            <span>
+                                Extension:{" "}
+                                {file?.last_version?.file_path?.extension}
+                            </span>
                         </div>
                     </div>
                     {isLoading && <LoadingSpinner />}

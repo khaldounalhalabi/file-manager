@@ -12,19 +12,24 @@ const Show = ({ directory }: { directory: Directory }) => {
 
     return (
         <PageCard>
-            <ExplorerHeader directory={directory} refetch={refetch} />
-            <div
-                className={
-                    "max-h-[80vh] max-w-full flex flex-col items-start justify-between gap-3 overflow-y-scroll"
-                }
-            >
-                {directory.sub_directories?.map((dir, index) => (
-                    <FolderItem key={index} directory={dir} refetch={refetch} />
-                ))}
-                {directory.files?.map((file, index) => (
-                    <FileItem key={index} file={file} refetch={refetch} />
-                ))}
-            </div>
+            <ExplorerHeader directory={directory} refetch={refetch}>
+                <div
+                    className={
+                        "max-h-[80vh] max-w-full flex flex-col items-start justify-between gap-3 overflow-y-scroll"
+                    }
+                >
+                    {directory.sub_directories?.map((dir, index) => (
+                        <FolderItem
+                            key={index}
+                            directory={dir}
+                            refetch={refetch}
+                        />
+                    ))}
+                    {directory.files?.map((file, index) => (
+                        <FileItem key={index} file={file} refetch={refetch} />
+                    ))}
+                </div>
+            </ExplorerHeader>
         </PageCard>
     );
 };

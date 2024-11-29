@@ -5,6 +5,7 @@ namespace App\Http\Controllers\WEB\v1;
 use App\Enums\ResponseCodeEnum;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\File\EditMultipleFilesRequest;
 use App\Http\Requests\v1\File\PushFileUpdateRequest;
 use App\Http\Requests\v1\File\StoreUpdateFileRequest;
 use App\Services\v1\File\FileService;
@@ -59,5 +60,17 @@ class FileController extends Controller
         } else {
             return redirect()->back()->with('error', __('site.wrong_uploader'));
         }
+    }
+
+    public function editMultipleFiles(EditMultipleFilesRequest $request)
+    {
+        $url = $this->fileService->zipMultipleFiles($request->validated());
+        if ($url) {
+            return $this->apiResponse([
+                'url' => $url,
+            ], ApiController::STATUS_OK, __('site.get_successfully'));
+        }
+
+        return $this->noData();
     }
 }

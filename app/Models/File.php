@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property  User|null   owner
  * @property  Group       group
  * @property  Directory   directory
+ * @property integer      frequent
  */
 class File extends Model
 {
@@ -32,6 +33,7 @@ class File extends Model
         'owner_id',
         'group_id',
         'directory_id',
+        'frequent',
     ];
 
     public function exportable(): array
@@ -85,5 +87,14 @@ class File extends Model
     public function isLocked(): bool
     {
         return $this->status == FileStatusEnum::LOCKED->value;
+    }
+
+    public function getFileName(): string
+    {
+        if ($this->frequent > 0) {
+            return "$this->name ($this->frequent) ." . $this->lastVersion?->file_path['extension'];
+        }
+
+        return "$this->name ." . $this->lastVersion?->file_path['extension'];
     }
 }

@@ -16,5 +16,6 @@ export interface File {
     last_version: FileVersion;
     name: string;
     updated_at: string;
+    frequent:number;
 }
 

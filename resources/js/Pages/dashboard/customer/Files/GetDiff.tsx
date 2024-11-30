@@ -77,7 +77,10 @@ const GetDiff = ({
                 Summary: {hunk.content.trim()}
             </div>
         </Decoration>,
-        <Hunk key={`hunk-${hunk.content}`} hunk={hunk} />,
+        <Hunk
+            key={`hunk-${hunk.content}`}
+            hunk={hunk}
+        />,
     ];
 
     if (error) {
@@ -103,7 +106,12 @@ const GetDiff = ({
                         <span className="text-blue-600">{oldRevision}</span> →{" "}
                         <span className="text-green-600">{newRevision}</span>
                     </h2>
-                    <Diff viewType="split" diffType={type} hunks={hunks}>
+                    <Diff
+                        viewType="split"
+                        diffType={type}
+                        hunks={hunks}
+                        className={"w-full"}
+                    >
                         {(hunks) => hunks.flatMap(renderHunk)}
                     </Diff>
                 </div>

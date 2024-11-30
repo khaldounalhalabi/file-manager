@@ -40,6 +40,9 @@ Route::controller(v1\DirectoryController::class)
         Route::get('/{directoryId}', 'show')->name('show');
     });
 
+Route::post('get-diff', [v1\FileController::class, 'getDiff'])->name('get.diff');
+Route::get('stream-file', [v1\FileController::class, 'streamFile'])->name('stream.file');
+Route::get('file-versions/{fileId}', [v1\FileVersionController::class, 'getByFile'])->name('files.versions');
 Route::controller(v1\FileController::class)
     ->name('files.')
     ->prefix('files')
@@ -49,5 +52,6 @@ Route::controller(v1\FileController::class)
         Route::get('/{fileId}/edit', 'edit')->name('edit');
         Route::put('/update', 'pushUpdates')->name('update');
         Route::delete('/{fileId}', 'destroy')->name('destroy');
+        Route::get('/{fileId}', 'show')->name('show');
     });
 

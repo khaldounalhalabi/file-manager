@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\WEB\v1;
 
-use App\Enums\ResponseCodeEnum;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\File\EditMultipleFilesRequest;
+use App\Http\Requests\v1\File\GetDiffRequest;
 use App\Http\Requests\v1\File\PushFileUpdateRequest;
 use App\Http\Requests\v1\File\StoreUpdateFileRequest;
 use App\Services\v1\File\FileService;
 use App\Traits\RestTrait;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class FileController extends Controller
 {
@@ -72,5 +74,46 @@ class FileController extends Controller
         }
 
         return $this->noData();
+    }
+
+    public function show($fileId)
+    {
+        $file = $this->fileService->view($fileId, ['owner', 'lastVersion', 'directory']);
+        if ($file) {
+            return Inertia::render('dashboard/customer/Files/Show', [
+                'file' => $file
+            ]);
+        }
+        abort(404);
+    }
+
+    public function getDiff(GetDiffRequest $request)
+    {
+        $data = $this->fileService->getDiff($request->validated());
+        if ($data) {
+            return Inertia::render('dashboard/customer/Files/GetDiff', $data);
+        }
+
+        abort(404);
+    }
+
+    public function streamFile(Request $request)
+    {
+        $filePath = $request->query('path');
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        return response()->stream(function () use ($filePath) {
+            $stream = fopen($filePath, 'r');
+            while (!feof($stream)) {
+                echo fread($stream, 8192); // 8 KB chunks
+            }
+            fclose($stream);
+        }, 200, [
+            'Content-Type' => mime_content_type($filePath),
+            'Content-Disposition' => 'inline; filename="' . basename($filePath) . '"',
+        ]);
     }
 }

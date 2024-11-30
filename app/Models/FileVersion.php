@@ -69,4 +69,10 @@ class FileVersion extends Model
             ],
         ];
     }
+
+
+    public function fileExists(): bool
+    {
+        return file_exists($this->file_path['absolute_path']);
+    }
 }

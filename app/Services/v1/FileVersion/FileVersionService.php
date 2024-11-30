@@ -16,4 +16,9 @@ class FileVersionService extends BaseService
     use Makable;
 
     protected string $repositoryClass = FileVersionRepository::class;
+
+    public function getByFile($fileId, array $relations = []): ?array
+    {
+        return $this->repository->getByFile($fileId, $relations);
+    }
 }

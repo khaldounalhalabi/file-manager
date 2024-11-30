@@ -92,9 +92,14 @@ class File extends Model
     public function getFileName(): string
     {
         if ($this->frequent > 0) {
-            return "$this->name ($this->frequent) ." . $this->lastVersion?->file_path['extension'];
+            return "$this->name ($this->frequent)." . $this->lastVersion?->file_path['extension'];
         }
 
-        return "$this->name ." . $this->lastVersion?->file_path['extension'];
+        return "$this->name." . $this->lastVersion?->file_path['extension'];
+    }
+
+    public function fileExists(): bool
+    {
+        return file_exists($this->lastVersion?->file_path['absolute_path']);
     }
 }

@@ -16,6 +16,8 @@ import { FileStatusEnum } from "@/Enums/FileStatusEnum";
 import DeleteFileButton from "@/Components/FilesAndDirectories/DeleteFileButton";
 import PushFileUpdateButton from "@/Components/FilesAndDirectories/PushFileUpdateButton";
 import { SelectedFilesContext } from "@/Components/FilesAndDirectories/ExplorerHeader";
+import Eye from "@/Components/icons/Eye";
+import { Link } from "@inertiajs/react";
 
 const FileOptions = ({
     file,
@@ -78,6 +80,13 @@ const FileOptions = ({
             </button>
 
             <DeleteFileButton file={file} refetch={refetch} />
+
+            <Link
+                href={route("v1.web.customer.files.show", file.id)}
+                className="hover:bg-white-secondary p-0.5 rounded-md"
+            >
+                <Eye className="w-5 h-5 text-info" />
+            </Link>
 
             {file.status == FileStatusEnum.UNLOCKED && (
                 <input

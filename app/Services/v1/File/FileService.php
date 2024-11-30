@@ -140,4 +140,37 @@ class FileService extends BaseService
         }
         return asset("storage/" . Str::after($zipFilePath, "storage\app/public"));
     }
+
+    public function view($id, array $relationships = []): ?File
+    {
+        $file = $this->repository->find($id, $relationships);
+
+        if (!$file) {
+            return null;
+        }
+
+        if ($file->group_id != auth()->user()?->group_id) {
+            return null;
+        }
+
+        return $file;
+    }
+
+    public function getDiff(array $data): ?array
+    {
+        $firstFile = FileVersionRepository::make()->find($data['first_file_id']);
+        $secondFile = FileVersionRepository::make()->find($data['second_file_id']);
+
+        if (!$firstFile?->fileExists() || !$secondFile?->fileExists()) {
+            return null;
+        }
+
+        $firstFilePath = $firstFile->file_path['absolute_path'];
+        $secondFilePath = $secondFile->file_path['absolute_path'];
+
+        return [
+            'first_file_stream_url' => route('v1.web.customer.stream.file', ['path' => $firstFilePath]),
+            'second_file_stream_url' => route('v1.web.customer.stream.file', ['path' => $secondFilePath]),
+        ];
+    }
 }

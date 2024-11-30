@@ -16,4 +16,20 @@ class FileVersionController extends Controller
     {
         $this->fileVersionService = FileVersionService::make();
     }
+
+    public function getByFile($fileId)
+    {
+        $data = $this->fileVersionService->getByFile($fileId, $this->relations);
+        if ($data) {
+            return response()->json(array(
+                'data' => $data['data'],
+                'pagination_data' => $data['pagination_data'],
+            ));
+        }
+        
+        return response()->json(array(
+            'data' => array(),
+            'pagination_data' => null,
+        ));
+    }
 }

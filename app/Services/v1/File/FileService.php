@@ -2,8 +2,10 @@
 
 namespace App\Services\v1\File;
 
+use App\Enums\FileLogTypeEnum;
 use App\Enums\FileStatusEnum;
 use App\Models\File;
+use App\Repositories\FileLogRepository;
 use App\Repositories\FileRepository;
 use App\Repositories\FileVersionRepository;
 use App\Services\Contracts\BaseService;
@@ -51,6 +53,8 @@ class FileService extends BaseService
             'version' => 1
         ]);
 
+        FileLogRepository::make()->logEvent(FileLogTypeEnum::CREATED, $file);
+
         return $file->load($relationships);
     }
 
@@ -70,6 +74,8 @@ class FileService extends BaseService
             'status' => FileStatusEnum::LOCKED->value,
         ], $file);
 
+        FileLogRepository::make()->logEvent(FileLogTypeEnum::STARTED_EDITING, $file);
+
         return $file?->lastVersion?->file_path['path'];
     }
 
@@ -81,12 +87,17 @@ class FileService extends BaseService
     {
         $file = $this->repository->find($data['file_id'], ['lastVersion']);
 
-        //TODO:: add locker checking via logs after adding them
         if (!$file->isLocked()) {
             return false;
         }
 
         if ($file->getFileName() != $data['file']?->getClientOriginalName()) {
+            return false;
+        }
+
+        $lastLog = FileLogRepository::make()->getLatestByEvent(FileLogTypeEnum::STARTED_EDITING, $file->id);
+
+        if (!$lastLog || $lastLog->user_id != $this->user->id) {
             return false;
         }
 
@@ -99,6 +110,8 @@ class FileService extends BaseService
         $this->repository->update([
             'status' => FileStatusEnum::UNLOCKED->value,
         ], $file);
+
+        FileLogRepository::make()->logEvent(FileLogTypeEnum::FINISHED_EDITING, $file);
 
         return true;
     }
@@ -114,7 +127,15 @@ class FileService extends BaseService
             return false;
         }
 
-        return $this->repository->delete($file);
+        if (
+            $file->owner_id == $this->user->id
+            || $file->group->owner_id == $this->user->id
+            || $file->directory->owner_id == $this->user->id
+        ) {
+            return $this->repository->delete($file);
+        }
+
+        return false;
     }
 
     public function zipMultipleFiles(array $data): ?string
@@ -132,6 +153,7 @@ class FileService extends BaseService
                     $file->update([
                         'status' => FileStatusEnum::LOCKED->value,
                     ]);
+                    FileLogRepository::make()->logEvent(FileLogTypeEnum::STARTED_EDITING, $file);
                 }
             }
             $zip->close();

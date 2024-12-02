@@ -59,7 +59,7 @@ class DirectoryController extends Controller
 
     public function show($directoryId)
     {
-        $directory = $this->directoryService->view($directoryId, ['subDirectories', 'files', 'files.lastVersion']);
+        $directory = $this->directoryService->view($directoryId, ['subDirectories', 'files', 'files.lastVersion', 'files.lastLog']);
         if ($directory) {
             return Inertia::render('dashboard/customer/directories/Show', [
                 'directory' => $directory,

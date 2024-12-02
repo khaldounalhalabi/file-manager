@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Decoration, Diff, Hunk, parseDiff } from "react-diff-view";
+import { File } from "gitdiff-parser";
 
 const GetDiff = ({
     first_file_stream_url,
@@ -8,7 +9,7 @@ const GetDiff = ({
     first_file_stream_url: string;
     second_file_stream_url: string;
 }) => {
-    const [files, setFiles] = useState<any[]>([]);
+    const [files, setFiles] = useState<File[] | undefined>(undefined);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -24,10 +25,14 @@ const GetDiff = ({
                     firstFileResponse,
                     secondFileResponse,
                 );
-                const parsedFiles = parseDiff(diffText);
-                setFiles(parsedFiles);
+                if (diffText) {
+                    const parsedFiles: File[] = parseDiff(diffText);
+                    setFiles(parsedFiles);
+                } else {
+                    setFiles(undefined);
+                }
             } catch (err: any) {
-                setError(err.message || "Error fetching files.");
+                setError("Files are similar");
             }
         };
 
@@ -37,7 +42,7 @@ const GetDiff = ({
     const generateUnifiedDiff = (
         oldContent: string,
         newContent: string,
-    ): string => {
+    ): string | undefined => {
         const oldLines = oldContent.split("\n");
         const newLines = newContent.split("\n");
 
@@ -68,7 +73,11 @@ const GetDiff = ({
             i++;
         }
 
-        return diffText.join("\n");
+        if (diffText.length <= 2) {
+            return undefined;
+        } else {
+            return diffText.join("\n");
+        }
     };
 
     const renderHunk = (hunk: any) => [
@@ -77,18 +86,19 @@ const GetDiff = ({
                 Summary: {hunk.content.trim()}
             </div>
         </Decoration>,
-        <Hunk
-            key={`hunk-${hunk.content}`}
-            hunk={hunk}
-        />,
+        <Hunk key={`hunk-${hunk.content}`} hunk={hunk} />,
     ];
 
     if (error) {
-        return <div className="text-red-500">Error: {error}</div>;
+        return <div className="text-red-500">{error}</div>;
     }
 
-    if (!files.length) {
+    if (!files?.length) {
         return <div>Loading...</div>;
+    }
+
+    if (!files) {
+        return <div>The files are similar to each other</div>;
     }
 
     return (
@@ -96,7 +106,7 @@ const GetDiff = ({
             <h1 className="text-3xl font-bold mb-6 text-center w-full">
                 File Differences
             </h1>
-            {files.map(({ oldRevision, newRevision, type, hunks }) => (
+            {files?.map(({ oldRevision, newRevision, type, hunks }) => (
                 <div
                     key={`${oldRevision}-${newRevision}`}
                     className="border rounded-lg shadow-md bg-white p-4 mb-6 w-full"

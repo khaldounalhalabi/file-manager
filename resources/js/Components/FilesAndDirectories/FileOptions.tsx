@@ -18,6 +18,7 @@ import PushFileUpdateButton from "@/Components/FilesAndDirectories/PushFileUpdat
 import { SelectedFilesContext } from "@/Components/FilesAndDirectories/ExplorerHeader";
 import Eye from "@/Components/icons/Eye";
 import { Link } from "@inertiajs/react";
+import { user as AuthUser } from "@/helper";
 
 const FileOptions = ({
     file,
@@ -36,6 +37,7 @@ const FileOptions = ({
         | (() => void);
 }) => {
     const { downloadFile, isLoading: isDownloading } = DownloadFile();
+    const user = AuthUser();
     const handleEdit = () => {
         GET<string>(route("v1.web.customer.files.edit", file.id))
             .then((res) => {
@@ -51,7 +53,7 @@ const FileOptions = ({
                     refetch();
                 }
             })
-            .catch((e) => {
+            .catch(() => {
                 toast.error("There is been an error");
                 if (refetch) {
                     refetch();
@@ -63,7 +65,10 @@ const FileOptions = ({
 
     return (
         <div className={"flex items-center justify-between px-5 gap-1"}>
-            <PushFileUpdateButton file={file} refetch={refetch} />
+            {user?.id == file.last_log?.user_id &&
+                file.last_log?.event_type == "started_editing" && (
+                    <PushFileUpdateButton file={file} refetch={refetch} />
+                )}
             <button
                 type={"button"}
                 className="hover:bg-white-secondary p-1 rounded-md disabled:cursor-not-allowed text-success disabled:text-white disabled:bg-gray-300"
@@ -79,7 +84,11 @@ const FileOptions = ({
                 )}
             </button>
 
-            <DeleteFileButton file={file} refetch={refetch} />
+            {(user?.id == file.owner_id ||
+                file.directory?.owner_id == user?.id ||
+                user?.group?.owner_id == user?.id) && (
+                <DeleteFileButton file={file} refetch={refetch} />
+            )}
 
             <Link
                 href={route("v1.web.customer.files.show", file.id)}

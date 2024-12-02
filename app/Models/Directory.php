@@ -113,6 +113,6 @@ class Directory extends Model
 
     public function files(): HasMany
     {
-        return $this->hasMany(File::class);
+        return $this->hasMany(File::class)->chaperone();
     }
 }

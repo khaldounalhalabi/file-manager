@@ -46,7 +46,7 @@ const Index = () => {
     };
     return (
         <PageCard>
-            <ExplorerHeader refetch={refetch} />
+            <ExplorerHeader refetch={refetch} children={undefined} />
             <div
                 className={
                     "max-h-[80vh] max-w-full flex flex-col items-start justify-between gap-3 overflow-y-scroll"

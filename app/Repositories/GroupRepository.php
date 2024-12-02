@@ -15,7 +15,7 @@ class GroupRepository extends BaseRepository
 {
     protected string $modelClass = Group::class;
 
-    public function globalQuery(array $relations = []): Builder|Group
+    public function globalQuery(array $relations = [], $defaultOrder = true): Builder|Group
     {
         return parent::globalQuery($relations)
             ->when(auth()->user()?->isCustomer(),

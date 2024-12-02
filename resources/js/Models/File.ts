@@ -1,3 +1,4 @@
+import { FileLog } from "./FileLog";
 import { FileVersion } from "./FileVersion";
 import { Group } from "./Group";
 import { Directory } from "./Directory";
@@ -16,6 +17,7 @@ export interface File {
     last_version: FileVersion;
     name: string;
     updated_at: string;
-    frequent:number;
+    frequent: number;
+    file_logs?: FileLog[];
+    last_log?: FileLog;
 }
-

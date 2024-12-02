@@ -10,10 +10,14 @@ use Maatwebsite\Excel\Concerns\WithCustomChunkSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
+/**
+ * @template MODEL of Model
+ */
 class BaseExporter implements FromCollection, WithMapping, WithHeadings, WithCustomChunkSize
 {
     public array|Collection|null $collection = null;
 
+    /** @var MODEL|null */
     public ?Model $model = null;
 
     public ?array $requestCols = null;
@@ -63,14 +67,18 @@ class BaseExporter implements FromCollection, WithMapping, WithHeadings, WithCus
             if (Str::contains($col, ".")) {
                 $relation = explode(".", $col);
                 $val = $row;
+                $lastModel = null;
 
                 for ($i = 0; $i < count($relation); $i++) {
+                    if ($i == count($relation) - 2) {
+                        $lastModel = $val->{"{$relation[$i]}"};
+                    }
                     $val = $val->{"{$relation[$i]}"};
                 }
 
-                $map[] = $val;
+                $map[] = $this->cast($val, $col, $lastModel ?? $row);
             } else {
-                $map[] = $row->{"{$col}"};
+                $map[] = $this->cast($row->{"{$col}"}, $col, $row);
             }
         }
 
@@ -97,5 +105,16 @@ class BaseExporter implements FromCollection, WithMapping, WithHeadings, WithCus
     public function chunkSize(): int
     {
         return 500;
+    }
+
+    /**
+     * @param mixed  $value
+     * @param string $attribute
+     * @param MODEL  $model
+     * @return mixed
+     */
+    protected function cast(mixed $value, string $attribute, Model $model): mixed
+    {
+        return $value;
     }
 }

@@ -101,7 +101,7 @@ abstract class BaseRepository
      * @param array $relations
      * @return Builder<T>|T
      */
-    public function globalQuery(array $relations = []): Builder|Model
+    public function globalQuery(array $relations = [], $defaultOrder = true): Builder|Model
     {
         $query = $this->model->with($relations);
 
@@ -112,7 +112,9 @@ abstract class BaseRepository
             $query = $query->where(function ($q) {
                 return $this->addSearch($q);
             });
-            $query = $this->orderQueryBy($query);
+            if ($defaultOrder) {
+                $query = $this->orderQueryBy($query);
+            }
         }
 
         return $query;

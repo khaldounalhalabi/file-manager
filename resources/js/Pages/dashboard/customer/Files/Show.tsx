@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import FileVersionsTable from "@/Components/FileVersion/FileVersionsTable";
 import { Link, router } from "@inertiajs/react";
 import React, { createContext, useState } from "react";
+import FileLogsTable from "@/Components/file-logs/FileLogsTable";
 
 export const SelectedDiffFilesContext = createContext<{
     selected: number[];
@@ -15,6 +16,7 @@ export const SelectedDiffFilesContext = createContext<{
 
 const Show = ({ file }: { file: File }) => {
     const [selectedDiff, setSelectedDiff] = useState<number[]>([]);
+    const [isVersions, setIsVersions] = useState(true);
     return (
         <SelectedDiffFilesContext.Provider
             value={{ selected: selectedDiff, setSelected: setSelectedDiff }}
@@ -98,7 +100,28 @@ const Show = ({ file }: { file: File }) => {
                     </div>
                 </div>
             </PageCard>
-            <FileVersionsTable fileId={file.id} />
+            <div className={"mt-5 rounded-md p-5"}>
+                <div
+                    className={
+                        "my-5 bg-primary rounded-md p-5 flex items-center gap-3"
+                    }
+                >
+                    <div
+                        className={`${isVersions ? "text-primary underline bg-white" : "text-white "} hover:cursor-pointer hover:text-primary hover:underline p-3 rounded-sm hover:bg-white`}
+                        onClick={() => setIsVersions(true)}
+                    >
+                        Versions
+                    </div>
+                    <div
+                        className={`${!isVersions ? "text-primary underline bg-white" : "text-white "} hover:cursor-pointer hover:text-primary hover:underline p-3 rounded-sm hover:bg-white`}
+                        onClick={() => setIsVersions(false)}
+                    >
+                        Logs
+                    </div>
+                </div>
+                {isVersions && <FileVersionsTable fileId={file.id} />}
+                {!isVersions && <FileLogsTable fileId={file.id} />}
+            </div>
         </SelectedDiffFilesContext.Provider>
     );
 };

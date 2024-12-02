@@ -81,7 +81,7 @@ class File extends Model
 
     public function lastVersion(): HasOne
     {
-        return $this->hasOne(FileVersion::class)->ofMany('version', 'MAX');
+        return $this->hasOne(FileVersion::class)->ofMany('version');
     }
 
     public function isLocked(): bool
@@ -101,5 +101,15 @@ class File extends Model
     public function fileExists(): bool
     {
         return file_exists($this->lastVersion?->file_path['absolute_path']);
+    }
+
+    public function fileLogs(): HasMany
+    {
+        return $this->hasMany(FileLog::class);
+    }
+
+    public function lastLog(): HasOne
+    {
+        return $this->hasOne(FileLog::class)->latestOfMany();
     }
 }

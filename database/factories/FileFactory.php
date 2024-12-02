@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Directory;
+use App\Models\FileLog;
 use App\Models\FileVersion;
 use App\Models\Group;
 use App\Models\User;
@@ -30,5 +31,10 @@ class FileFactory extends Factory
     public function withFileVersions($count = 1): FileFactory|Factory
     {
         return $this->has(FileVersion::factory($count));
+    }
+
+    public function withFileLogs($count = 1): FileFactory|Factory
+    {
+        return $this->has(FileLog::factory($count));
     }
 }

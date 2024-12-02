@@ -1,3 +1,4 @@
+import { FileLog } from "./FileLog";
 import { Group } from "./Group";
 import { Role } from "@/Models/Role";
 
@@ -15,4 +16,5 @@ export interface User {
     groups?: Group[];
     ownedGroups?: Group[];
     group?: Group;
+    file_logs?: FileLog[];
 }

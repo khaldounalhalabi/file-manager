@@ -40,6 +40,8 @@ Route::controller(v1\DirectoryController::class)
         Route::get('/{directoryId}', 'show')->name('show');
     });
 
+Route::post('files/{fileId}/logs/export', [v1\FileLogController::class, 'export'])->name('files.logs.export');
+Route::get('files/{fileId}/logs', [v1\FileLogController::class, 'getByFile'])->name('files.logs');
 Route::post('get-diff', [v1\FileController::class, 'getDiff'])->name('get.diff');
 Route::get('stream-file', [v1\FileController::class, 'streamFile'])->name('stream.file');
 Route::get('file-versions/{fileId}', [v1\FileVersionController::class, 'getByFile'])->name('files.versions');

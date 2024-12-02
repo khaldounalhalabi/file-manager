@@ -1,5 +1,5 @@
 import Trash from "@/Components/icons/Trash";
-import { swal } from "@/helper";
+import { swal, user as AuthUser } from "@/helper";
 import { toast } from "react-toastify";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useForm, usePage } from "@inertiajs/react";
@@ -34,6 +34,7 @@ const FolderOptions = ({
 }) => {
     const csrf = usePage<MiddlewareProps>().props.csrfToken;
     const [openEdit, setOpenEdit] = useState<boolean>(false);
+    const user = AuthUser();
     const { post, setData, processing, wasSuccessful } = useForm<{
         name?: string;
         _method: string;
@@ -90,54 +91,57 @@ const FolderOptions = ({
                     />
                 </Form>
             </Modal>
-            <button
-                className="hover:bg-white-secondary p-1 rounded-md"
-                type={"button"}
-            >
-                <Trash
-                    className="w-5 h-5 text-danger"
-                    onClick={() => {
-                        swal.fire({
-                            title: "Do you want to Delete this item ?",
-                            showDenyButton: true,
-                            showCancelButton: true,
-                            confirmButtonText: "Yes",
-                            denyButtonText: `No`,
-                            confirmButtonColor: "#007BFF",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                if (directory) {
-                                    fetch(
-                                        route(
-                                            "v1.web.customer.directories.destroy",
-                                            directory.id,
-                                        ),
-                                        {
-                                            method: "DELETE",
-                                            headers: {
-                                                "X-CSRF-TOKEN": csrf,
+            {(directory.owner_id == user?.id ||
+                user?.group?.owner_id == user?.id) && (
+                <button
+                    className="hover:bg-white-secondary p-1 rounded-md"
+                    type={"button"}
+                >
+                    <Trash
+                        className="w-5 h-5 text-danger"
+                        onClick={() => {
+                            swal.fire({
+                                title: "Do you want to Delete this item ?",
+                                showDenyButton: true,
+                                showCancelButton: true,
+                                confirmButtonText: "Yes",
+                                denyButtonText: `No`,
+                                confirmButtonColor: "#007BFF",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    if (directory) {
+                                        fetch(
+                                            route(
+                                                "v1.web.customer.directories.destroy",
+                                                directory.id,
+                                            ),
+                                            {
+                                                method: "DELETE",
+                                                headers: {
+                                                    "X-CSRF-TOKEN": csrf,
+                                                },
                                             },
-                                        },
-                                    )
-                                        .then(() => {
-                                            toast.success("Deleted !");
-                                            if (refetch) {
-                                                refetch();
-                                            }
-                                        })
-                                        .catch(() => {
-                                            toast.error(
-                                                "There Is Been An Error While Deleting",
-                                            );
-                                        });
+                                        )
+                                            .then(() => {
+                                                toast.success("Deleted !");
+                                                if (refetch) {
+                                                    refetch();
+                                                }
+                                            })
+                                            .catch(() => {
+                                                toast.error(
+                                                    "There Is Been An Error While Deleting",
+                                                );
+                                            });
+                                    }
+                                } else if (result.isDenied) {
+                                    toast.info("Didn't Delete");
                                 }
-                            } else if (result.isDenied) {
-                                toast.info("Didn't Delete");
-                            }
-                        });
-                    }}
-                />
-            </button>
+                            });
+                        }}
+                    />
+                </button>
+            )}
         </div>
     );
 };

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\ApiController;
 use App\Traits\RestTrait;
 use Closure;
 use Illuminate\Http\Request;
@@ -21,14 +22,9 @@ class HasRoleMiddleware
     public function handle(Request $request, Closure $next, string $role): Response
     {
         if ($request->expectsJson() && !auth('api')?->user()?->hasRole($role)) {
-            return response()->json([
-                'data' => null,
-                'status' => false,
-                'code' => 403,
-                'message' => __('site.unauthorized_user')
-            ]);
+            return $this->apiResponse(null, ApiController::STATUS_FORBIDDEN, __('site.unauthorized_user'));
         } elseif (!$request->expectsJson() && !auth('web')?->user()?->hasRole($role)) {
-            abort(403, __('site.unauthorized_user'));
+            return redirect()->route("v1.web.public.$role.login.page")->with('error', __('site.unauthorized_user'));
         }
 
         return $next($request);

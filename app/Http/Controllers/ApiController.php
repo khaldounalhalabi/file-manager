@@ -35,4 +35,6 @@ class ApiController extends Controller
     public const STATUS_VALIDATION = 405;
 
     public const TOKEN_EXPIRATION = 406;
+
+    public const STATUS_NO_GROUP = 409;
 }

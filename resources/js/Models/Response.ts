@@ -11,3 +11,9 @@ export interface PaginatedResponse<T> {
         is_last: boolean;
     };
 }
+
+export interface ApiResponse<T> {
+    data: T;
+    code: number;
+    status: boolean;
+}

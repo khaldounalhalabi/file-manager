@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 
 /**
- * @property string                                                                                      name
- * @property integer                                                                                     owner_id
- * @property  User                                                                                       owner
- * @property  \Illuminate\Support\Collection<User>|\Illuminate\Database\Eloquent\Collection<User>|User[] users
+ * @property string                                                                  name
+ * @property integer                                                                 owner_id
+ * @property  User                                                                   owner
+ * @property  Collection<User>|\Illuminate\Database\Eloquent\Collection<User>|User[] users
  */
 class Group extends Model
 {
@@ -92,5 +94,15 @@ class Group extends Model
                 'email',
             ]
         ];
+    }
+
+    public function directories(): HasMany
+    {
+        return $this->hasMany(Directory::class);
+    }
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class);
     }
 }

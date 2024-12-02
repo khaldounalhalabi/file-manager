@@ -5,6 +5,7 @@ import Trash from "../icons/Trash";
 import { swal } from "@/helper";
 import { toast } from "react-toastify";
 import { MiddlewareProps } from "@/types";
+import React from "react";
 
 type Buttons = "delete" | "edit" | "show";
 
@@ -31,6 +32,7 @@ function ActionsButtons<Data>({
     setHidden,
     children,
 }: ActionsButtonsProps<Data>) {
+    // @ts-ignore
     const dataId = id ?? data?.id ?? undefined;
 
     const dUrl = deleteUrl ?? `${baseUrl}/${dataId ?? ""}`; // delete url

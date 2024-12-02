@@ -15,8 +15,9 @@ use Inertia\Inertia;
 
 class BaseAuthController extends Controller
 {
-    private UserService $userService;
-    private ?string $role = null;
+    protected UserService $userService;
+    protected ?string $role = null;
+    protected array $relations = [];
 
     /**
      * @throws Exception
@@ -36,7 +37,7 @@ class BaseAuthController extends Controller
     {
         //you can pass additional data as an array for the third parameter in the
         //login method and this data will be stored in the users table
-        $user = $this->userService->login($request->validated(), $this->role, []);
+        $user = $this->userService->login($request->validated(), $this->role, $this->relations);
         if ($user) {
             return redirect()->route("v1.web.$this->role.user.details");
         } else {
@@ -47,7 +48,7 @@ class BaseAuthController extends Controller
 
     public function updateUserData(UpdateUserRequest $request)
     {
-        $user = $this->userService->updateUserDetails($request->validated(), $this->role);
+        $user = $this->userService->updateUserDetails($request->validated(), $this->role, $this->relations);
 
         if ($user) {
             return redirect()->route("v1.web.$this->role.user.details");
@@ -58,7 +59,7 @@ class BaseAuthController extends Controller
 
     public function userDetails()
     {
-        $user = $this->userService->userDetails($this->role);
+        $user = $this->userService->userDetails($this->role, $this->relations);
 
         if ($user) {
             return Inertia::render("auth/$this->role/UserDetails", [
@@ -99,7 +100,7 @@ class BaseAuthController extends Controller
 
     public function register(AuthRegisterRequest $request)
     {
-        $user = $this->userService->register($request->validated(), $this->role);
+        $user = $this->userService->register($request->validated(), $this->role, $this->relations);
         if ($user) {
             return redirect()->route("v1.web.$this->role.user.details");
         } else {

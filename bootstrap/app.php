@@ -3,6 +3,7 @@
 use App\Exceptions\Handler;
 use App\Http\Middleware\AcceptedLanguagesMiddleware;
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CustomerMustHaveAGroup;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\HasPermissionMiddleware;
 use App\Http\Middleware\HasRoleMiddleware;
@@ -31,7 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('v1/admin')
                 ->group(base_path('routes\v1\web\admin.php'));
 
-            Route::middleware(['web', 'locale', 'authenticated', 'has-role:customer'])
+            Route::middleware(['web', 'locale', 'authenticated', 'has-role:customer', 'must-have-group'])
                 ->name('v1.web.customer.')
                 ->prefix('v1/customer')
                 ->group(base_path('routes\v1\web\customer.php'));
@@ -41,7 +42,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'has-role' => HasRoleMiddleware::class,
             'has-permission' => HasPermissionMiddleware::class,
             'authenticated' => Authenticate::class,
-            'locale' => AcceptedLanguagesMiddleware::class
+            'locale' => AcceptedLanguagesMiddleware::class,
+            'must-have-group' => CustomerMustHaveAGroup::class
         ]);
         $middleware->web(append: [
             HandleInertiaRequests::class,

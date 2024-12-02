@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\v1\Group\GroupService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -32,10 +33,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        if (auth()->user()?->isCustomer()) {
+            $userGroups = GroupService::make()->getUserGroups();
+        } else {
+            $userGroups = [];
+        }
         return array_merge(parent::share($request), [
             'availableLocales' => config('cubeta-starter.available_locales'),
             'currentLocale' => Session::get('locale') ?? "en",
-            'authUser' => auth()->user(),
+            'authUser' => auth()->user()?->load(['group']),
             'currentRoute' => Str::replace(env('APP_URL'), "", $request->fullUrl()),
             'asset' => asset('/'),
             'baseUrl' => (config('cubeta-starter.project_url') ?? config('app.url')) ?? '/',
@@ -43,7 +49,8 @@ class HandleInertiaRequests extends Middleware
             'message' => session()->get('message') ?? null,
             'error' => session()->get('error') ?? null,
             'success' => session()->get('success') ?? null,
-            'role' => auth()->user()?->roles()?->first()?->name
+            'role' => auth()->user()?->roles()?->first()?->name,
+            'user_groups' => $userGroups
         ]);
     }
 }

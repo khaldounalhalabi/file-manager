@@ -1,10 +1,9 @@
-import TableCells from "../icons/TableCells";
 import React, { ReactNode } from "react";
 import { asset, role } from "@/helper";
 import { Link } from "@inertiajs/react";
 import XMark from "../icons/XMark";
 import PresentationChart from "../icons/PresentationChart";
-import { Group, User } from "lucide-react";
+import { FolderOpen, Group, User } from "lucide-react";
 
 export const Sidebar = ({
     toggleSidebar,
@@ -27,10 +26,16 @@ export const Sidebar = ({
             role: ["admin"],
         },
         {
-            href: route("v1.web.admin.groups.index"),
+            href: route(`v1.web.${role()}.groups.index`),
             title: "Group",
             icon: () => <Group />,
-            role: ["admin"],
+            role: ["admin", "customer"],
+        },
+        {
+            href: route(`v1.web.customer.directories.root`),
+            title: "Files",
+            icon: () => <FolderOpen />,
+            role: ["customer"],
         },
     ];
     const userRole = role();

@@ -3,7 +3,10 @@ import { useState } from "react";
 const DownloadFile = () => {
     const [isLoading, setIsLoading] = useState(false);
 
-    const downloadFile = async (api: () => Promise<Response>) => {
+    const downloadFile = async (
+        api: () => Promise<Response>,
+        name: string | undefined = undefined,
+    ) => {
         setIsLoading(true);
         try {
             const response = await api();
@@ -18,15 +21,15 @@ const DownloadFile = () => {
             a.href = downloadUrl;
             const disposition = response.headers.get("Content-Disposition");
             let filename = "";
-            if (disposition && disposition.includes("attachment")) {
+            if (name) {
+                filename = name;
+            } else if (disposition && disposition.includes("attachment")) {
                 const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
                 const matches = filenameRegex.exec(disposition);
                 if (matches != null && matches[1]) {
                     filename = matches[1].replace(/['"]/g, "");
                 }
-            }
-
-            if (!filename) {
+            } else if (!filename) {
                 filename = "downloaded_file";
             }
 

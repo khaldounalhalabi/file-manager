@@ -1,7 +1,7 @@
-import LanguageDropdown from "@/Components/ui/LanguageDropDown";
 import ProfileDropdown from "@/Components/ui/ProfileDropdown";
 import Menu from "../icons/Menu";
-import DarkModeToggle from "@/Components/ui/DarkModeToggle";
+import GroupSelector from "@/Components/ui/GroupSelector";
+import { role } from "@/helper";
 
 const Navbar = ({
     isSidebarOpen,
@@ -20,8 +20,7 @@ const Navbar = ({
                 )}
             </div>
             <div className={`flex w-full items-center justify-end`}>
-                <DarkModeToggle />
-                <LanguageDropdown />
+                {role() == "customer" ? <GroupSelector /> : ""}
                 <ProfileDropdown />
             </div>
         </nav>

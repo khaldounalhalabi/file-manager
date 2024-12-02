@@ -13,19 +13,34 @@ const authPages = [
     "ResetPasswordCodeForm",
     "ResetPassword",
     "Register",
+    "GroupSelector",
 ];
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: async (name) => {
         const pages = import.meta.glob("./Pages/**/*.tsx");
+        // @ts-ignore
         let page = (await pages[`./Pages/${name}.tsx`]()).default;
 
         // Assign layout conditionally
         page.layout =
             page.layout ||
             (!authPages.includes(page.name ?? "undefined")
-                ? (page) => <Layout children={page} />
+                ? (
+                      page:
+                          | string
+                          | number
+                          | boolean
+                          | React.ReactElement<
+                                any,
+                                string | React.JSXElementConstructor<any>
+                            >
+                          | Iterable<React.ReactNode>
+                          | React.ReactPortal
+                          | null
+                          | undefined,
+                  ) => <Layout children={page} />
                 : null);
 
         return page;
@@ -44,6 +59,7 @@ createInertiaApp({
     },
 });
 
+// @ts-ignore
 const dark = "dark" == window.localStorage.getItem("theme_mode") ?? "light";
 const htmlTag = document.querySelector("html");
 if (dark) {

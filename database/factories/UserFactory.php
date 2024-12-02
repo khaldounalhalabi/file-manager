@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\RolesPermissionEnum;
+use App\Models\FileLog;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -39,7 +40,7 @@ class UserFactory extends Factory
         ]);
     }
 
-    public function withGroups($count = 1)
+    public function withGroups($count = 1): Factory|UserFactory
     {
         return $this->has(Group::factory($count));
     }
@@ -49,5 +50,10 @@ class UserFactory extends Factory
         return $this->afterCreating(function (User $user) {
             $user->assignRole(RolesPermissionEnum::CUSTOMER['role']);
         });
+    }
+
+    public function withFileLogs($count = 1): Factory|UserFactory
+    {
+        return $this->has(FileLog::factory($count));
     }
 }

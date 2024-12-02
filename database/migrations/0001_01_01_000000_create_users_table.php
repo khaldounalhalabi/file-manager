@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('fcm_token')->nullable();
             $table->string('reset_password_code')->nullable();
             $table->json('profile')->nullable();
+            $table->unsignedBigInteger('group_id')->nullable()->index();
             $table->rememberToken();
             $table->timestamps();
         });

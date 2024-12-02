@@ -2,6 +2,7 @@
 
 namespace App\Services\Contracts;
 
+use App\Models\User;
 use App\Repositories\Contracts\BaseRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -15,9 +16,11 @@ abstract class BaseService
 {
     protected BaseRepository $repository;
     protected string $repositoryClass = BaseRepository::class;
+    protected ?User $user;
 
     protected function __construct()
     {
+        $this->user = auth()->user();
         $this->repository = new $this->repositoryClass();
     }
 
@@ -50,7 +53,7 @@ abstract class BaseService
 
     /**
      * @param array $relations
-     * @param int $per_page
+     * @param int   $per_page
      * @return array{data:Collection<T>|array<T>|RegularCollection<T> , pagination_data:array}|null
      */
     public function indexWithPagination(array $relations = [], int $per_page = 10): ?array
@@ -69,9 +72,9 @@ abstract class BaseService
     }
 
     /**
-     * @param array $data
+     * @param array  $data
      * @param        $id
-     * @param array $relationships
+     * @param array  $relationships
      * @return T|null
      */
     public function update(array $data, $id, array $relationships = []): ?Model
@@ -80,7 +83,7 @@ abstract class BaseService
     }
 
     /**
-     * @param $id
+     * @param       $id
      * @param array $relationships
      * @return T|null
      */

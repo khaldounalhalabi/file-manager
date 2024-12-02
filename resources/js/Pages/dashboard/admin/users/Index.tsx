@@ -2,6 +2,7 @@ import ActionsButtons from "@/Components/Datatable/ActionsButtons";
 import DataTable from "@/Components/Datatable/DataTable";
 import { User } from "@/Models/User";
 import { PaginatedResponse } from "@/Models/Response";
+import { GET } from "@/Modules/Http";
 
 const Index = ({ exportables }: { exportables: string[] }) => {
     return (
@@ -23,7 +24,7 @@ const Index = ({ exportables }: { exportables: string[] }) => {
                 perPage?: number | undefined,
                 params?: object | undefined,
             ): Promise<PaginatedResponse<User>> =>
-                fetch(
+                GET(
                     route("v1.web.admin.users.data", {
                         page: page,
                         search: search,
@@ -32,14 +33,7 @@ const Index = ({ exportables }: { exportables: string[] }) => {
                         limit: perPage,
                         ...params,
                     }),
-                    {
-                        method: "GET",
-                        headers: {
-                            accept: "application/html",
-                            "Content-Type": "application/html",
-                        },
-                    },
-                ).then((res) => res.json())
+                )
             }
             schema={[
                 {

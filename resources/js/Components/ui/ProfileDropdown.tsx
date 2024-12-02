@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, usePage } from "@inertiajs/react";
-import { User } from "@/Models/User";
-import { asset, role } from "@/helper";
+import { Link } from "@inertiajs/react";
+import { asset, role, user } from "@/helper";
 import ChevronDown from "../icons/ChevronDown";
 
 const ProfileDropdown = () => {
     const [open, setOpen] = useState(false);
-    const { authUser } = usePage().props;
+    const authUser = user();
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -39,10 +38,7 @@ const ProfileDropdown = () => {
                         alt=""
                     />
                 </div>
-                {(authUser as User)?.first_name ??
-                    undefined + (authUser as User)?.last_name ??
-                    undefined ??
-                    "App Admin"}
+                {authUser?.first_name + " " + authUser?.last_name}
                 <ChevronDown className="w-4 h-4 ms-3" />
             </button>
 
@@ -52,7 +48,11 @@ const ProfileDropdown = () => {
                 } z-10 start-5 bg-white-secondary dark:bg-dark-secondary rounded-lg shadow w-44`}
             >
                 <ul className="shadow-md h-full text-gray-700 text-sm dark:text-white">
-                    <li>
+                    <li
+                        onClick={() => {
+                            setOpen((prevState) => !prevState);
+                        }}
+                    >
                         <Link
                             id="user-details"
                             href={route(`v1.web.${role()}.user.details`)}
@@ -61,7 +61,11 @@ const ProfileDropdown = () => {
                             My Profile
                         </Link>
                     </li>
-                    <li>
+                    <li
+                        onClick={() => {
+                            setOpen((prevState) => !prevState);
+                        }}
+                    >
                         <Link
                             id="logout"
                             href={route(`v1.web.${role()}.logout`)}

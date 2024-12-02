@@ -12,7 +12,7 @@ const PageCard = ({
     return (
         <div
             className={
-                "p-8 bg-white-secondary dark:bg-dark-secondary rounded-md w-full"
+                "p-5 bg-white-secondary dark:bg-dark-secondary rounded-md w-full"
             }
             style={{
                 boxShadow: "0 35px 60px 15px rgba(0, 0, 0, 0.2)",

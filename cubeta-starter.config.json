@@ -41,6 +41,7 @@
             "model_name": "Owner",
             "table_name": "owners",
             "attributes": [],
+            "relations": [],
             "version": "v1"
         },
         {
@@ -72,6 +73,217 @@
                     {
                         "type": "manyToMany",
                         "model_name": "User"
+                    }
+                ]
+            },
+            "version": "v1"
+        },
+        {
+            "model_name": "Parent",
+            "table_name": "parents",
+            "attributes": [],
+            "version": "v1"
+        },
+        {
+            "model_name": "Directory",
+            "table_name": "directories",
+            "attributes": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "owner_id",
+                    "type": "key",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "parent_id",
+                    "type": "key",
+                    "nullable": true,
+                    "unique": false
+                },
+                {
+                    "name": "group_id",
+                    "type": "key",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "path",
+                    "type": "text",
+                    "nullable": false,
+                    "unique": false
+                }
+            ],
+            "relations": {
+                "belongsTo": [
+                    {
+                        "type": "belongsTo",
+                        "model_name": "Owner",
+                        "key": "owner_id"
+                    },
+                    {
+                        "type": "belongsTo",
+                        "model_name": "Parent",
+                        "key": "parent_id"
+                    },
+                    {
+                        "type": "belongsTo",
+                        "model_name": "Group",
+                        "key": "group_id"
+                    }
+                ],
+                "hasMany": [
+                    {
+                        "type": "hasMany",
+                        "model_name": "File"
+                    },
+                    {
+                        "type": "hasMany",
+                        "model_name": "SubDirectory"
+                    }
+                ]
+            },
+            "version": "v1"
+        },
+        {
+            "model_name": "File",
+            "table_name": "files",
+            "attributes": [
+                {
+                    "name": "owner_id",
+                    "type": "key",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "group_id",
+                    "type": "key",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "directory_id",
+                    "type": "key",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "nullable": false,
+                    "unique": false
+                }
+            ],
+            "relations": {
+                "belongsTo": [
+                    {
+                        "type": "belongsTo",
+                        "model_name": "Owner",
+                        "key": "owner_id"
+                    },
+                    {
+                        "type": "belongsTo",
+                        "model_name": "Group",
+                        "key": "group_id"
+                    },
+                    {
+                        "type": "belongsTo",
+                        "model_name": "Directory",
+                        "key": "directory_id"
+                    }
+                ],
+                "hasMany": [
+                    {
+                        "type": "hasMany",
+                        "model_name": "FileVersion"
+                    },
+                    {
+                        "type": "hasMany",
+                        "model_name": "FileLog"
+                    }
+                ]
+            },
+            "version": "v1"
+        },
+        {
+            "model_name": "FileVersion",
+            "table_name": "file_versions",
+            "attributes": [
+                {
+                    "name": "file_path",
+                    "type": "json",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "file_id",
+                    "type": "key",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "version",
+                    "type": "integer",
+                    "nullable": false,
+                    "unique": false
+                }
+            ],
+            "relations": {
+                "belongsTo": [
+                    {
+                        "type": "belongsTo",
+                        "model_name": "File",
+                        "key": "file_id"
+                    }
+                ]
+            },
+            "version": "v1"
+        },
+        {
+            "model_name": "FileLog",
+            "table_name": "file_logs",
+            "attributes": [
+                {
+                    "name": "file_id",
+                    "type": "key",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "event_type",
+                    "type": "string",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "user_id",
+                    "type": "key",
+                    "nullable": false,
+                    "unique": false
+                },
+                {
+                    "name": "happened_at",
+                    "type": "dateTime",
+                    "nullable": false,
+                    "unique": false
+                }
+            ],
+            "relations": {
+                "belongsTo": [
+                    {
+                        "type": "belongsTo",
+                        "model_name": "File",
+                        "key": "file_id"
+                    },
+                    {
+                        "type": "belongsTo",
+                        "model_name": "User",
+                        "key": "user_id"
                     }
                 ]
             },

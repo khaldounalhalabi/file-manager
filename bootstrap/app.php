@@ -51,9 +51,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
     })->withExceptions(function (Exceptions $exceptions) {
         if (!request()->acceptsHtml()) {
-            $exceptions->render(function (Exception $exception, Request $request) {
-                $handler = new Handler();
-                return $handler->handleException($request, $exception);
-            });
+//            $exceptions->render(function (Exception $exception, Request $request) {
+//                $handler = new Handler();
+//                return $handler->handleException($request, $exception);
+//            });
         }
     })->create();

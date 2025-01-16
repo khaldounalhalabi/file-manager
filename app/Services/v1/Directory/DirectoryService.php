@@ -20,7 +20,7 @@ class DirectoryService extends BaseService
 
     public function getRoot(array $relations = []): ?array
     {
-        return ($this->repository->getRoot($this->user?->group_id, $relations));
+        return $this->repository->getRoot($this->user?->group_id, $relations);
     }
 
     public function store(array $data, array $relationships = []): Model

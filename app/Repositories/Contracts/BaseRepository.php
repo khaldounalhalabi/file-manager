@@ -240,7 +240,7 @@ abstract class BaseRepository
     public function all_with_pagination(array $relationships = [], int $per_page = 10): ?array
     {
         $per_page = request("limit") ?? $per_page;
-        $all = $this->globalQuery($relationships)->paginate($per_page);
+        $all = $this->globalQuery($relationships)->paginate(intval($per_page) ?? 10);
         if (count($all) > 0) {
             $pagination_data = $this->formatPaginateData($all);
             return ['data' => $all->items(), 'pagination_data' => $pagination_data];
@@ -520,18 +520,15 @@ abstract class BaseRepository
 
     /**
      * @param Builder|\Illuminate\Database\Query\Builder $builder
-     * @param                                            $perPage
+     * @param int                                        $perPage
      * @return array{data:Collection<T>|RegularCollection<T>|T[] , pagination_data:array}|null
      */
-    public function paginate(Builder|\Illuminate\Database\Query\Builder $builder, $perPage = 10): ?array
+    public function paginate(Builder|\Illuminate\Database\Query\Builder $builder, int $perPage = 10): ?array
     {
         $perPage = request("limit") ?? $perPage;
-        $all = $builder->paginate($perPage);
+        $all = $builder->paginate(intval($perPage) ?? 10);
 
-        if (count($all) > 0) {
-            $paginationData = $this->formatPaginateData($all);
-            return ['data' => $all->items(), 'pagination_data' => $paginationData];
-        }
-        return null;
+        $paginationData = $this->formatPaginateData($all);
+        return ['data' => $all->items(), 'pagination_data' => $paginationData];
     }
 }

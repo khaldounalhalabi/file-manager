@@ -53,3 +53,8 @@ export const userGroups = () => {
     const { user_groups } = usePage<MiddlewareProps>().props;
     return user_groups;
 };
+
+export const getLocale = (): string | undefined => {
+    const { currentLocale } = usePage<MiddlewareProps>().props;
+    return currentLocale;
+};

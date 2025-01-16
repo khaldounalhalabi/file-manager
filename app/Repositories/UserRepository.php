@@ -73,4 +73,18 @@ class UserRepository extends BaseRepository
                 }
             });
     }
+
+    /**
+     * @param       $groupId
+     * @param       $userId
+     * @param array $relations
+     * @return User[]|Collection<User>|
+     */
+    public function getUsersInGroupExcept($groupId, $userId, array $relations = []): Collection|array
+    {
+        return $this->globalQuery($relations)
+            ->where('group_id', $groupId)
+            ->where('id', '!=', $userId)
+            ->get();
+    }
 }

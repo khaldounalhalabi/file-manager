@@ -116,18 +116,21 @@ class User extends Authenticatable
      * so you can search within them in the index method
      */
     public static function relationsSearchableArray(): array
-     
-{
- return [
-'fileLogs' => [
-'event_type'
-]
-];
-}
-public function fileLogs()
-{
-	 return $this->hasMany(FileLog::class);
-}
+    {
+        return [
+            'fileLogs' => [
+                'event_type'
+            ]
+        ];
+    }
 
+    public function fileLogs()
+    {
+        return $this->hasMany(FileLog::class);
+    }
 
+    public function routeNotificationForFcm(): ?string
+    {
+        return $this->fcm_token;
+    }
 }

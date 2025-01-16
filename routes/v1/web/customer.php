@@ -10,6 +10,10 @@ Route::put('/update-user-data', [v1\CustomerAuthController::class, 'updateUserDa
 Route::get('/user-details', [v1\CustomerAuthController::class, 'userDetails'])->name('user.details');
 Route::get('/logout', [v1\CustomerAuthController::class, 'logout'])->name('logout');
 
+Route::get('notifications', [v1\NotificationController::class, 'getUserNotification'])->name('notifications');
+Route::get('notifications/unread/count', [v1\NotificationController::class, 'unreadCount'])->name('notifications.unread.count');
+Route::get('notifications/{notificationId}/mark-as-read', [v1\NotificationController::class, 'markAsRead'])->name('notifications.mark.as.read');
+
 Route::get('/groups/{groupId}/users', [v1\UserController::class, 'getUsersByGroup'])
     ->withoutMiddleware(CustomerMustHaveAGroup::class)
     ->name('groups.users');

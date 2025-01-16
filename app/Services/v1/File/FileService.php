@@ -5,13 +5,18 @@ namespace App\Services\v1\File;
 use App\Enums\FileLogTypeEnum;
 use App\Enums\FileStatusEnum;
 use App\Models\File;
+use App\Notifications\Customer\FileLockedNotification;
+use App\Notifications\Customer\NewFileNotification;
 use App\Repositories\FileLogRepository;
 use App\Repositories\FileRepository;
 use App\Repositories\FileVersionRepository;
+use App\Repositories\UserRepository;
 use App\Services\Contracts\BaseService;
 use App\Services\Contracts\Makable;
+use App\Services\v1\Firebase\FirebaseServices;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use ZipArchive;
 
@@ -47,6 +52,15 @@ class FileService extends BaseService
 
         $file = $this->repository->create($fileData);
 
+        FirebaseServices::make()
+            ->setData([
+                'file' => $file,
+                'user' => $this->user,
+            ])->setNotification(NewFileNotification::class)
+            ->setTo(UserRepository::make()->getUsersInGroupExcept($this->user?->group_id, $this->user?->id)->pluck('id')->toArray())
+            ->setMethod(FirebaseServices::MANY)
+            ->send();
+
         FileVersionRepository::make()->create([
             'file_path' => $data['file'],
             'file_id' => $file->id,
@@ -74,10 +88,21 @@ class FileService extends BaseService
             'status' => FileStatusEnum::LOCKED->value,
         ], $file);
 
+        FirebaseServices::make()
+            ->setData([
+                'file' => $file,
+                'user' => $this->user,
+            ])->setNotification(FileLockedNotification::class)
+            ->setTo(UserRepository::make()->getUsersInGroupExcept($this->user?->group_id, $this->user?->id)->pluck('id')->toArray())
+            ->setMethod(FirebaseServices::MANY)
+            ->send();
+
+
         FileLogRepository::make()->logEvent(FileLogTypeEnum::STARTED_EDITING, $file);
 
         return $file?->lastVersion?->file_path['path'];
     }
+
 
     /**
      * @param array{file:UploadedFile , file_id:numeric} $data

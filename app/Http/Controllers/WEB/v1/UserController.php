@@ -140,4 +140,32 @@ class UserController extends Controller
             abort(403);
         }
     }
+
+    public function storeFcmToken(Request $request)
+    {
+        try {
+            $token = $request->fcm_token;
+
+            $user = auth()->user();
+
+            $user->fcm_token = $token;
+
+            $user->save();
+
+            return response()->json([
+                'message' => 'Token Stored Successfully',
+            ]);
+        } catch (Exception) {
+            return response()->json([
+                'message' => "There Is Been An Error Registering FCM Token",
+            ], 500);
+        }
+    }
+
+    public function getFcmToken()
+    {
+        return $this->apiResponse([
+            'fcm_token' => auth()->user()?->fcm_token,
+        ], 200, __('site.success'));
+    }
 }

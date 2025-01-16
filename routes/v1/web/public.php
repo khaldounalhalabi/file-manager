@@ -32,3 +32,6 @@ Route::prefix('v1/customer')
         Route::inertia('/register', 'auth/customer/Register')->name('register.page');
         Route::get('accept-invitation', [v1\UserController::class, 'acceptGroupInvitation'])->name('accept.invitation');
     });
+
+Route::get('fcm/get-token', [v1\UserController::class, 'getFcmToken'])->name('fcm.get.token');
+Route::post('fcm/store-token', [v1\UserController::class, 'storeFcmToken'])->name('fcm.store.token');

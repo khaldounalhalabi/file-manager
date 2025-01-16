@@ -24,10 +24,10 @@ export const POST = async <T extends any = any>(
 
 export const GET = async <T extends any = any>(
     url: string,
-    queryParams?: Record<string, string>,
+    queryParams?: Record<string, any>,
     headers?: Record<string, string>,
 ): Promise<ApiResponse<T>> =>
-    await fetch(url + new URLSearchParams(queryParams), {
+    await fetch(url + "?" + new URLSearchParams(queryParams), {
         headers: { ...baseHeaders, ...headers },
         method: "GET",
     }).then((response) => handler(response.json()));

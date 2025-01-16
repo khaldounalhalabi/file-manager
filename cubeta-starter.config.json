@@ -288,6 +288,12 @@
                 ]
             },
             "version": "v1"
+        },
+        {
+            "model_name": "Notification",
+            "table_name": "notifications",
+            "attributes": [],
+            "version": "v1"
         }
     ]
 }

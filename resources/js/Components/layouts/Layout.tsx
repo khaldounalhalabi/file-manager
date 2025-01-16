@@ -7,8 +7,11 @@ import { usePage } from "@inertiajs/react";
 import { MiddlewareProps } from "@/types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { getTheme, setCsrf } from "@/helper";
+import useFcmToken from "@/Hooks/FirebaseNotificationHook";
+import NotificationProvider from "@/Contexts/NotificationProvider";
 
 const Layout = ({ children }: { children?: React.ReactNode }) => {
+    useFcmToken();
     const theme = getTheme();
     const { csrfToken } = usePage<MiddlewareProps>().props;
     setCsrf(csrfToken);
@@ -55,29 +58,31 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
                             "ar"
                         }
                     />
-                    <div
-                        className={`bg-white-secondary shadow-lg dark:bg-dark-secondary h-full ${
-                            isOpen
-                                ? "slide-sidebar-right"
-                                : "slide-sidebar-left w-1/4"
-                        }`}
-                    >
-                        <Sidebar
-                            isOpen={isOpen}
-                            toggleSidebar={toggleSidebar}
-                        />
-                    </div>
-                    <div
-                        className={`w-full h-full overflow-y-scroll bg-white dark:bg-dark`}
-                    >
-                        <Navbar
-                            isSidebarOpen={isOpen}
-                            toggleSidebar={toggleSidebar}
-                        />
-                        <main className={"m-5 bg-white dark:bg-dark"}>
-                            {children}
-                        </main>
-                    </div>
+                    <NotificationProvider>
+                        <div
+                            className={`bg-white-secondary shadow-lg dark:bg-dark-secondary h-full ${
+                                isOpen
+                                    ? "slide-sidebar-right"
+                                    : "slide-sidebar-left w-1/4"
+                            }`}
+                        >
+                            <Sidebar
+                                isOpen={isOpen}
+                                toggleSidebar={toggleSidebar}
+                            />
+                        </div>
+                        <div
+                            className={`w-full h-full overflow-y-scroll bg-white dark:bg-dark`}
+                        >
+                            <Navbar
+                                isSidebarOpen={isOpen}
+                                toggleSidebar={toggleSidebar}
+                            />
+                            <main className={"m-5 bg-white dark:bg-dark"}>
+                                {children}
+                            </main>
+                        </div>
+                    </NotificationProvider>
                 </div>
             </QueryClientProvider>
         </>

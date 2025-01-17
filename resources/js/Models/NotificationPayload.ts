@@ -1,5 +1,4 @@
-import { getLocale, getNestedPropertyValue, user } from "@/helper";
-import { GET } from "@/Modules/Http";
+import { getLocale, getNestedPropertyValue } from "@/helper";
 
 export class NotificationPayload {
     public collapseKey?: string;
@@ -115,12 +114,28 @@ export class NotificationPayload {
     }
 
     public getUrl(): string {
+        console.log(this.data);
         const type = this.getNotificationType();
         switch (type) {
             case NotificationsType.FileUpdatedNotification:
                 return route(
                     "v1.web.customer.files.show",
-                    getNestedPropertyValue(this.data, "file_id"),
+                    this.getFromData("file_id") ??
+                        getNestedPropertyValue(this.data, "file_id"),
+                );
+            case NotificationsType.NewFileNotification:
+                return route(
+                    "v1.web.customer.files.show",
+                    this.getFromData("file_id") ??
+                        getNestedPropertyValue(this.data, "file_id"),
+                );
+
+            case NotificationsType.FileLockedNotification:
+                console.log(this.data);
+                return route(
+                    "v1.web.customer.files.show",
+                    this.getFromData("file_id") ??
+                        getNestedPropertyValue(this.data, "file_id"),
                 );
             default:
                 return "#";
@@ -140,6 +155,8 @@ export interface NotificationPayloadData {
 
 export enum NotificationsType {
     FileUpdatedNotification = "Customer\\FileUpdatedNotification",
+    NewFileNotification = "Customer\\NewFileNotification",
+    FileLockedNotification = "Customer\\FileLockedNotification",
 }
 
 export interface Notification {

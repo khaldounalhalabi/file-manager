@@ -39,8 +39,9 @@ const GroupSelector = ({ groups }: { groups: Group[] }) => {
                             }
                         >
                             {groups.length > 0 ? (
-                                groups.map((group) => (
+                                groups.map((group, index) => (
                                     <Link
+                                        key={index}
                                         href={route(
                                             "v1.web.customer.groups.select",
                                             group.id,

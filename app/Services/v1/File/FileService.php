@@ -6,6 +6,7 @@ use App\Enums\FileLogTypeEnum;
 use App\Enums\FileStatusEnum;
 use App\Models\File;
 use App\Notifications\Customer\FileLockedNotification;
+use App\Notifications\Customer\FileUpdatedNotification;
 use App\Notifications\Customer\NewFileNotification;
 use App\Repositories\DirectoryRepository;
 use App\Repositories\FileLogRepository;
@@ -67,7 +68,7 @@ class FileService extends BaseService
                 'file' => $file,
                 'user' => $this->user,
             ])->setNotification(NewFileNotification::class)
-            ->setTo(UserRepository::make()->getUsersInGroupExcept($this->user?->group_id, $this->user?->id)->pluck('id')->toArray())
+            ->setTo(UserRepository::make()->getUsersInGroupExcept($file->group_id, $this->user?->id)->pluck('id')->toArray())
             ->setMethod(FirebaseServices::MANY)
             ->send();
 
@@ -103,7 +104,7 @@ class FileService extends BaseService
                 'file' => $file,
                 'user' => $this->user,
             ])->setNotification(FileLockedNotification::class)
-            ->setTo(UserRepository::make()->getUsersInGroupExcept($this->user?->group_id, $this->user?->id)->pluck('id')->toArray())
+            ->setTo(UserRepository::make()->getUsersInGroupExcept($file->group_id, $this->user?->id)->pluck('id')->toArray())
             ->setMethod(FirebaseServices::MANY)
             ->send();
 
@@ -146,6 +147,15 @@ class FileService extends BaseService
             'status' => FileStatusEnum::UNLOCKED->value,
         ], $file);
 
+        FirebaseServices::make()
+            ->setData([
+                'file' => $file,
+                'user' => $this->user,
+            ])->setNotification(FileUpdatedNotification::class)
+            ->setTo(UserRepository::make()->getUsersInGroupExcept($file->group_id, $this->user?->id)->pluck('id')->toArray())
+            ->setMethod(FirebaseServices::MANY)
+            ->send();
+
         FileLogRepository::make()->logEvent(FileLogTypeEnum::FINISHED_EDITING, $file);
 
         return true;
@@ -177,7 +187,7 @@ class FileService extends BaseService
     {
         DB::beginTransaction();
         try {
-
+            $notifications = [];
             $files = $this->repository->getByIds($data['files_ids'], ['lastVersion']);
             $zipFileName = Str::uuid() . '.zip';
             $zipFilePath = storage_path('app/public/' . $zipFileName);
@@ -192,10 +202,21 @@ class FileService extends BaseService
                             'status' => FileStatusEnum::LOCKED->value,
                         ]);
                         FileLogRepository::make()->logEvent(FileLogTypeEnum::STARTED_EDITING, $file);
+                        $notifications[] = FirebaseServices::make()
+                            ->setData([
+                                'file' => $file,
+                                'user' => $this->user,
+                            ])->setNotification(FileLockedNotification::class)
+                            ->setTo(UserRepository::make()->getUsersInGroupExcept($file->group_id, $this->user?->id)->pluck('id')->toArray())
+                            ->setMethod(FirebaseServices::MANY);
                     } else {
                         throw new Exception("{$file->getFileName()} is Locked");
                     }
                 }
+                foreach ($notifications as $notification) {
+                    $notification->send();
+                }
+                
                 $zip->close();
             } else {
                 return null;
@@ -215,7 +236,7 @@ class FileService extends BaseService
             return null;
         }
 
-        if ($file->group_id != auth()->user()?->group_id &&  !$this->user->isAdmin()) {
+        if ($file->group_id != auth()->user()?->group_id && !$this->user->isAdmin()) {
             return null;
         }
 

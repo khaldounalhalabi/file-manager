@@ -115,4 +115,22 @@ class Directory extends Model
     {
         return $this->hasMany(File::class)->chaperone();
     }
+
+    public function canDelete(): bool
+    {
+        return $this->owner_id == auth()->user()->id
+            || auth()->user()->isAdmin()
+            || (auth()->user()->isCustomer()
+                && auth()->user()->group->owner_id == auth()->user()->id
+            );
+    }
+
+    public function canUpdate(): bool
+    {
+        return $this->owner_id == auth()->user()->id
+            || auth()->user()->isAdmin()
+            || (auth()->user()->isCustomer()
+                && auth()->user()->group->owner_id == auth()->user()->id
+            );
+    }
 }

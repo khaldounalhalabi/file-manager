@@ -5,8 +5,10 @@ import { FileVersion } from "@/Models/FileVersion";
 import dayjs from "dayjs";
 import DownloadVersionButton from "@/Components/FileVersion/DownloadVersionButton";
 import VersionCheckbox from "@/Components/FileVersion/VersionCheckbox";
+import { role } from "@/helper";
 
 const FileVersionsTable = ({ fileId }: { fileId: number }) => {
+    const authRole = role();
     return (
         <DataTable
             title="versions"
@@ -22,7 +24,7 @@ const FileVersionsTable = ({ fileId }: { fileId: number }) => {
                 params?: object | undefined,
             ): Promise<PaginatedResponse<FileVersion>> =>
                 GET(
-                    route("v1.web.customer.files.versions", {
+                    route(`v1.web.${authRole}.files.versions`, {
                         fileId: fileId,
                         page: page,
                         search: search,

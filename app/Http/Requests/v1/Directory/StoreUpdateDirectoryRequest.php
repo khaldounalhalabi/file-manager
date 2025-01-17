@@ -34,7 +34,8 @@ class StoreUpdateDirectoryRequest extends FormRequest
                             return $query->whereNull('parent_id');
                         })
                 ],
-                'parent_id' => ['nullable', 'numeric', 'exists:directories,id']
+                'parent_id' => ['nullable', 'numeric', 'exists:directories,id'],
+                'group_id' => ['nullable', 'numeric', 'exists:groups,id', Rule::requiredIf(fn() => auth()->user()->isAdmin())],
             ];
         }
 

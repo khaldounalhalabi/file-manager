@@ -3,6 +3,7 @@ import { Link } from "@inertiajs/react";
 import { Folder } from "lucide-react";
 import dayjs from "dayjs";
 import FolderOptions from "@/Components/FilesAndDirectories/FolderOptions";
+import { role } from "@/helper";
 
 const FolderItem = ({
     directory,
@@ -11,6 +12,7 @@ const FolderItem = ({
     directory: Directory;
     refetch: () => void;
 }) => {
+    const authRole = role();
     return (
         <div
             className={
@@ -18,7 +20,10 @@ const FolderItem = ({
             }
         >
             <Link
-                href={route("v1.web.customer.directories.show", directory.id)}
+                href={route(
+                    `v1.web.${authRole}.directories.show`,
+                    directory.id,
+                )}
                 className={
                     "cursor-pointer w-[90%] border-r border-r-black hover:bg-gray-300 rounded-l-md p-2"
                 }

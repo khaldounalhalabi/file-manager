@@ -12,6 +12,7 @@ import Modal from "@/Components/ui/Modal";
 import Form from "@/Components/form/Form";
 import { useForm } from "@inertiajs/react";
 import Input from "@/Components/form/fields/Input";
+import { role } from "@/helper";
 
 const PushFileUpdateButton = ({
     file,
@@ -29,6 +30,7 @@ const PushFileUpdateButton = ({
           >)
         | (() => void);
 }) => {
+    const authRole = role();
     const [modalOpen, openModal] = useState<boolean>(false);
     const { post, setData, processing, wasSuccessful, transform, progress } =
         useForm<{
@@ -40,7 +42,7 @@ const PushFileUpdateButton = ({
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         transform((data) => ({ ...data, file_id: file.id, _method: "PUT" }));
-        post(route("v1.web.customer.files.update"));
+        post(route(`v1.web.${authRole}.files.update`));
     };
 
     useEffect(() => {

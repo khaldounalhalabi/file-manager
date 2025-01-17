@@ -60,12 +60,35 @@ class DirectoryController extends Controller
     public function show($directoryId)
     {
         $directory = $this->directoryService->view($directoryId, ['subDirectories', 'files', 'files.lastVersion', 'files.lastLog']);
-        if ($directory) {
-            return Inertia::render('dashboard/customer/directories/Show', [
+        if (!$directory) {
+            abort(404);
+        }
+        if (auth()->user()->isAdmin()) {
+            return Inertia::render('dashboard/admin/groups/directories/Show', [
                 'directory' => $directory,
             ]);
         }
+        return Inertia::render('dashboard/customer/directories/Show', [
+            'directory' => $directory,
+        ]);
 
-        abort(404);
+    }
+
+    public function getRootByGroup($groupId)
+    {
+        $directories = $this->directoryService->getRootByGroup($groupId, $this->relations);
+        return $this->apiResponse(
+            DirectoryResource::collection($directories['data']),
+            ApiController::STATUS_OK,
+            __('site.get_successfully'),
+            $directories['pagination_data']
+        );
+    }
+
+    public function getRootPageByGroup($groupId)
+    {
+        return Inertia::render('dashboard/admin/groups/directories/Index', [
+            'groupId' => $groupId,
+        ]);
     }
 }

@@ -2,13 +2,15 @@ import DataTable from "@/Components/Datatable/DataTable";
 import { FileLog } from "@/Models/FileLog";
 import { PaginatedResponse } from "@/Models/Response";
 import dayjs from "dayjs";
+import { role } from "@/helper";
 
 const exportables: string[] = [];
 const FileLogsTable = ({ fileId }: { fileId: number }) => {
+    const authRole = role();
     return (
         <DataTable
             title="Logs"
-            exportRoute={route("v1.web.customer.files.logs.export", {
+            exportRoute={route(`v1.web.${authRole}.files.logs.export`, {
                 fileId: fileId,
             })}
             getDataArray={(res) => res.data}
@@ -23,7 +25,7 @@ const FileLogsTable = ({ fileId }: { fileId: number }) => {
                 params?: object | undefined,
             ): Promise<PaginatedResponse<FileLog>> =>
                 fetch(
-                    route("v1.web.customer.files.logs", {
+                    route(`v1.web.${authRole}.files.logs`, {
                         fileId: fileId,
                         page: page,
                         search: search,

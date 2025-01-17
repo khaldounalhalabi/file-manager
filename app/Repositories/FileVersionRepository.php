@@ -17,7 +17,9 @@ class FileVersionRepository extends BaseRepository
         return $this->paginate(
             $this->globalQuery($relations)
                 ->where('file_id', $fileId)
-                ->whereHas('file', fn($q) => $q->where('group_id', auth()->user()->group_id))
+                ->when(!auth()->user()->isAdmin(), function ($query) {
+                    $query->whereHas('file', fn($q) => $q->where('group_id', auth()->user()->group_id));
+                })
         );
     }
 }

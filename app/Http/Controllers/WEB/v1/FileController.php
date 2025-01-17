@@ -79,22 +79,30 @@ class FileController extends Controller
     public function show($fileId)
     {
         $file = $this->fileService->view($fileId, ['owner', 'lastVersion', 'directory']);
-        if ($file) {
-            return Inertia::render('dashboard/customer/Files/Show', [
-                'file' => $file
+        if (!$file) {
+            abort(404);
+        }
+        if (auth()->user()->isAdmin()) {
+            return Inertia::render('dashboard/admin/groups/directories/Files/Show', [
+                'file' => $file,
             ]);
         }
-        abort(404);
+        return Inertia::render('dashboard/customer/Files/Show', [
+            'file' => $file
+        ]);
     }
 
     public function getDiff(GetDiffRequest $request)
     {
         $data = $this->fileService->getDiff($request->validated());
-        if ($data) {
-            return Inertia::render('dashboard/customer/Files/GetDiff', $data);
+        if (!$data) {
+            abort(404);
+        }
+        if (auth()->user()->isAdmin()) {
+            return Inertia::render('dashboard/admin/groups/directories/Files/GetDiff', $data);
         }
 
-        abort(404);
+        return Inertia::render('dashboard/customer/Files/GetDiff', $data);
     }
 
     public function streamFile(Request $request)

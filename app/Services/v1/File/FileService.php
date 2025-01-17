@@ -7,6 +7,7 @@ use App\Enums\FileStatusEnum;
 use App\Models\File;
 use App\Notifications\Customer\FileLockedNotification;
 use App\Notifications\Customer\NewFileNotification;
+use App\Repositories\DirectoryRepository;
 use App\Repositories\FileLogRepository;
 use App\Repositories\FileRepository;
 use App\Repositories\FileVersionRepository;
@@ -14,6 +15,7 @@ use App\Repositories\UserRepository;
 use App\Services\Contracts\BaseService;
 use App\Services\Contracts\Makable;
 use App\Services\v1\Firebase\FirebaseServices;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -32,9 +34,17 @@ class FileService extends BaseService
 
     public function store(array $data, array $relationships = []): Model
     {
+        if ($this->user->isAdmin()) {
+            $directory = DirectoryRepository::make()->find($data['directory_id']);
+            $groupId = $directory->group_id;
+            $ownerId = $directory->owner_id;
+        } else {
+            $groupId = $this->user->group_id;
+            $ownerId = $this->user->id;
+        }
         $fileData = [
-            'owner_id' => $this->user?->id,
-            'group_id' => $this->user?->group_id,
+            'owner_id' => $ownerId,
+            'group_id' => $groupId,
             'directory_id' => $data['directory_id'],
             'status' => FileStatusEnum::UNLOCKED->value,
             'name' => explode('.', $data['file']->getClientOriginalName())[0] ?? "Unknown file",
@@ -165,27 +175,36 @@ class FileService extends BaseService
 
     public function zipMultipleFiles(array $data): ?string
     {
-        $files = $this->repository->getByIds($data['files_ids'], ['lastVersion']);
-        $zipFileName = Str::uuid() . '.zip';
-        $zipFilePath = storage_path('app/public/' . $zipFileName);
+        DB::beginTransaction();
+        try {
 
-        $zip = new ZipArchive();
+            $files = $this->repository->getByIds($data['files_ids'], ['lastVersion']);
+            $zipFileName = Str::uuid() . '.zip';
+            $zipFilePath = storage_path('app/public/' . $zipFileName);
 
-        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-            foreach ($files as $file) {
-                if (!$file->isLocked() && $file->lastVersion) {
-                    $zip->addFile($file->lastVersion?->file_path['absolute_path'], $file->getFileName());
-                    $file->update([
-                        'status' => FileStatusEnum::LOCKED->value,
-                    ]);
-                    FileLogRepository::make()->logEvent(FileLogTypeEnum::STARTED_EDITING, $file);
+            $zip = new ZipArchive();
+
+            if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                foreach ($files as $file) {
+                    if (!$file->isLocked() && $file->lastVersion) {
+                        $zip->addFile($file->lastVersion?->file_path['absolute_path'], $file->getFileName());
+                        $file->update([
+                            'status' => FileStatusEnum::LOCKED->value,
+                        ]);
+                        FileLogRepository::make()->logEvent(FileLogTypeEnum::STARTED_EDITING, $file);
+                    } else {
+                        throw new Exception("{$file->getFileName()} is Locked");
+                    }
                 }
+                $zip->close();
+            } else {
+                return null;
             }
-            $zip->close();
-        } else {
+            return asset("storage/" . Str::after($zipFilePath, "storage\app/public"));
+        } catch (Exception) {
+            DB::rollBack();
             return null;
         }
-        return asset("storage/" . Str::after($zipFilePath, "storage\app/public"));
     }
 
     public function view($id, array $relationships = []): ?File
@@ -196,7 +215,7 @@ class FileService extends BaseService
             return null;
         }
 
-        if ($file->group_id != auth()->user()?->group_id) {
+        if ($file->group_id != auth()->user()?->group_id &&  !$this->user->isAdmin()) {
             return null;
         }
 

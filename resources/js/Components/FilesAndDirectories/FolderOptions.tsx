@@ -1,5 +1,5 @@
 import Trash from "@/Components/icons/Trash";
-import { swal, user as AuthUser } from "@/helper";
+import { role, swal, user as AuthUser } from "@/helper";
 import { toast } from "react-toastify";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useForm, usePage } from "@inertiajs/react";
@@ -32,6 +32,7 @@ const FolderOptions = ({
           >)
         | (() => void);
 }) => {
+    const authRole = role();
     const csrf = usePage<MiddlewareProps>().props.csrfToken;
     const [openEdit, setOpenEdit] = useState<boolean>(false);
     const user = AuthUser();
@@ -46,7 +47,7 @@ const FolderOptions = ({
     const onSubmitUpdateFolder = (e: FormEvent<HTMLFormElement>) => {
         setData("_method", "PUT");
         e.preventDefault();
-        post(route("v1.web.customer.directories.update", directory.id));
+        post(route(`v1.web.${authRole}.directories.update`, directory.id));
     };
 
     useEffect(() => {
@@ -92,7 +93,8 @@ const FolderOptions = ({
                 </Form>
             </Modal>
             {(directory.owner_id == user?.id ||
-                user?.group?.owner_id == user?.id) && (
+                user?.group?.owner_id == user?.id ||
+                authRole == "admin") && (
                 <button
                     className="hover:bg-white-secondary p-1 rounded-md"
                     type={"button"}
@@ -112,7 +114,7 @@ const FolderOptions = ({
                                     if (directory) {
                                         fetch(
                                             route(
-                                                "v1.web.customer.directories.destroy",
+                                                `v1.web.${authRole}.directories.destroy`,
                                                 directory.id,
                                             ),
                                             {

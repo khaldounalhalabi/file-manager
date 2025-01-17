@@ -21,7 +21,7 @@ const Navbar = ({
                 )}
             </div>
             <div className={`flex w-full items-center justify-end`}>
-                <NotificationsPopover />
+                {role() == "customer" ? <NotificationsPopover /> : ""}
                 {role() == "customer" ? <GroupSelector /> : ""}
                 <ProfileDropdown />
             </div>

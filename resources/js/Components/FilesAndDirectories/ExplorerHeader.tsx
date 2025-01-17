@@ -13,7 +13,7 @@ import { PaginatedResponse } from "@/Models/Response";
 import { Directory } from "@/Models/Directory";
 import { POST } from "@/Modules/Http";
 import DownloadFile from "@/Hooks/DownloadFile";
-import { getCsrf } from "@/helper";
+import { getCsrf, role } from "@/helper";
 import LoadingSpinner from "@/Components/icons/LoadingSpinner";
 
 export const SelectedFilesContext = createContext<{
@@ -27,6 +27,7 @@ const ExplorerHeader = ({
     refetch,
     directory,
     children = undefined,
+    groupId = undefined,
 }: {
     refetch?:
         | ((
@@ -40,7 +41,9 @@ const ExplorerHeader = ({
         | (() => void);
     directory?: Directory;
     children: any;
+    groupId?: number;
 }) => {
+    const authRole = role();
     const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
     const [openNewFolder, setOpenNewFolder] = useState<boolean>(false);
     const [openNewFile, setOpenNewFile] = useState<boolean>(false);
@@ -63,13 +66,23 @@ const ExplorerHeader = ({
 
     const onSubmitNewFolder = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (directory) {
-            transform((data) => ({
+        transform((data) => {
+            const additions: Record<string, any> = {};
+            if (authRole == "admin") {
+                additions.group_id = groupId;
+            }
+
+            if (directory) {
+                additions.parent_id = directory.id;
+            }
+
+            return {
                 ...data,
-                parent_id: directory.id,
-            }));
-        }
-        post(route("v1.web.customer.directories.store"));
+                ...additions,
+            };
+        });
+
+        post(route(`v1.web.${authRole}.directories.store`));
     };
 
     const { downloadFile, isLoading } = DownloadFile();
@@ -116,7 +129,7 @@ const ExplorerHeader = ({
                 directory_id: directory.id,
             }));
         }
-        postFile(route("v1.web.customer.files.store"));
+        postFile(route(`v1.web.${authRole}.files.store`));
     };
 
     useEffect(() => {
@@ -240,7 +253,14 @@ const ExplorerHeader = ({
                 <div className={"w-full flex items-center justify-end"}>
                     <Link
                         className={"text-brand hover:underline"}
-                        href={route("v1.web.customer.directories.root")}
+                        href={
+                            authRole == "admin"
+                                ? route(
+                                      "v1.web.admin.groups.directories",
+                                      groupId,
+                                  )
+                                : route("v1.web.customer.directories.root")
+                        }
                     >
                         /root
                     </Link>
@@ -248,7 +268,7 @@ const ExplorerHeader = ({
                         directory.path.map((path) => (
                             <Link
                                 href={route(
-                                    "v1.web.customer.directories.show",
+                                    `v1.web.${authRole}.directories.show`,
                                     path.id,
                                 )}
                                 key={path.id}

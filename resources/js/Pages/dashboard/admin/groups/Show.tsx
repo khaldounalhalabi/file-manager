@@ -16,7 +16,15 @@ const Show = ({ group }: { group: Group }) => {
             <PageCard
                 title="Group Details"
                 actions={
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center gap-2">
+                        <Link
+                            href={route(
+                                "v1.web.admin.groups.directories",
+                                group.id,
+                            )}
+                        >
+                            <Button>Show Files</Button>
+                        </Link>
                         <Link
                             href={route("v1.web.admin.groups.edit", group.id)}
                         >

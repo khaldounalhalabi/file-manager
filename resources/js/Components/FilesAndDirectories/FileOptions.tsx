@@ -18,7 +18,7 @@ import PushFileUpdateButton from "@/Components/FilesAndDirectories/PushFileUpdat
 import { SelectedFilesContext } from "@/Components/FilesAndDirectories/ExplorerHeader";
 import Eye from "@/Components/icons/Eye";
 import { Link } from "@inertiajs/react";
-import { user as AuthUser } from "@/helper";
+import { role, user as AuthUser } from "@/helper";
 
 const FileOptions = ({
     file,
@@ -38,8 +38,9 @@ const FileOptions = ({
 }) => {
     const { downloadFile, isLoading: isDownloading } = DownloadFile();
     const user = AuthUser();
+    const authRole = role();
     const handleEdit = () => {
-        GET<string>(route("v1.web.customer.files.edit", file.id))
+        GET<string>(route(`v1.web.${authRole}.files.edit`, file.id))
             .then((res) => {
                 if (res.code == ResponseCodeEnum.OK) {
                     downloadFile(
@@ -91,7 +92,7 @@ const FileOptions = ({
             )}
 
             <Link
-                href={route("v1.web.customer.files.show", file.id)}
+                href={route(`v1.web.${authRole}.files.show`, file.id)}
                 className="hover:bg-white-secondary p-0.5 rounded-md"
             >
                 <Eye className="w-5 h-5 text-info" />

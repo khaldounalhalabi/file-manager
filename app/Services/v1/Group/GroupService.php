@@ -112,35 +112,43 @@ class GroupService extends BaseService
         try {
             $group = $this->repository->find($data['group_id']);
 
-            $invited = UserRepository::make()->getUserByEmail($data['email']);
+            if (isset($data['user_id'])) {
+                $invitedUser = UserRepository::make()->find($data['user_id']);
+            } else {
+                $invitedUser = UserRepository::make()->getUserByEmail($data['email']);
+            }
 
             $password = Str::password();
 
-            if (!$invited) {
-                $invited = UserRepository::make()->create([
+            if (!$invitedUser && !isset($data['user_id'])) {
+                $invitedUser = UserRepository::make()->create([
                     'email' => $data['email'],
                     'first_name' => explode('@', $data['email'])[0] ?? "",
                     'last_name' => explode('@', $data['email'])[0] ?? "",
                     'password' => $password,
                     'group_id' => $group->id,
                 ]);
-                $invited->assignRole(RolesPermissionEnum::CUSTOMER['role']);
+                $invitedUser->assignRole(RolesPermissionEnum::CUSTOMER['role']);
             }
 
-            $token = Crypt::encrypt([
-                'group_id' => $group->id,
-                'valid_until' => now()->addDays(3),
-                'email' => $data['email'],
-            ]);
+            $invitedUser->groups()->attach($group->id);
 
-            Mail::to($data['email'])->send(new InviteToGroupEmail(
-                $data['email'],
-                $this->user->first_name . " " . $this->user->last_name,
-                $this->user->email,
-                $group->name,
-                $token,
-                $password
-            ));
+            if (!isset($data['user_id'])) {
+                $token = Crypt::encrypt([
+                    'group_id' => $group->id,
+                    'valid_until' => now()->addDays(3),
+                    'email' => $data['email'],
+                ]);
+
+                Mail::to($data['email'])->send(new InviteToGroupEmail(
+                    $data['email'],
+                    $this->user->first_name . " " . $this->user->last_name,
+                    $this->user->email,
+                    $group->name,
+                    $token,
+                    $password
+                ));
+            }
 
             return true;
 

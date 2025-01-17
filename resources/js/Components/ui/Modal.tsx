@@ -6,10 +6,12 @@ const Modal = ({
     isOpen,
     onClose,
     children,
+    containerClasses = "",
 }: {
     isOpen: boolean;
     onClose: () => void;
     children: ReactNode;
+    containerClasses?: string;
 }) => {
     const [show, setShow] = useState(isOpen);
 
@@ -37,7 +39,7 @@ const Modal = ({
                 onClick={onClose}
             ></div>
             <div
-                className={`bg-white dark:bg-dark-secondary rounded-lg shadow-lg overflow-hidden w-full max-w-lg transform transition-transform duration-300 ${
+                className={`${containerClasses} bg-white dark:bg-dark-secondary rounded-lg shadow-lg overflow-hidden w-full max-w-lg transform transition-transform duration-300 ${
                     isOpen ? "scale-100" : "scale-95"
                 }`}
             >

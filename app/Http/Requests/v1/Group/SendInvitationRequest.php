@@ -23,7 +23,8 @@ class SendInvitationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|min:3|max:255',
+            'email' => 'nullable|email|min:3|max:255|required_without:user_id',
+            'user_id' => 'numeric|required_without:email|exists:users,id',
             'group_id' => [
                 'required',
                 'numeric',

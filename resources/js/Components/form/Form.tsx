@@ -16,7 +16,7 @@ const Form = ({
     backButton?: boolean;
 }) => {
     return (
-        <form onSubmit={onSubmit} className={"w-full"}>
+        <form onSubmit={onSubmit} className={"w-full h-full"}>
             {children}
             <div
                 className={`flex items-center ${backButton ? "justify-between" : "justify-end"} w-full mt-10`}

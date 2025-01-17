@@ -14,6 +14,8 @@ Route::get('notifications', [v1\NotificationController::class, 'getUserNotificat
 Route::get('notifications/unread/count', [v1\NotificationController::class, 'unreadCount'])->name('notifications.unread.count');
 Route::get('notifications/{notificationId}/mark-as-read', [v1\NotificationController::class, 'markAsRead'])->name('notifications.mark.as.read');
 
+Route::get('users/customers', [v1\UserController::class, 'getCustomers'])->name('users.customers');
+
 Route::get('/groups/{groupId}/users', [v1\UserController::class, 'getUsersByGroup'])
     ->withoutMiddleware(CustomerMustHaveAGroup::class)
     ->name('groups.users');

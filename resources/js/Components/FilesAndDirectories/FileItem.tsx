@@ -11,12 +11,12 @@ const FileItem = ({ file, refetch }: { file: File; refetch: () => void }) => {
     return (
         <div
             className={
-                "flex items-center justify-between p-3 bg-gray-100 w-full gap-1 rounded-md h-full"
+                "flex items-center justify-between p-3 bg-gray-100 dark:bg-dark dark:text-white hover:text-black w-full gap-1 rounded-md h-full"
             }
         >
             <div
                 className={
-                    "cursor-pointer w-[90%] border-r border-r-black hover:bg-gray-300 rounded-l-md p-2"
+                    "cursor-pointer w-[90%] border-r border-r-black hover:bg-gray-300 dark:hover:bg-sky-100 rounded-l-md p-2"
                 }
                 onClick={() => {
                     downloadFile(

@@ -3,6 +3,7 @@ import Menu from "../icons/Menu";
 import GroupSelector from "@/Components/ui/GroupSelector";
 import { role } from "@/helper";
 import NotificationsPopover from "@/Components/ui/NotificationsPopover";
+import DarkModeToggle from "@/Components/ui/DarkModeToggle";
 
 const Navbar = ({
     isSidebarOpen,
@@ -23,6 +24,7 @@ const Navbar = ({
             <div className={`flex w-full items-center justify-end`}>
                 {role() == "customer" ? <NotificationsPopover /> : ""}
                 {role() == "customer" ? <GroupSelector /> : ""}
+                <DarkModeToggle />
                 <ProfileDropdown />
             </div>
         </nav>

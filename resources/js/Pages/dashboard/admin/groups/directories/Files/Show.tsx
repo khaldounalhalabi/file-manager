@@ -20,7 +20,7 @@ const Show = ({ file }: { file: File }) => {
             <PageCard>
                 <div
                     className={
-                        "flex gap-5 items-center bg-gray-100 shadow-sm rounded-md p-5"
+                        "flex gap-5 items-center bg-gray-100 dark:bg-dark dark:text-white shadow-sm rounded-md p-5"
                     }
                 >
                     <IconFile
@@ -54,7 +54,7 @@ const Show = ({ file }: { file: File }) => {
                         <button
                             type={"button"}
                             className={
-                                "text-brand flex items-center gap-2 border p-3 border-gray-200 hover:shadow-md rounded-md"
+                                "text-brand dark:text-white flex items-center gap-2 border p-3 border-gray-200 hover:shadow-md rounded-md"
                             }
                             onClick={() => {
                                 router.post(
@@ -109,7 +109,7 @@ const Show = ({ file }: { file: File }) => {
             <div className={"mt-5 rounded-md p-5"}>
                 <div
                     className={
-                        "my-5 bg-primary rounded-md p-5 flex items-center gap-3"
+                        "my-5 bg-primary dark:bg-dark-secondary rounded-md p-5 flex items-center gap-3"
                     }
                 >
                     <div

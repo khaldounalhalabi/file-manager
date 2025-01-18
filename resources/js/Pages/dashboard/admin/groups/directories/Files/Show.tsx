@@ -20,7 +20,7 @@ const Show = ({ file }: { file: File }) => {
             <PageCard>
                 <div
                     className={
-                        "flex gap-5 items-center bg-gray-100 dark:bg-dark dark:text-white shadow-sm rounded-md p-5"
+                        "flex flex-col md:flex-row gap-5 md:items-center bg-gray-100 dark:bg-dark dark:text-white shadow-sm rounded-md p-5"
                     }
                 >
                     <IconFile
@@ -88,7 +88,7 @@ const Show = ({ file }: { file: File }) => {
                     )}
                     <div
                         className={
-                            "w-full self-end flex items-center justify-end"
+                            "w-full md:self-end flex-wrap flex items-center md:justify-end"
                         }
                     >
                         <Link

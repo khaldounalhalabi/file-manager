@@ -65,7 +65,7 @@ const FileOptions = ({
     const { selected, setSelected } = useContext(SelectedFilesContext);
 
     return (
-        <div className={"flex items-center justify-between px-5 gap-1"}>
+        <div className={"flex items-center justify-center md:justify-between px-5 gap-1"}>
             {user?.id == file.last_log?.user_id &&
                 file.last_log?.event_type == "started_editing" && (
                     <PushFileUpdateButton file={file} refetch={refetch} />

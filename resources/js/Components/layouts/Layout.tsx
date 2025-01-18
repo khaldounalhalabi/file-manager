@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/Components/ui/Navbar";
 import { Sidebar } from "@/Components/ui/Sidebar";
 import { toast, ToastContainer } from "react-toastify";
@@ -19,6 +19,18 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
     const toggleSidebar = () => {
         setIsOpen((prev) => !prev);
     };
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                setIsOpen(true);
+            } else {
+                setIsOpen(false);
+            }
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const queryClient = new QueryClient({
         defaultOptions: {

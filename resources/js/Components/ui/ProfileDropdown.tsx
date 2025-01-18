@@ -33,7 +33,7 @@ const ProfileDropdown = () => {
             >
                 <div className="mx-2 rounded-full">
                     <img
-                        className="rounded-full h-12"
+                        className="rounded-full max-w-12 max-h-12"
                         src={
                             authUser?.profile?.path ??
                             asset("/images/profile-img.jpg")

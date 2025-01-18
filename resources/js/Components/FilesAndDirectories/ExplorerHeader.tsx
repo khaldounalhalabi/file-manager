@@ -153,10 +153,10 @@ const ExplorerHeader = ({
         >
             <div
                 className={
-                    "flex items-center justify-items-start w-full border-b border-b-brand mb-5 p-5"
+                    "flex flex-col md:flex-row md:items-center justify-items-start w-full border-b border-b-brand mb-5 p-5"
                 }
             >
-                <div className={"flex items-center justify-start gap-5 w-full"}>
+                <div className={"flex flex-col md:flex-row md:items-center justify-start gap-5 w-full"}>
                     <button
                         className={
                             "text-brand flex items-center gap-2 border p-3 border-gray-200 hover:shadow-md rounded-md"
@@ -250,7 +250,7 @@ const ExplorerHeader = ({
                         </button>
                     )}
                 </div>
-                <div className={"w-full flex items-center justify-end"}>
+                <div className={"w-full flex items-center md:justify-end flex-wrap"}>
                     <Link
                         className={"text-brand hover:underline"}
                         href={

@@ -8,20 +8,16 @@ import Input from "@/Components/form/fields/Input";
 import { User } from "@/Models/User";
 
 const Edit = ({ user }: { user: User }) => {
-    const { post, setData, errors, processing } = useForm<{
+    const { post, setData, processing } = useForm<{
         first_name?: string;
         last_name?: string;
         email?: string;
-        password?: string;
-        password_confirmation?: string;
         profile?: string | File;
         _method?: "PUT" | "POST";
     }>({
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
-        password: "",
-        password_confirmation: "",
         _method: "PUT",
     });
 
@@ -62,24 +58,6 @@ const Edit = ({ user }: { user: User }) => {
                         type={"email"}
                         required={true}
                         defaultValue={user.email}
-                    />
-
-                    <Input
-                        name={"password"}
-                        label={"Password"}
-                        onChange={(e) => setData("password", e.target.value)}
-                        type={"password"}
-                        required={true}
-                    />
-
-                    <Input
-                        name={"password_confirmation"}
-                        label={"Confirm Password"}
-                        onChange={(e) =>
-                            setData("password_confirmation", e.target.value)
-                        }
-                        type={"password"}
-                        required={true}
                     />
 
                     <Input

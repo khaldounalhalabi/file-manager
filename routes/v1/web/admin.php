@@ -10,6 +10,7 @@ Route::put('/update-user-data', [v1\AdminAuthController::class, 'updateUserData'
 Route::get('/user-details', [v1\AdminAuthController::class, 'userDetails'])->name('user.details');
 Route::get('/logout', [v1\AdminAuthController::class, 'logout'])->name('logout');
 
+Route::get('/users/{userId}/logs', [v1\FileLogController::class, 'getByUser'])->name('users.logs');
 Route::get('users/customers', [v1\UserController::class, 'getCustomers'])->name('users.customers');
 Route::get('/groups/{groupId}/users', [v1\UserController::class, 'getUsersByGroup'])->name('groups.users');
 Route::get('/users/data', [v1\UserController::class, 'data'])->name('users.data');
@@ -48,3 +49,4 @@ Route::controller(v1\FileController::class)
         Route::delete('/{fileId}', 'destroy')->name('destroy');
         Route::get('/{fileId}', 'show')->name('show');
     });
+

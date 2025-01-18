@@ -69,4 +69,13 @@ class FileLogRepository extends BaseRepository
             'event_type' => $eventType->value,
         ]);
     }
+
+    public function getByUser(int $userId, array $relations = []): ?array
+    {
+        return $this->paginate(
+            $this->globalQuery($relations)
+                ->where('user_id', $userId)
+                ->orderBy('happened_at', 'desc')
+        );
+    }
 }

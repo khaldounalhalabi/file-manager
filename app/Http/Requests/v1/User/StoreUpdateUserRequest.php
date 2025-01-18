@@ -24,7 +24,6 @@ class StoreUpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        //TODO::handle profile after creating media class
         if ($this->method() == "POST") {
             return [
                 'first_name' => 'required|string|max:255',

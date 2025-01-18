@@ -52,4 +52,20 @@ class FileLogController extends Controller
             return redirect()->back()->with('error', __('site.something_went_wrong'));
         }
     }
+
+    public function getByUser($userId)
+    {
+        $data = $this->fileLogService->getByUser($userId, $this->relations);
+        if ($data) {
+            return response()->json([
+                'data' => FileLogResource::collection($data['data']),
+                'pagination_data' => $data['pagination_data'],
+            ], 200);
+        }
+
+        return response()->json([
+            'data' => [],
+            'pagination_data' => null,
+        ], 200);
+    }
 }

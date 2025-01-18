@@ -21,4 +21,9 @@ class FileLogService extends BaseService
     {
         return $this->repository->getByFile($fileId, $relations);
     }
+
+    public function getByUser(int $userId, array $relations = []): ?array
+    {
+        return $this->repository->getByUser($userId, $relations);
+    }
 }

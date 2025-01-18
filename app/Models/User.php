@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Media;
 use App\Enums\RolesPermissionEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -43,7 +44,8 @@ class User extends Authenticatable
         'email_verified_at',
         'fcm_token',
         'reset_password_code',
-        'group_id'
+        'group_id',
+        'profile'
     ];
 
     protected $hidden = [
@@ -70,6 +72,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'created_at' => 'datetime:Y-m-d H:i:s',
             'updated_at' => 'datetime:Y-m-d H:i:s',
+            'profile' => Media::class,
         ];
     }
 

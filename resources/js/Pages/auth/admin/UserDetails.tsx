@@ -68,18 +68,24 @@ const UserOverview = ({ user }: { user: User }) => {
 };
 
 const EditProfile = ({ user }: { user: User }) => {
-    const { put, setData, processing } = useForm<{
+    const { post, setData, processing } = useForm<{
         first_name?: string;
         last_name?: string;
         email?: string;
         password?: string;
         password_confirmation?: string;
+        profile?: File;
         _method: "POST" | "PUT";
-    }>();
+    }>({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        _method: "PUT",
+    });
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        put(route("v1.web.admin.update.user.data"));
+        post(route("v1.web.admin.update.user.data"));
     };
 
     return (
@@ -148,6 +154,14 @@ const EditProfile = ({ user }: { user: User }) => {
                                     ? undefined
                                     : e.target.value,
                             );
+                        }}
+                    />
+
+                    <Input
+                        name={"profile"}
+                        type={"file"}
+                        onChange={(e) => {
+                            setData("profile", e.target?.files?.[0]);
                         }}
                     />
                 </div>

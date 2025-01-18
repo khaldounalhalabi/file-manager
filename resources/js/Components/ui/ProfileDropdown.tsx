@@ -27,14 +27,17 @@ const ProfileDropdown = () => {
     return (
         <div ref={dropdownRef} className="w-auto relative">
             <button
-                className="focus:outline-none bg-transparent py-2 px-5 inline-flex dark:text-white justify-center items-center rounded-lg text-sm text-center"
+                className="focus:outline-none bg-transparent py-2 inline-flex dark:text-white justify-center items-center rounded-lg text-sm text-center"
                 type="button"
                 onClick={() => setOpen((prevState) => !prevState)}
             >
                 <div className="mx-2 rounded-full">
                     <img
                         className="rounded-full h-12"
-                        src={asset("/images/profile-img.jpg")}
+                        src={
+                            authUser?.profile?.path ??
+                            asset("/images/profile-img.jpg")
+                        }
                         alt=""
                     />
                 </div>

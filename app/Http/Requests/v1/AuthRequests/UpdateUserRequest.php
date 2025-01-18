@@ -29,6 +29,7 @@ class UpdateUserRequest extends FormRequest
             'email' => 'required|email|unique:users,email,' . auth($guard)->user()?->id,
             'password' => 'nullable|min:8|confirmed',
             'fcm_token' => 'nullable|string',
+            'profile' => 'nullable|image|max:255',
         ];
     }
 }

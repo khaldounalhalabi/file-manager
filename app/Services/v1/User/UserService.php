@@ -64,7 +64,7 @@ class UserService extends BaseService
         }
 
         /** @var User $user */
-        $user = $this->repository->update($data, $user->id);
+        $user = $this->repository->update(array_filter($data), $user->id);
 
         $token = auth($this->guard)->login($user);
 

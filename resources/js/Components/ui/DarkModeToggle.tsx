@@ -25,7 +25,7 @@ const DarkModeToggle = () => {
             onClick={() => {
                 setDark((prevState) => !prevState);
             }}
-            className={"p-4 cursor-pointer"}
+            className={"py-4 cursor-pointer"}
         >
             {dark ? (
                 <Sun className={"h-6 w-6 dark:text-white dark:fill-white"} />

@@ -17,12 +17,12 @@ const Login = () => {
     };
 
     return (
-        <div className="grid grid-cols-3 my-20">
-            <div className="col-start-2 col-end-3">
+        <div className="md:grid grid-cols-3 my-20">
+            <div className="md:col-start-2 md:col-end-3">
                 <div className="flex flex-col items-center">
                     <div className="flex items-center my-2 gap-1">
                         <img src={asset("images/logo.png")} width={"35px"} />
-                        <h1 className="text-brand text-4xl font-bold">
+                        <h1 className="text-brand md:text-4xl font-bold">
                             Ultimate file manager
                         </h1>
                     </div>
@@ -64,7 +64,7 @@ const Login = () => {
                                     type="password"
                                 />
                             </div>
-                            <p className="text-lg dark:text-white">
+                            <p className="md:text-lg dark:text-white">
                                 Forgot Your Password ?{" "}
                                 <span>
                                     <Link

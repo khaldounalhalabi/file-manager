@@ -12,6 +12,8 @@ use App\Services\v1\File\FileService;
 use App\Traits\RestTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Jfcherng\Diff\Factory\RendererFactory;
+use Jfcherng\Diff\Renderer\RendererConstant;
 
 class FileController extends Controller
 {
@@ -122,6 +124,43 @@ class FileController extends Controller
         }, 200, [
             'Content-Type' => mime_content_type($filePath),
             'Content-Disposition' => 'inline; filename="' . basename($filePath) . '"',
+        ]);
+    }
+
+    public function getLastComparison($fileId)
+    {
+        $file = $this->fileService->view($fileId, ['owner', 'lastVersion', 'directory']);
+        if (!$file->last_comparison) {
+            abort(404, 'File not found');
+        }
+
+        $rendererOptions = [
+            'detailLevel' => 'line',
+            'language' => 'eng',
+            'lineNumbers' => true,
+            'separateBlock' => true,
+            'showHeader' => true,
+            'spacesToNbsp' => false,
+            'tabSize' => 4,
+            'mergeThreshold' => 0.8,
+            'cliColorization' => RendererConstant::CLI_COLOR_ENABLE,
+            'outputTagAsString' => false,
+            'jsonEncodeFlags' => \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE,
+            'wordGlues' => [' ', '-'],
+            'resultForIdenticals' => null,
+            'wrapperClasses' => ['diff-wrapper'],
+        ];
+        $htmlRenderer = RendererFactory::make('SideBySide', $rendererOptions);
+        $htmlRenderer = trim(preg_replace('/\r+|\n+/', '', $htmlRenderer->renderArray(json_decode($file->last_comparison, true))));
+
+        if (auth()->user()->isAdmin()) {
+            return Inertia::render('dashboard/admin/groups/directories/Files/LastComparison', [
+                'result' => $htmlRenderer,
+            ]);
+        }
+
+        return Inertia::render('dashboard/customer/Files/LastComparison', [
+            'result' => $htmlRenderer,
         ]);
     }
 }

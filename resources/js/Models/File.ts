@@ -20,4 +20,5 @@ export interface File {
     frequent: number;
     file_logs?: FileLog[];
     last_log?: FileLog;
+    last_comparison?: string;
 }

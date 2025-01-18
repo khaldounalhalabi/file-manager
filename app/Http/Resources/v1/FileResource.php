@@ -28,7 +28,8 @@ class FileResource extends BaseResource
             'last_version' => new FileVersionResource($this->whenLoaded('lastVersion')),
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'file_logs' => FileLogResource::collection($this->whenLoaded('fileLogs'))
+            'file_logs' => FileLogResource::collection($this->whenLoaded('fileLogs')),
+            'last_comparison' => $this->last_comparison
         ];
     }
 }

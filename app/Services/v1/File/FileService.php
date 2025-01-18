@@ -4,6 +4,7 @@ namespace App\Services\v1\File;
 
 use App\Enums\FileLogTypeEnum;
 use App\Enums\FileStatusEnum;
+use App\Jobs\StoreDiffJob;
 use App\Models\File;
 use App\Notifications\Customer\FileLockedNotification;
 use App\Notifications\Customer\FileUpdatedNotification;
@@ -143,6 +144,8 @@ class FileService extends BaseService
             'file_id' => $file->id,
         ]);
 
+        StoreDiffJob::dispatch($file);
+
         $this->repository->update([
             'status' => FileStatusEnum::UNLOCKED->value,
         ], $file);
@@ -216,7 +219,7 @@ class FileService extends BaseService
                 foreach ($notifications as $notification) {
                     $notification->send();
                 }
-                
+
                 $zip->close();
             } else {
                 return null;

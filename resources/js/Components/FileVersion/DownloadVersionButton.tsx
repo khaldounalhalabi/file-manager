@@ -24,7 +24,7 @@ const DownloadVersionButton = ({ version }: { version: FileVersion }) => {
             }}
         >
             {isLoading ? (
-                <LoadingSpinner className={"w-5 h-5"} />
+                <LoadingSpinner className={"w-5 h-5 dark:text-white"} />
             ) : (
                 <ArrowDownCircle className="w-5 h-5" />
             )}

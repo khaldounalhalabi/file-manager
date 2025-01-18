@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->foreignIdFor(Group::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Directory::class)->constrained()->cascadeOnDelete();
             $table->integer('frequent')->default(0);
+            $table->json('last_comparison')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

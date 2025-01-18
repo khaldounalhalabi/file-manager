@@ -48,7 +48,7 @@ const FileItem = ({ file, refetch }: { file: File; refetch: () => void }) => {
                             </span>
                         </div>
                     </div>
-                    {isLoading && <LoadingSpinner />}
+                    {isLoading && <LoadingSpinner className={"dark:text-white"}/>}
                 </div>
             </div>
             <FileOptions file={file} refetch={refetch} />

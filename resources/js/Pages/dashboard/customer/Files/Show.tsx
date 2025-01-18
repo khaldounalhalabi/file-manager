@@ -70,6 +70,24 @@ const Show = ({ file }: { file: File }) => {
                             Compare Selected
                         </button>
                     )}
+
+                    {file.last_comparison && (
+                        <Link
+                            href={route(
+                                "v1.web.customer.files.last.comparison",
+                                file.id,
+                            )}
+                        >
+                            <button
+                                type={"button"}
+                                className={
+                                    "text-brand dark:text-white flex items-center gap-2 border p-3 border-gray-200 hover:shadow-md rounded-md"
+                                }
+                            >
+                                Get diff from last version
+                            </button>
+                        </Link>
+                    )}
                     <div
                         className={
                             "w-full self-end flex items-center justify-end"

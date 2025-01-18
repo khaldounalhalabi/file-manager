@@ -60,7 +60,7 @@ const Index = ({ groupId }: { groupId: number }) => {
             >
                 {isFetching && !isFetchingNextPage ? (
                     <div className={"flex justify-center items-center w-full"}>
-                        <LoadingSpinner />
+                        <LoadingSpinner className={"dark:text-white"}/>
                     </div>
                 ) : (
                     data?.pages?.map((page) =>
@@ -89,7 +89,7 @@ const Index = ({ groupId }: { groupId: number }) => {
                             "flex items-center justify-center p-3  w-full"
                         }
                     >
-                        <LoadingSpinner />
+                        <LoadingSpinner className={"dark:text-white"}/>
                     </div>
                 )}
             </div>

@@ -79,7 +79,7 @@ const FileOptions = ({
                 }}
             >
                 {isDownloading ? (
-                    <LoadingSpinner className={"w-5 h-5"} />
+                    <LoadingSpinner className={"w-5 h-5 dark:text-white"} />
                 ) : (
                     <Pencil className="w-5 h-5" />
                 )}

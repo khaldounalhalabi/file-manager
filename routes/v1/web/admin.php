@@ -33,6 +33,7 @@ Route::get('/groups/data', [v1\GroupController::class, 'data'])->name('groups.da
 Route::post('/groups/export', [v1\GroupController::class, 'export'])->name('groups.export');
 Route::Resource('/groups', v1\GroupController::class)->names('groups');
 
+Route::get('/files/{fileId}/last-comparison}' , [v1\FileController::class , 'getLastComparison'])->name('files.last.comparison');
 Route::post('files/{fileId}/logs/export', [v1\FileLogController::class, 'export'])->name('files.logs.export');
 Route::get('files/{fileId}/logs', [v1\FileLogController::class, 'getByFile'])->name('files.logs');
 Route::post('get-diff', [v1\FileController::class, 'getDiff'])->name('get.diff');

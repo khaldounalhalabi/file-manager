@@ -246,7 +246,7 @@ const ExplorerHeader = ({
                             type={"button"}
                         >
                             Edit ({selectedFiles.length}) files
-                            {isDownloadingMultiple && <LoadingSpinner />}
+                            {isDownloadingMultiple && <LoadingSpinner className={"dark:text-white"}/>}
                         </button>
                     )}
                 </div>

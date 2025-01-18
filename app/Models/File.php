@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property  Group       group
  * @property  Directory   directory
  * @property integer      frequent
+ * @property string       last_comparison
  */
 class File extends Model
 {
@@ -34,6 +35,7 @@ class File extends Model
         'group_id',
         'directory_id',
         'frequent',
+        'last_comparison'
     ];
 
     public function exportable(): array

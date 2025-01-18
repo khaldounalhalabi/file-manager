@@ -113,7 +113,7 @@ const NotificationsPopover = () => {
                     <h2>Notifications</h2>
                     <p className="opacity-[0.6]">
                         {isFetchingCount ? (
-                            <LoadingSpinner />
+                            <LoadingSpinner className={"dark:text-white"}/>
                         ) : (
                             `You have ${notificationsCount?.data ?? 0} unread messages`
                         )}
@@ -203,7 +203,7 @@ const NotificationsPopover = () => {
                             }}
                         >
                             Show More
-                            {isFetchingNextPage ? <LoadingSpinner /> : ""}
+                            {isFetchingNextPage ? <LoadingSpinner className={"dark:text-white"}/> : ""}
                         </button>
                     ) : (
                         ""

@@ -35,7 +35,7 @@ const Button: React.FunctionComponent<IButtonProps> = ({
             {...props}
         >
             {children}
-            {disabled ? <LoadingSpinner /> : ""}
+            {disabled ? <LoadingSpinner className={"dark:text-white"}/> : ""}
         </button>
     );
 };

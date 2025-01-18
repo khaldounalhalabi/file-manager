@@ -266,7 +266,7 @@ function ApiSelect<TResponse, TData>({
                                 {styles?.loadingIcon ? (
                                     styles.loadingIcon()
                                 ) : (
-                                    <LoadingSpinner className="w-full h-full text-primary" />
+                                    <LoadingSpinner className="w-full h-full text-primary dark:text-white" />
                                 )}
                             </div>
                         )}

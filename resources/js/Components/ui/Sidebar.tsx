@@ -39,23 +39,33 @@ export const Sidebar = ({
         },
     ];
     const userRole = role();
+
+    const handleItemClick = () => {
+        toggleSidebar(); // Close sidebar on item click
+    };
+
     return (
         <div
-            className={`sticky flex flex-col bg-white-secondary dark:bg-dark-secondary max-h-screen overflow-y-scroll`}
+            className={`fixed top-0 left-0 w-full h-full bg-white-secondary dark:bg-dark-secondary z-50 transition-transform duration-300 ease-in-out transform ${
+                isOpen ? "translate-y-0" : "-translate-y-full"
+            } sm:translate-y-0 sm:static sm:flex sm:flex-col sm:max-h-screen sm:overflow-y-scroll`}
         >
+            {/* Header */}
             <div
-                className={`flex  ${isOpen ? " justify-between " : " justify-center "} items-center sticky top-0 bg-white-secondary dark:bg-dark-secondary p-[17px] max-h-20 ${isOpen ? "shadow-sm" : " "}`}
+                className={`flex ${
+                    isOpen ? "justify-between" : "justify-center"
+                } items-center sticky top-0 bg-white-secondary dark:bg-dark-secondary p-[17px] max-h-20 sm:shadow-sm`}
             >
                 <div className={`flex items-center justify-center gap-1`}>
                     <img
                         src={asset("/images/logo.png")}
-                        width={`${isOpen ? "40px" : "40px"}`}
-                        alt=""
+                        width="40px"
+                        alt="Logo"
                     />
                     {isOpen && (
                         <a
                             href="#"
-                            className={`px-2 w-full text-brand dark:text-white hover:underline`}
+                            className="px-2 w-full text-brand dark:text-white hover:underline"
                         >
                             Ultimate file manager
                         </a>
@@ -63,17 +73,16 @@ export const Sidebar = ({
                 </div>
 
                 {isOpen && (
-                    <button type={"button"} onClick={() => toggleSidebar()}>
+                    <button type="button" onClick={toggleSidebar}>
                         <XMark className="w-8 h-8 text-brand dark:text-white" />
                     </button>
                 )}
             </div>
 
+            {/* Sidebar Items */}
             <div
                 id="sidebar-list"
-                className={
-                    "bg-white-secondary dark:bg-dark-secondary w-full mt-6 gap-1 px-4"
-                }
+                className="bg-white-secondary dark:bg-dark-secondary w-full mt-6 gap-1 px-4"
             >
                 {sidebarItems.map((item, index) =>
                     (userRole && item.role?.includes(userRole)) ||
@@ -84,10 +93,9 @@ export const Sidebar = ({
                             title={item.title}
                             icon={item.icon}
                             isOpen={isOpen}
+                            onClick={handleItemClick}
                         />
-                    ) : (
-                        ""
-                    ),
+                    ) : null,
                 )}
             </div>
         </div>
@@ -99,11 +107,13 @@ export const SidebarItem = ({
     title,
     isOpen = false,
     icon = undefined,
+    onClick,
 }: {
     href: string;
     title: string;
     isOpen: boolean;
     icon?: () => ReactNode;
+    onClick: () => void;
 }) => {
     const selected = window.location.href.startsWith(href);
 
@@ -116,57 +126,11 @@ export const SidebarItem = ({
                         : " dark:text-white"
                 }`}
                 href={href}
+                onClick={onClick} // Close sidebar on item click
             >
                 {icon ? icon() : ""}
                 {isOpen && <span>{title}</span>}
             </Link>
         </div>
-    );
-};
-
-export const CompactSidebarItem = ({
-    title,
-    children,
-    baseRouteName,
-}: {
-    title: string;
-    children?: React.ReactNode;
-    baseRouteName?: string;
-}) => {
-    let selected = false;
-    if (baseRouteName) {
-        selected = route().current(`${baseRouteName}.*`);
-    }
-    return (
-        <details
-            className={`[&_summary::-webkit-details-marker]:hidden group`}
-            open={selected}
-        >
-            <summary
-                className={`flex text-lg justify-between items-center hover:bg-gray-100 px-4 py-2 rounded-lg text-brand hover:text-gray-700 cursor-pointer ${
-                    selected
-                        ? "bg-sky-100 dark:bg-white-secondary dark:text-black"
-                        : " dark:text-white"
-                }`}
-            >
-                <span> {title} </span>
-
-                <span className="group-open:-rotate-180 transition duration-300 shrink-0">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-5 h-5"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fillRule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                        />
-                    </svg>
-                </span>
-            </summary>
-            <ul className="space-y-1 mt-2 px-4">{children}</ul>
-        </details>
     );
 };

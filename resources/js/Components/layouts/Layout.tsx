@@ -63,7 +63,7 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
                             className={`bg-white-secondary shadow-lg dark:bg-dark-secondary h-full ${
                                 isOpen
                                     ? "slide-sidebar-right"
-                                    : "slide-sidebar-left w-1/4"
+                                    : "w-0 slide-sidebar-left md:w-1/4"
                             }`}
                         >
                             <Sidebar

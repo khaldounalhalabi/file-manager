@@ -55,51 +55,55 @@ body {
     @apply bg-primary
 }
 
-.slide-sidebar-left {
-    -webkit-animation: slide-sidebar-left 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    animation: slide-sidebar-left 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+@media (min-width: 768px) {
+
+    .slide-sidebar-left {
+        -webkit-animation: slide-sidebar-left 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        animation: slide-sidebar-left 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+
+    @-webkit-keyframes slide-sidebar-left {
+        0% {
+            @apply w-1/4
+        }
+        100% {
+            @apply w-[7%]
+        }
+    }
+
+    @keyframes slide-sidebar-left {
+        0% {
+            @apply w-1/4
+        }
+        100% {
+            @apply w-[7%]
+        }
+    }
+
+    .slide-sidebar-right {
+        -webkit-animation: slide-sidebar-right 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+        animation: slide-sidebar-right 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    }
+
+    @-webkit-keyframes slide-sidebar-right {
+        0% {
+            @apply w-[7%]
+        }
+        100% {
+            @apply w-1/4
+        }
+    }
+
+    @keyframes slide-sidebar-right {
+        0% {
+            @apply w-[7%]
+        }
+        100% {
+            @apply w-1/4
+        }
+    }
 }
 
-@-webkit-keyframes slide-sidebar-left {
-    0% {
-        @apply w-1/4
-    }
-    100% {
-        @apply w-[7%]
-    }
-}
-
-@keyframes slide-sidebar-left {
-    0% {
-        @apply w-1/4
-    }
-    100% {
-        @apply w-[7%]
-    }
-}
-
-.slide-sidebar-right {
-    -webkit-animation: slide-sidebar-right 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
-    animation: slide-sidebar-right 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
-}
-
-@-webkit-keyframes slide-sidebar-right {
-    0% {
-        @apply w-[7%]
-    }
-    100% {
-        @apply w-1/4
-    }
-}
-
-@keyframes slide-sidebar-right {
-    0% {
-        @apply w-[7%]
-    }
-    100% {
-        @apply w-1/4
-    }
-}
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

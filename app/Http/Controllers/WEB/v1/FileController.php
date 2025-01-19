@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\WEB\v1;
 
+use App\Aspects\Contracts\AspectWrapper;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\File\EditMultipleFilesRequest;
 use App\Http\Requests\v1\File\GetDiffRequest;
 use App\Http\Requests\v1\File\PushFileUpdateRequest;
 use App\Http\Requests\v1\File\StoreUpdateFileRequest;
-use App\Services\v1\File\FileService;
 use App\Traits\RestTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,12 +19,12 @@ class FileController extends Controller
 {
     use RestTrait;
 
-    private FileService $fileService;
+    private $fileService;
     private array $relations = ['group', 'directory'];
 
-    public function __construct()
+    public function __construct(AspectWrapper $fileService)
     {
-        $this->fileService = FileService::make();
+        $this->fileService = $fileService;
     }
 
     public function store(StoreUpdateFileRequest $request)

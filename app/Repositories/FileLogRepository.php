@@ -60,10 +60,10 @@ class FileLogRepository extends BaseRepository
             ->first();
     }
 
-    public function logEvent(FileLogTypeEnum $eventType, File $file)
+    public function logEvent(FileLogTypeEnum $eventType, File|int $file)
     {
         return FileLog::create([
-            'file_id' => $file->id,
+            'file_id' => $file instanceof File ? $file->id : $file,
             'user_id' => auth()->user()->id,
             'happened_at' => now(),
             'event_type' => $eventType->value,

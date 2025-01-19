@@ -79,8 +79,6 @@ class FileService extends BaseService
             'version' => 1
         ]);
 
-        FileLogRepository::make()->logEvent(FileLogTypeEnum::CREATED, $file);
-
         return $file->load($relationships);
     }
 
@@ -109,8 +107,6 @@ class FileService extends BaseService
             ->setMethod(FirebaseServices::MANY)
             ->send();
 
-
-        FileLogRepository::make()->logEvent(FileLogTypeEnum::STARTED_EDITING, $file);
 
         return $file?->lastVersion?->file_path['path'];
     }
@@ -159,8 +155,6 @@ class FileService extends BaseService
             ->setMethod(FirebaseServices::MANY)
             ->send();
 
-        FileLogRepository::make()->logEvent(FileLogTypeEnum::FINISHED_EDITING, $file);
-
         return true;
     }
 
@@ -204,7 +198,6 @@ class FileService extends BaseService
                         $file->update([
                             'status' => FileStatusEnum::LOCKED->value,
                         ]);
-                        FileLogRepository::make()->logEvent(FileLogTypeEnum::STARTED_EDITING, $file);
                         $notifications[] = FirebaseServices::make()
                             ->setData([
                                 'file' => $file,
@@ -224,6 +217,7 @@ class FileService extends BaseService
             } else {
                 return null;
             }
+            DB::commit();
             return asset("storage/" . Str::after($zipFilePath, "storage\app/public"));
         } catch (Exception) {
             DB::rollBack();

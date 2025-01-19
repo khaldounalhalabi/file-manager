@@ -33,6 +33,7 @@ class FileLogResource extends BaseResource
             FileLogTypeEnum::CREATED => $this->user->first_name . ' ' . $this->user->last_name . ' created the file at ' . $this->happened_at->format('Y-m-d H:i:s'),
             FileLogTypeEnum::STARTED_EDITING => $this->user->first_name . ' ' . $this->user->last_name . ' started editing the file at ' . $this->happened_at->format('Y-m-d H:i:s'),
             FileLogTypeEnum::FINISHED_EDITING => $this->user->first_name . ' ' . $this->user->last_name . ' pushed new updates to the file at ' . $this->happened_at->format('Y-m-d H:i:s'),
+            FileLogTypeEnum::DELETED => $this->user->first_name . ' ' . $this->user->last_name . ' has deleted the file at ' . $this->happened_at->format('Y-m-d H:i:s'),
             default => "No corresponding message to the current event"
         };
     }

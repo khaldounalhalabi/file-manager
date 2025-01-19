@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->id();
             $table->string('event_type');
             $table->dateTime('happened_at');
-            $table->foreignIdFor(File::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(File::class)->nullable()->constrained()->nullOnDelete();
+            $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
 
             $table->timestamps();
         });

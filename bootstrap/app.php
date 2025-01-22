@@ -22,20 +22,20 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
             Route::middleware(['web', 'locale'])
-                ->group(base_path('routes\v1\web\public.php'));
+                ->group(base_path('routes/v1/web/public.php'));
 
             Route::middleware(['web', 'locale'])
-                ->group(base_path('routes\v1\web\protected.php'));
+                ->group(base_path('routes/v1/web/protected.php'));
 
             Route::middleware(['web', 'locale', 'authenticated', 'has-role:admin'])
                 ->name('v1.web.admin.')
                 ->prefix('v1/admin')
-                ->group(base_path('routes\v1\web\admin.php'));
+                ->group(base_path('routes/v1/web/admin.php'));
 
             Route::middleware(['web', 'locale', 'authenticated', 'has-role:customer', 'must-have-group'])
                 ->name('v1.web.customer.')
                 ->prefix('v1/customer')
-                ->group(base_path('routes\v1\web\customer.php'));
+                ->group(base_path('routes/v1/web/customer.php'));
         }
     )->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([

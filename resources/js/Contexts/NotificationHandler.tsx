@@ -1,7 +1,7 @@
 "use client";
+import { HandleNotification } from "@/Hooks/HandleNotification";
 import { NotificationPayload } from "@/Models/NotificationPayload";
 import { ReactNode, useEffect } from "react";
-import { HandleNotification } from "@/hooks/HandleNotification";
 
 export const NotificationHandler = ({
     handle,

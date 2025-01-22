@@ -19,10 +19,19 @@ const SendInvitationModal = ({ group }: { group: Group }) => {
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        transform((data) => ({
-            ...data,
-            group_id: group.id,
-        }));
+        transform((data) => {
+            let temp:any= {
+                group_id: group.id,
+            };
+
+            if (data.user_id) {
+                temp.user_id = data.user_id;
+            }else{
+                temp.email = data.email
+            }
+
+            return temp;
+        });
 
         post(route("v1.web.customer.groups.invite"));
     };
@@ -97,7 +106,6 @@ const SendInvitationModal = ({ group }: { group: Group }) => {
                             }
                             name={"user_id"}
                             label={"Or just select an existing user : "}
-                            required={true}
                             onChange={(e) => {
                                 setData("user_id", Number(e.target.value ?? 0));
                             }}

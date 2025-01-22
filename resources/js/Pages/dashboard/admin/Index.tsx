@@ -2,7 +2,7 @@ const Index = () => {
     return (
         <div>
             <h1 className="text-5xl dark:text-white">
-                Welcome to cubeta-starter generated dashboard
+                Welcome to Ultimate file manager admin panel
             </h1>
         </div>
     );

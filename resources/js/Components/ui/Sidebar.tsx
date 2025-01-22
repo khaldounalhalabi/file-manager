@@ -41,7 +41,9 @@ export const Sidebar = ({
     const userRole = role();
 
     const handleItemClick = () => {
-        toggleSidebar(); // Close sidebar on item click
+        if (window.innerWidth < 768) {
+            toggleSidebar();
+        }
     };
 
     return (

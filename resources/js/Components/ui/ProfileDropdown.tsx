@@ -7,6 +7,7 @@ const ProfileDropdown = () => {
     const [open, setOpen] = useState(false);
     const authUser = user();
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const authRole = role();
 
     const handleClickOutside = (event: MouseEvent) => {
         if (
@@ -58,7 +59,7 @@ const ProfileDropdown = () => {
                     >
                         <Link
                             id="user-details"
-                            href={route(`v1.web.${role()}.user.details`)}
+                            href={route(`v1.web.${authRole}.user.details`)}
                             className="cursor-pointer block hover:bg-gray-100 dark:hover:text-black p-2 rounded-md"
                         >
                             My Profile
@@ -71,7 +72,7 @@ const ProfileDropdown = () => {
                     >
                         <Link
                             id="logout"
-                            href={route(`v1.web.${role()}.logout`)}
+                            href={route(`v1.web.${authRole}.logout`)}
                             className="cursor-pointer block hover:bg-gray-100 dark:hover:text-black p-2 rounded-md"
                         >
                             Sign Out

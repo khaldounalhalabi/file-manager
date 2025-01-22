@@ -6,13 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { usePage } from "@inertiajs/react";
 import { MiddlewareProps } from "@/types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { getTheme, setCsrf } from "@/helper";
+import { getTheme, setCsrf, user } from "@/helper";
 import useFcmToken from "@/Hooks/FirebaseNotificationHook";
 import NotificationProvider from "@/Contexts/NotificationProvider";
 
 const Layout = ({ children }: { children?: React.ReactNode }) => {
     useFcmToken();
     const theme = getTheme();
+    const authUer = user();
     const { csrfToken } = usePage<MiddlewareProps>().props;
     setCsrf(csrfToken);
     const [isOpen, setIsOpen] = useState(true);
@@ -33,15 +34,6 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
     }, []);
 
     const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                refetchOnWindowFocus: true,
-                staleTime: 0,
-                refetchOnReconnect: true,
-                retry: true,
-                retryDelay: 1,
-            },
-        },
     });
 
     if (usePage<MiddlewareProps>().props.message) {
@@ -59,6 +51,7 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
         usePage<MiddlewareProps>().props.success = undefined;
     }
 
+
     return (
         <>
             <QueryClientProvider client={queryClient}>
@@ -70,7 +63,7 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
                             "ar"
                         }
                     />
-                    <NotificationProvider>
+                    {authUer ? (<NotificationProvider>
                         <div
                             className={`bg-white-secondary shadow-lg dark:bg-dark-secondary h-full ${
                                 isOpen
@@ -94,7 +87,10 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
                                 {children}
                             </main>
                         </div>
-                    </NotificationProvider>
+                    </NotificationProvider>) : (<main>
+                        {children}
+
+                    </main>)}
                 </div>
             </QueryClientProvider>
         </>

@@ -12,9 +12,10 @@ export const Sidebar = ({
     toggleSidebar: () => void;
     isOpen: boolean;
 }) => {
+    const authRole = role();
     const sidebarItems = [
         {
-            href: route(`v1.web.${role()}.index`),
+            href: route(`v1.web.${authRole}.index`),
             title: "Dashboard",
             icon: () => <PresentationChart />,
             role: ["admin", "customer"],
@@ -26,7 +27,7 @@ export const Sidebar = ({
             role: ["admin"],
         },
         {
-            href: route(`v1.web.${role()}.groups.index`),
+            href: route(`v1.web.${authRole}.groups.index`),
             title: "Group",
             icon: () => <Group />,
             role: ["admin", "customer"],
@@ -38,7 +39,6 @@ export const Sidebar = ({
             role: ["customer"],
         },
     ];
-    const userRole = role();
 
     const handleItemClick = () => {
         if (window.innerWidth < 768) {
@@ -87,7 +87,7 @@ export const Sidebar = ({
                 className="bg-white-secondary dark:bg-dark-secondary w-full mt-6 gap-1 px-4"
             >
                 {sidebarItems.map((item, index) =>
-                    (userRole && item.role?.includes(userRole)) ||
+                    (authRole && item.role?.includes(authRole)) ||
                     !item.role ? (
                         <SidebarItem
                             key={index}

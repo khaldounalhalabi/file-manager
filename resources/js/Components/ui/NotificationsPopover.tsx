@@ -75,17 +75,10 @@ const NotificationsPopover = () => {
                 className={"relative w-8 h-full cursor-pointer"}
                 onClick={() => OpenAndClose(openPopNot, setOpenPopNot)}
             >
-                <Bell
-                    className={
-                        openPopNot
-                            ? `h-6 w-6 cursor-pointer text-[#909CA6] fill-blue-500`
-                            : "h-6 w-6 cursor-pointer text-[#909CA6] fill-[#909CA6]"
-                    }
-                />
                 {(notificationsCount?.data ?? 0) > 0 ? (
                     <span
                         className={
-                            "left-0 border-error rounded-full text-error"
+                            "absolute right-0 -top-1 border-red-500 rounded-full text-red-500"
                         }
                     >
                         {notificationsCount?.data}
@@ -93,6 +86,13 @@ const NotificationsPopover = () => {
                 ) : (
                     ""
                 )}
+                <Bell
+                    className={
+                        openPopNot
+                            ? `h-6 w-6 cursor-pointer text-[#909CA6] fill-blue-500`
+                            : "h-6 w-6 cursor-pointer text-[#909CA6] fill-[#909CA6]"
+                    }
+                />
             </div>
 
             <div

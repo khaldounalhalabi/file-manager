@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { User } from "@/Models/User";
 import { RoleName } from "@/Models/Role";
+import { useEffect, useState } from "react";
 
 export const asset = (path: string) => {
     if (path.startsWith("/")) {
@@ -34,8 +35,14 @@ export function user(): User | null | undefined {
 }
 
 export function role(): RoleName | undefined {
+    const [authRole , setAuthRole] = useState<RoleName>("customer");
     const { role } = usePage<MiddlewareProps>().props;
-    return role;
+    useEffect(() => {
+        if (role) {
+            setAuthRole(role);
+        }
+    } , [role])
+    return authRole;
 }
 
 export const getTheme = () =>

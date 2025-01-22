@@ -12,6 +12,7 @@ const Navbar = ({
     isSidebarOpen: boolean;
     toggleSidebar: () => void;
 }) => {
+    const authRole = role();
     return (
         <nav className="top-0 z-30 sticky flex justify-between items-center bg-white-secondary dark:bg-dark-secondary shadow-md px-3 w-full max-h-20">
             <div className={`flex w-full items-center gap-1`}>
@@ -22,8 +23,8 @@ const Navbar = ({
                 )}
             </div>
             <div className={`flex w-full items-center justify-end`}>
-                {role() == "customer" ? <NotificationsPopover /> : ""}
-                {role() == "customer" ? <GroupSelector /> : ""}
+                {authRole == "customer" ? <NotificationsPopover /> : ""}
+                {authRole == "customer" ? <GroupSelector /> : ""}
                 <DarkModeToggle />
                 <ProfileDropdown />
             </div>

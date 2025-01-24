@@ -33,8 +33,7 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const queryClient = new QueryClient({
-    });
+    const queryClient = new QueryClient({});
 
     if (usePage<MiddlewareProps>().props.message) {
         toast.info(usePage<MiddlewareProps>().props.message);
@@ -51,7 +50,6 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
         usePage<MiddlewareProps>().props.success = undefined;
     }
 
-
     return (
         <>
             <QueryClientProvider client={queryClient}>
@@ -63,34 +61,35 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
                             "ar"
                         }
                     />
-                    {authUer ? (<NotificationProvider>
-                        <div
-                            className={`bg-white-secondary shadow-lg dark:bg-dark-secondary h-full ${
-                                isOpen
-                                    ? "slide-sidebar-right"
-                                    : "w-0 slide-sidebar-left md:w-1/4"
-                            }`}
-                        >
-                            <Sidebar
-                                isOpen={isOpen}
-                                toggleSidebar={toggleSidebar}
-                            />
-                        </div>
-                        <div
-                            className={`w-full h-full overflow-y-scroll bg-white dark:bg-dark`}
-                        >
-                            <Navbar
-                                isSidebarOpen={isOpen}
-                                toggleSidebar={toggleSidebar}
-                            />
-                            <main className={"m-5 bg-white dark:bg-dark"}>
-                                {children}
-                            </main>
-                        </div>
-                    </NotificationProvider>) : (<main>
-                        {children}
-
-                    </main>)}
+                    {authUer ? (
+                        <NotificationProvider>
+                            <div
+                                className={`bg-white-secondary shadow-lg dark:bg-dark-secondary h-full ${
+                                    isOpen
+                                        ? "slide-sidebar-right"
+                                        : "w-0 slide-sidebar-left md:w-1/4"
+                                }`}
+                            >
+                                <Sidebar
+                                    isOpen={isOpen}
+                                    toggleSidebar={toggleSidebar}
+                                />
+                            </div>
+                            <div
+                                className={`w-full h-full overflow-y-scroll bg-white dark:bg-dark`}
+                            >
+                                <Navbar
+                                    isSidebarOpen={isOpen}
+                                    toggleSidebar={toggleSidebar}
+                                />
+                                <main className={"m-5 bg-white dark:bg-dark"}>
+                                    {children}
+                                </main>
+                            </div>
+                        </NotificationProvider>
+                    ) : (
+                        <main className={"w-full h-full"}>{children}</main>
+                    )}
                 </div>
             </QueryClientProvider>
         </>

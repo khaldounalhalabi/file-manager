@@ -43,8 +43,7 @@ ensures controlled access, tracks changes, and supports file versioning while ma
 ## Tech Stack
 
 - **Backend**: [Laravel](https://laravel.com/)
-- **Frontend
-  **: [Inertia.js](https://inertiajs.com/), [React.js](https://reactjs.org/), [TailwindCSS](https://tailwindcss.com/)
+- **Frontend**: [Inertia.js](https://inertiajs.com/), [React.js](https://reactjs.org/), [TailwindCSS](https://tailwindcss.com/)
 
 ## Installation
 
